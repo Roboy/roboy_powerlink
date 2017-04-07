@@ -1,0 +1,13 @@
+uint8[] motors
+uint8[] control_mode
+int32[] outputPosMax
+int32[] outputNegMax
+int32[] spPosMax
+int32[] spNegMax
+uint16[] Kp
+uint16[] Ki
+uint16[] Kd
+uint16[] forwardGain
+uint16[] deadBand
+int32[] IntegralPosMax
+int32[] IntegralNegMax
