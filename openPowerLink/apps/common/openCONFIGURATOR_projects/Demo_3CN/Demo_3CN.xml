@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCONFIGURATORProject xmlns="http://sourceforge.net/projects/openconf/configuration" xmlns:ns2="http://ethernet-powerlink.org/POWERLINK" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://sourceforge.net/projects/openconf/configuration openCONFIGURATOR.xsd">
+  <Generator vendor="Kalycito Infotech Private Limited &amp; Bernecker + Rainer Industrie Elektronik Ges.m.b.H." toolName="Ethernet POWERLINK openCONFIGURATOR" toolVersion="2.1.2" createdBy="roboy" createdOn="2015-02-17T16:36:58" modifiedBy="roboy" modifiedOn="2017-03-27T14:02:28.072+02:00" />
+  <ProjectConfiguration activeAutoGenerationSetting="all">
+    <PathSettings>
+      <Path id="defaultOutputPath" path="output" />
+      <Path id="default" path="/home/roboy/Downloads/openPowerLink/apps/common/openCONFIGURATOR_projects/Demo_3CN/output" />
+    </PathSettings>
+    <AutoGenerationSettings id="all">
+      <Setting name="GENERATE_MN_MAPPING_FOR_NODES" value="" enabled="true" />
+    </AutoGenerationSettings>
+    <AutoGenerationSettings id="none" />
+    <AutoGenerationSettings id="custom" />
+  </ProjectConfiguration>
+  <NetworkConfiguration lossOfSocTolerance="50000000">
+    <NodeCollection>
+      <MN name="openPOWERLINK_MN" nodeID="240" pathToXDC="deviceConfiguration/00000000_POWERLINK_CiA302-4_MN.xdc" />
+      <CN name="CN_1" nodeID="1" pathToXDC="deviceConfiguration/00000000_POWERLINK_CiA401_CN_1.xdc">
+        <ForcedObjects>
+          <Object index="1F98" subindex="04" />
+          <Object index="1F98" subindex="05" />
+          <Object index="1F8D" subindex="F0" />
+        </ForcedObjects>
+      </CN>
+      <CN name="CN_2" nodeID="32" pathToXDC="deviceConfiguration/00000000_POWERLINK_CiA401_CN_32.xdc">
+        <ForcedObjects>
+          <Object index="1F98" subindex="04" />
+          <Object index="1F98" subindex="05" />
+          <Object index="1F8D" subindex="F0" />
+        </ForcedObjects>
+      </CN>
+      <CN name="CN_3" nodeID="110" pathToXDC="deviceConfiguration/00000000_POWERLINK_CiA401_CN_110.xdc">
+        <ForcedObjects>
+          <Object index="1F98" subindex="04" />
+          <Object index="1F98" subindex="05" />
+          <Object index="1F8D" subindex="F0" />
+        </ForcedObjects>
+      </CN>
+    </NodeCollection>
+  </NetworkConfiguration>
+</openCONFIGURATORProject>
