@@ -32,7 +32,7 @@
 # D E M O   I D E N T I F I C A T I O N
 
 # Name of the demo
-SET(CFG_DEMO_NAME "mn-soc-shmem-gpio")
+SET(CFG_DEMO_NAME "Nios_Access_DDR3")
 
 # Board of the demo
 SET(CFG_DEMO_BOARD_NAME "altera-c5soc")
@@ -68,7 +68,7 @@ SET(CFG_HOST_UNHOSTED_LINKER cycloneV-dk-ram-unhosted.ld)
 # P R O C E S S O R   F E A T U R E S   ( H O S T )
 
 # Qsys subsystem name of processor that processes host/app
-SET(CFG_HOST_SUB_NAME "host_0")
+SET(CFG_HOST_SUB_NAME "hps_0")
 # Processor that processes host/app
 SET(CFG_HOST_PROC_NAME "hps_0")
 SET(CFG_HOST_PROC_IP_NAME "hps")
