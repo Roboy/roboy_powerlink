@@ -197,10 +197,15 @@ static void backgroundProcess(void)
 {
     BOOL    fExit = FALSE;
 
+    uint i = 0;
+
     while (1)
     {
         ctrlk_updateHeartbeat();
         fExit = ctrlk_process();
+
+        if((i++%100)==0)
+        	PRINTF("background process\n");
 
         if (fExit != FALSE)
             break;
