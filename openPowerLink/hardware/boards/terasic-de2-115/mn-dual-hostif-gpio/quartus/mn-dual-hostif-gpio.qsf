@@ -36,7 +36,7 @@
 # Project settings
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION    "13.0 SP1"
 set_global_assignment -name PROJECT_CREATION_TIME_DATE  "08:00:00  December 20, 2013"
-set_global_assignment -name LAST_QUARTUS_VERSION "17.0.0 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION        "13.0 SP1"
 
 # Device settings
 set_global_assignment -name FAMILY                      "Cyclone IV E"

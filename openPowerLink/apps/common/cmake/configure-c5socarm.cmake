@@ -48,7 +48,7 @@ SET(CPU_INST_NAME HOST)
 # Get subdirectories (board/demo)
 LIST_SUBDIRECTORIES(HW_BOARD_DEMOS ${CFG_HW_LIB_PATH} 2)
 
-SET(CFG_HW_LIB altera-c5soc/mn-soc-shmem-gpio CACHE STRING
+SET(CFG_HW_LIB altera-c5soc/mn-soc-shmem-gpio2 CACHE STRING
     "Subfolder of hardware board demo")
 SET_PROPERTY(CACHE CFG_HW_LIB PROPERTY STRINGS ${HW_BOARD_DEMOS})
 

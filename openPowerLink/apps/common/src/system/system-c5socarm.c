@@ -316,7 +316,7 @@ static int initializeDriver(void)
     /* Use the above symbols to extract the driver binary information */
     const char*     driverBinary = &_binary_drv_daemon_bin_start;
     const UINT32    driverBinarySize = &_binary_drv_daemon_bin_end - &_binary_drv_daemon_bin_start;
-    char*           driverExecutableStartAddress = (char*)DDR3_EMIF_0_BASE;
+    char*           driverExecutableStartAddress = (char*)SHARED_MEMORY_BASE;
 
     // Trace the driver image information.
     TRACE("INFO: driver Image binary at %p.\n", driverBinary);
