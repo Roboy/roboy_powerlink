@@ -62,8 +62,8 @@ OPTION(CFG_HOST_BOOTLOADER_ENABLE "Build ARM Preloader" ON)
 SET(CFG_HOST_HAL_TYPE "hwlib")
 
 # Linker scripts used for ARM
-SET(CFG_HOST_SEMIHOSTED_LINKER cycloneV-dk-ram-hosted.ld)
-SET(CFG_HOST_UNHOSTED_LINKER cycloneV-dk-ram-hosted.ld)
+SET(CFG_HOST_SEMIHOSTED_LINKER cycloneV-dk-ram-semihosted.ld)
+SET(CFG_HOST_UNHOSTED_LINKER cycloneV-dk-ram-unhosted.ld)
 ################################################################################
 # P R O C E S S O R   F E A T U R E S   ( H O S T )
 

@@ -51,8 +51,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <errno.h>
 
-#define CONFIG_INCLUDE_SDO_UDP
-
 #if defined(CONFIG_INCLUDE_SDO_UDP)
 
 //============================================================================//

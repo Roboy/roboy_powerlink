@@ -7,7 +7,7 @@
    description=""
    tags=""
    categories="System" />
- <parameter name="bonusData"><![CDATA[bonusData 
+ <parameter name="bonusData"><![CDATA[bonusData
 {
    element $${FILENAME}
    {
@@ -153,11 +153,11 @@
          type = "String";
       }
    }
-   element button_pio.s1
+   element timer_0.s1
    {
       datum baseAddress
       {
-         value = "0";
+         value = "64";
          type = "String";
       }
    }
@@ -169,11 +169,11 @@
          type = "String";
       }
    }
-   element timer_0.s1
+   element button_pio.s1
    {
       datum baseAddress
       {
-         value = "64";
+         value = "0";
          type = "String";
       }
    }

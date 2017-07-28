@@ -70,8 +70,6 @@ extern "C"
 {
 #endif
 
-#define CONFIG_INCLUDE_SDO_UDP
-
 #if defined(CONFIG_INCLUDE_SDO_UDP)
 tOplkError sdoudp_init(tSequLayerReceiveCb pfnReceiveCb_p);
 tOplkError sdoudp_exit(void);

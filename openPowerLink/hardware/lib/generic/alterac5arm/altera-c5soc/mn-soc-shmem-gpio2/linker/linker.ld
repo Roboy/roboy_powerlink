@@ -1,6 +1,6 @@
 /* Linker script for Altera CycloneV-DK
  *
- * Version: Sourcery CodeBench Lite 2013.11-67
+ * Version: Sourcery CodeBench Lite 2014.11-13
  * Support: https://sourcery.mentor.com/GNUToolchain/
  *
  * Copyright (c) 2007-2010 CodeSourcery, Inc.
@@ -19,13 +19,14 @@
 OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 ENTRY(__cs3_reset)
 SEARCH_DIR(.)
-GROUP(-lgcc -lc -lcs3 -lcs3hosted -lcs3arm)
+GROUP(-lgcc -lc -lcs3 -lcs3unhosted -lcs3arm)
 
 MEMORY
 {
   boot_rom (rx) : ORIGIN = 0xfffd0000, LENGTH = 64K
   oc_ram (rwx) : ORIGIN = 0xffff0000, LENGTH = 64K
-  ram (rwx) : ORIGIN = 0x100000, LENGTH = 1023M
+/*  ram (rwx) : ORIGIN = 0x100000, LENGTH = 1023M */
+  ram (rwx) : ORIGIN = 0x10000000, LENGTH = 768M
 }
 
 /* These force the linker to search for particular symbols from
@@ -38,15 +39,11 @@ EXTERN(__cs3_start_asm _start)
 INCLUDE arm-names.inc
 EXTERN(__cs3_interrupt_vector_arm)
 EXTERN(__cs3_start_c main __cs3_stack __cs3_heap_end)
-/* force exit to be picked up in a hosted or os environment */
-EXTERN(exit atexit)
 
 /* Provide fall-back values */
 PROVIDE(__cs3_heap_start = _end);
 PROVIDE(__cs3_heap_end = __cs3_region_start_ram + __cs3_region_size_ram);
 PROVIDE(__cs3_region_num = (__cs3_regions_end - __cs3_regions) / 20);
-/* Ensure that newlib runs the finalizers */
-__libc_fini = _fini;
 PROVIDE(__cs3_stack = __cs3_region_start_ram + __cs3_region_size_ram);
 
 SECTIONS
@@ -92,6 +89,10 @@ SECTIONS
     *(.ARM.exidx* .gnu.linkonce.armexidx.*)
   } >ram
   PROVIDE_HIDDEN (__exidx_end = .);
+  .note.gnu.build-id : ALIGN (4)
+  {
+    KEEP (*(.note.gnu.build-id))
+  } >ram
   .rodata : ALIGN (4)
   {
     *(.rodata .rodata.* .gnu.linkonce.r.*)
@@ -258,4 +259,4 @@ SECTIONS
   .ARM.attributes 0 : { KEEP (*(.ARM.attributes)) }
   /DISCARD/ : { *(.note.GNU-stack) }
 }
-/* checksum: 5e16237bdfe167e546f942 */
+/* checksum: 1e31d42b79217b9ca44859 */
