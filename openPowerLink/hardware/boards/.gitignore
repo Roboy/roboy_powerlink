@@ -18,11 +18,7 @@ incremental_db/
 *.qws
 *.rpt
 *.smsg
-*.sof
-*.rbf
-*.sopcinfo
 *.summary
-*.pof
 *.txt
 *.csv
 *.hex
