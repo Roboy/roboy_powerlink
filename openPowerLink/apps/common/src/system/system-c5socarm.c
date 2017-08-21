@@ -146,12 +146,12 @@ int system_init(void)
     }
 
 #if defined(CONFIG_BOOT_FROM_SD)
-    // Initialize the driver processor
-    if (initializeDriver() != 0)
-    {
-        TRACE("Initializing the driver failed!!\n");
-        return -1;
-    }
+//    // Initialize the driver processor
+//    if (initializeDriver() != 0)
+//    {
+//        TRACE("Initializing the driver failed!!\n");
+//        return -1;
+//    }
 #endif
 
 Exit:
@@ -316,7 +316,7 @@ static int initializeDriver(void)
     /* Use the above symbols to extract the driver binary information */
     const char*     driverBinary = &_binary_drv_daemon_bin_start;
     const UINT32    driverBinarySize = &_binary_drv_daemon_bin_end - &_binary_drv_daemon_bin_start;
-    char*           driverExecutableStartAddress = (char*)SHARED_MEMORY_BASE;
+    char*           driverExecutableStartAddress = (char*)ONCHIP_MEMORY2_0_BASE;
 
     // Trace the driver image information.
     TRACE("INFO: driver Image binary at %p.\n", driverBinary);

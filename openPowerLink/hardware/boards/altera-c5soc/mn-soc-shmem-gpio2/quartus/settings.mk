@@ -30,12 +30,12 @@
 ################################################################################
 
 PROJECT = DE10_NANO_SoC_GHRD
-QSYS_PROJECT = mnSoCShmemGpio
+QSYS_PROJECT = soc_system
 
 QSYS_OUT = $(QSYS_PROJECT)/synthesis/*.*
 QSYS_OUT += $(QSYS_PROJECT)/synthesis/submodules/*.*
 QSYS_OUT += $(QSYS_PROJECT).sopcinfo
 
-SOURCE_FILES = DE10_NANO_SoC_GHRD.v
+SOURCE_FILES = toplevel.v
 SOURCE_FILES += ../../common/ipcore/**
 SOURCE_FILES += $(QSYS_OUT)
