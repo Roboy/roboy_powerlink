@@ -54,6 +54,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <arp/arp.h>
 #include <system/system.h>
 
+#define CONFIG_CDC_ON_SD FALSE
+
 #if (CONFIG_CDC_ON_SD != FALSE)
 #include <sdcard/sdcard.h>
 #endif
@@ -190,10 +192,12 @@ int main(void)
     PRINTF("NODEID=0x%02X\n", instance_l.nodeId);
     lcd_printNodeId(instance_l.nodeId);
 
+    PRINTF("initalizing powerlink\n");
     ret = initPowerlink(&instance_l);
     if (ret != kErrorOk)
         goto Exit;
 
+    PRINTF("initalizing app\n");
     ret = initApp();
     if (ret != kErrorOk)
         goto Exit;
@@ -206,6 +210,7 @@ int main(void)
                ret);
     }
 
+    PRINTF("staring main loop\n");
     loopMain(&instance_l);
 
 Exit:
@@ -287,6 +292,7 @@ static tOplkError initPowerlink(const tInstance* pInstance_p)
     initParam.pfnCbEvent = processEvents;
     initParam.pfnCbSync  = processSync;
 
+    PRINTF("obdcreate_initObd\n");
     // Initialize object dictionary
     ret = obdcreate_initObd(&initParam.obdInitParam);
     if (ret != kErrorOk)
@@ -297,6 +303,7 @@ static tOplkError initPowerlink(const tInstance* pInstance_p)
         return ret;
     }
 
+    PRINTF("oplk_initialize\n");
     // initialize POWERLINK stack
     ret = oplk_initialize();
     if (ret != kErrorOk)
@@ -307,6 +314,7 @@ static tOplkError initPowerlink(const tInstance* pInstance_p)
         return ret;
     }
 
+    PRINTF("oplk_create\n");
     ret = oplk_create(&initParam);
     if (ret != kErrorOk)
     {
@@ -316,6 +324,7 @@ static tOplkError initPowerlink(const tInstance* pInstance_p)
         return ret;
     }
 
+    PRINTF("oplk_setCdcBuffer\n");
     ret = oplk_setCdcBuffer(pInstance_p->pCdcBuffer,
                             pInstance_p->cdcBufferSize);
     if (ret != kErrorOk)
