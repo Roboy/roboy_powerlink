@@ -56,13 +56,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #if defined(__ALTERA_ARM__)
 
 #define COMMON_MEM_BASE             COM_MEM_BASE
-#define SHARED_MEM_BASE             SHARED_MEMORY_BASE
+#define SHARED_MEM_BASE             ONCHIP_MEMORY2_0_BASE
 #define SHARED_MEM_SPAN             0x400000    // Limited by the PCP bridge width
 
 #elif defined(__NIOS2__)
 
 #define COMMON_MEM_BASE             COM_MEM_BASE
-#define SHARED_MEM_BASE             NIOS_MEMORY_BASE
+#define SHARED_MEM_BASE             ONCHIP_MEMORY2_0_BASE   //ADDRESS_SPAN_EXTENDER_CPU_BRIDGE_BASE
 #define SHARED_MEM_SPAN             0x400000    // Limited by the PCP bridge width
 
 #else

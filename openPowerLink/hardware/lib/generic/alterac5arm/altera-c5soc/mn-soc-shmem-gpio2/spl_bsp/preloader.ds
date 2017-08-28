@@ -14,7 +14,7 @@ wait 5s
 reset system
 wait 5s
 
-set semihosting enabled 0
+set semihosting enabled 1
 
 #
 # load the preloader (a.k.a the spl from our uboot dist)

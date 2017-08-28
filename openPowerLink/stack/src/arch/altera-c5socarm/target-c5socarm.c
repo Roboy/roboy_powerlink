@@ -186,6 +186,8 @@ tOplkError target_init(void)
     tOplkError      oplkRet = kErrorOk;
     ALT_STATUS_CODE halRet = ALT_E_SUCCESS;
 
+
+    PRINTF("enableling cache\n");
 #if defined(ALTARM_CACHE_ENABLE)
     // Enable Cache
     halRet = alt_cache_system_enable();
@@ -199,6 +201,7 @@ tOplkError target_init(void)
         goto Exit;
     }
 
+    PRINTF("Initialize the global interrupt controller\n");
     // Initialize the global interrupt controller
     halRet = alt_int_global_init();
     if (halRet != ALT_E_SUCCESS)
@@ -208,6 +211,7 @@ tOplkError target_init(void)
         goto Exit;
     }
 
+    PRINTF("Initialize the CPU interrupt interface\n");
     // Initialize the CPU interrupt interface
     halRet = alt_int_cpu_init();
     if (halRet != ALT_E_SUCCESS)
@@ -217,6 +221,7 @@ tOplkError target_init(void)
         goto Exit;
     }
 
+    PRINTF("Enable global interrupt master\n");
     // Enable global interrupt master
     halRet = alt_int_global_enable();
     if (halRet != ALT_E_SUCCESS)

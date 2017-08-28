@@ -101,6 +101,8 @@ Calls the POWERLINK initialization and background task
 
 \ingroup module_daemon
 */
+
+#include "sys/alt_stdio.h"
 //------------------------------------------------------------------------------
 int main(void)
 {
@@ -109,6 +111,7 @@ int main(void)
     alt_icache_flush_all();
     alt_dcache_flush_all();
 
+//    alt_printf("hi there!\n");
     PRINTF("CPU NIOS II /%s (%s)\n", ALT_CPU_CPU_IMPLEMENTATION, ALT_CPU_NAME);
     PRINTF("FREQ = %d MHZ\n", ALT_CPU_CPU_FREQ / 1000000U);
     PRINTF("DCACHE = %d BYTE\n", ALT_CPU_DCACHE_SIZE);

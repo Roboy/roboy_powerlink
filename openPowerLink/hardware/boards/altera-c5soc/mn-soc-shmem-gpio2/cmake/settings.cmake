@@ -41,9 +41,10 @@ SET(CFG_DEMO_BOARD_NAME "altera-c5soc")
 SET(CFG_DEMO_BUS_SYSTEM "axi")
 
 # Boot ARM from SD card
-OPTION(CFG_HOST_BOOT_FROM_SDCARD "Boot ARM from SD card" ON)
+OPTION(CFG_HOST_BOOT_FROM_SDCARD "Boot ARM from SD card" OFF)
 
 # Enable semihosting operation for debugging from DS5
+#OPTION(CFG_HOST_SEMIHOSTING_ENABLE "Debug ARM core from DS5" ON)
 #CMAKE_DEPENDENT_OPTION(CFG_HOST_SEMIHOSTING_ENABLE "Debug ARM core from DS5" ON
 #                       "NOT CFG_HOST_BOOT_FROM_SDCARD" OFF)
 IF (NOT CFG_HOST_BOOT_FROM_SDCARD)

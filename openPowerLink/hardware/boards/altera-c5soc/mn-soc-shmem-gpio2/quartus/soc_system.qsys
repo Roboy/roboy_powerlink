@@ -50,7 +50,7 @@
    {
       datum baseAddress
       {
-         value = "27136";
+         value = "4096";
          type = "String";
       }
    }
@@ -62,11 +62,19 @@
          type = "int";
       }
    }
+   element openmac_0.macReg
+   {
+      datum baseAddress
+      {
+         value = "8192";
+         type = "String";
+      }
+   }
    element openmac_0.macTimer
    {
       datum baseAddress
       {
-         value = "26624";
+         value = "4128";
          type = "String";
       }
    }
@@ -99,6 +107,22 @@
          type = "int";
       }
    }
+   element openmac_0.pktBuf
+   {
+      datum baseAddress
+      {
+         value = "32768";
+         type = "String";
+      }
+   }
+   element onchip_memory2_0.s1
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
    element com_mem.s1
    {
       datum baseAddress
@@ -111,7 +135,7 @@
    {
       datum baseAddress
       {
-         value = "28672";
+         value = "0";
          type = "String";
       }
    }
@@ -141,7 +165,7 @@
  <parameter name="hdlLanguage" value="VERILOG" />
  <parameter name="hideFromIPCatalog" value="false" />
  <parameter name="maxAdditionalLatency" value="1" />
- <parameter name="projectName" value="mnSoCShmemGpio.qpf" />
+ <parameter name="projectName">DE10_NANO_SoC_GHRD.qpf</parameter>
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="0" />
  <parameter name="testBenchDutName" value="" />
@@ -232,12 +256,12 @@
  <module kind="openmac" version="1.0.2" enabled="1" name="openmac_0">
   <parameter name="sys_mainClk" value="50000000" />
   <parameter name="sys_mainClkx2" value="100000000" />
-  <parameter name="sys_dmaAddrWidth" value="18" />
+  <parameter name="sys_dmaAddrWidth" value="19" />
   <parameter name="gui_phyType" value="2" />
   <parameter name="gui_phyCount" value="1" />
   <parameter name="gui_extraSmi" value="false" />
   <parameter name="gui_txBufLoc" value="1" />
-  <parameter name="gui_txBufSize" value="16" />
+  <parameter name="gui_txBufSize" value="32" />
   <parameter name="gui_txBurstSize" value="1" />
   <parameter name="gui_rxBufLoc" value="2" />
   <parameter name="gui_rxBufSize" value="1" />
@@ -495,7 +519,7 @@
   <parameter name="initMemContent" value="true" />
   <parameter name="initializationFileName" value="onchip_mem.hex" />
   <parameter name="instanceID" value="NONE" />
-  <parameter name="memorySize" value="150000" />
+  <parameter name="memorySize" value="400000" />
   <parameter name="readDuringWriteMode" value="DONT_CARE" />
   <parameter name="simAllowMRAMContentsFile" value="false" />
   <parameter name="simMemInitOnlyFilename" value="0" />
@@ -623,7 +647,7 @@
    start="host_0.lw_bridge_m0"
    end="sysid_qsys.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x6a00" />
+  <parameter name="baseAddress" value="0x1000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -690,7 +714,7 @@
    start="pcp_0.slow_bridge"
    end="sysid_qsys.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x6a00" />
+  <parameter name="baseAddress" value="0x1000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -699,7 +723,7 @@
    start="pcp_0.slow_bridge"
    end="openmac_0.macReg">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x4000" />
+  <parameter name="baseAddress" value="0x2000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -708,7 +732,7 @@
    start="pcp_0.slow_bridge"
    end="openmac_0.macTimer">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x6800" />
+  <parameter name="baseAddress" value="0x1020" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -717,7 +741,7 @@
    start="pcp_0.slow_bridge"
    end="openmac_0.pktBuf">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x8000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -726,7 +750,7 @@
    start="pcp_0.slow_bridge"
    end="com_mem.s2">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x7000" />
+  <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection

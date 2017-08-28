@@ -19,7 +19,7 @@
 OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 ENTRY(__cs3_reset)
 SEARCH_DIR(.)
-GROUP(-lgcc -lc -lcs3 -lcs3unhosted -lcs3arm)
+GROUP(-lgcc -lc -lcs3 -lcs3hosted -lcs3arm)
 
 MEMORY
 {
@@ -39,11 +39,15 @@ EXTERN(__cs3_start_asm _start)
 INCLUDE arm-names.inc
 EXTERN(__cs3_interrupt_vector_arm)
 EXTERN(__cs3_start_c main __cs3_stack __cs3_heap_end)
+/* force exit to be picked up in a hosted or os environment */
+EXTERN(exit atexit)
 
 /* Provide fall-back values */
 PROVIDE(__cs3_heap_start = _end);
 PROVIDE(__cs3_heap_end = __cs3_region_start_ram + __cs3_region_size_ram);
 PROVIDE(__cs3_region_num = (__cs3_regions_end - __cs3_regions) / 20);
+/* Ensure that newlib runs the finalizers */
+__libc_fini = _fini;
 PROVIDE(__cs3_stack = __cs3_region_start_ram + __cs3_region_size_ram);
 
 SECTIONS
@@ -259,4 +263,4 @@ SECTIONS
   .ARM.attributes 0 : { KEEP (*(.ARM.attributes)) }
   /DISCARD/ : { *(.note.GNU-stack) }
 }
-/* checksum: 1e31d42b79217b9ca44859 */
+/* checksum: f603040842016f2120526 */

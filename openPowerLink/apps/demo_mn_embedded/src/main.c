@@ -127,6 +127,8 @@ static tOplkError   eventCbPowerlink(tOplkApiEventType eventType_p,
                                      const tOplkApiEventArg* pEventArg_p,
                                      void* pUserArg_p);
 
+int __auto_semihosting;
+
 //============================================================================//
 //            P U B L I C   F U N C T I O N S                                 //
 //============================================================================//
@@ -292,7 +294,6 @@ static tOplkError initPowerlink(const tInstance* pInstance_p)
     initParam.pfnCbEvent = processEvents;
     initParam.pfnCbSync  = processSync;
 
-    PRINTF("obdcreate_initObd\n");
     // Initialize object dictionary
     ret = obdcreate_initObd(&initParam.obdInitParam);
     if (ret != kErrorOk)
@@ -303,7 +304,6 @@ static tOplkError initPowerlink(const tInstance* pInstance_p)
         return ret;
     }
 
-    PRINTF("oplk_initialize\n");
     // initialize POWERLINK stack
     ret = oplk_initialize();
     if (ret != kErrorOk)
@@ -314,7 +314,6 @@ static tOplkError initPowerlink(const tInstance* pInstance_p)
         return ret;
     }
 
-    PRINTF("oplk_create\n");
     ret = oplk_create(&initParam);
     if (ret != kErrorOk)
     {
@@ -324,7 +323,6 @@ static tOplkError initPowerlink(const tInstance* pInstance_p)
         return ret;
     }
 
-    PRINTF("oplk_setCdcBuffer\n");
     ret = oplk_setCdcBuffer(pInstance_p->pCdcBuffer,
                             pInstance_p->cdcBufferSize);
     if (ret != kErrorOk)
