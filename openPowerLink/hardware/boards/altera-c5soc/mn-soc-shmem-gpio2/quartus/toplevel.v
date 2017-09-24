@@ -42,15 +42,15 @@ module toplevel(
     output              HPS_DDR3_RESET_N,
     input               HPS_DDR3_RZQ,
     output              HPS_DDR3_WE_N,
-    output              HPS_ENET_GTX_CLK,
+    inout               HPS_ENET_GTX_CLK,
     inout               HPS_ENET_INT_N,
-    output              HPS_ENET_MDC,
+    inout 					HPS_ENET_MDC,
     inout               HPS_ENET_MDIO,
-    input               HPS_ENET_RX_CLK,
-    input    [ 3: 0]    HPS_ENET_RX_DATA,
-    input               HPS_ENET_RX_DV,
-    output   [ 3: 0]    HPS_ENET_TX_DATA,
-    output              HPS_ENET_TX_EN,
+    inout               HPS_ENET_RX_CLK,
+    inout    [ 3: 0]    HPS_ENET_RX_DATA,
+    inout               HPS_ENET_RX_DV,
+    inout    [ 3: 0]    HPS_ENET_TX_DATA,
+    inout               HPS_ENET_TX_EN,
     inout               HPS_GSENSOR_INT,
     inout               HPS_I2C0_SCLK,
     inout               HPS_I2C0_SDAT,
@@ -103,6 +103,9 @@ assign LED[7: 1] = fpga_led_internal;
 assign fpga_clk_50 = FPGA_CLK1_50;
 assign stm_hw_events = {{15{1'b0}}, SW, fpga_led_internal, fpga_debounced_buttons};
 
+wire [66:0] loanio;
+wire [66:0] loanio_oe;
+assign loanio_oe[27:14] = 1'b00001010011111;
 
 
 //=======================================================
@@ -132,14 +135,29 @@ soc_system u0(
                .memory_mem_dm(HPS_DDR3_DM),                                 //                               .mem_dm
                .memory_oct_rzqin(HPS_DDR3_RZQ),                             //                               .oct_rzqin
                //HPS ethernet
-               .openmac_0_mii_txClk(HPS_ENET_GTX_CLK),    //                   hps_0_hps_io.hps_io_emac1_inst_TX_CLK
-               .openmac_0_mii_txData(HPS_ENET_TX_DATA),   //                               .hps_io_emac1_inst_TXD0
-               .openmac_0_mii_rxData(HPS_ENET_RX_DATA),   //                               .hps_io_emac1_inst_RXD0
-               .openmac_0_smi_dio(HPS_ENET_MDIO),         //                               .hps_io_emac1_inst_MDIO
-//               .hps_0_hps_io_hps_io_emac1_inst_MDC(HPS_ENET_MDC),           //                               .hps_io_emac1_inst_MDC
-               .openmac_0_mii_rxDataValid(HPS_ENET_RX_DV),      //                               .hps_io_emac1_inst_RX_CTL
-               .openmac_0_mii_txEnable(HPS_ENET_TX_EN),      //                               .hps_io_emac1_inst_TX_CTL
-               .openmac_0_mii_rxClk(HPS_ENET_RX_CLK),     //                               .hps_io_emac1_inst_RX_CLK
+					.hps_io_hps_io_gpio_inst_LOANIO14(HPS_ENET_GTX_CLK),
+					.hps_io_hps_io_gpio_inst_LOANIO15(HPS_ENET_TX_DATA[0]),
+					.hps_io_hps_io_gpio_inst_LOANIO16(HPS_ENET_TX_DATA[1]),
+					.hps_io_hps_io_gpio_inst_LOANIO17(HPS_ENET_TX_DATA[2]),
+					.hps_io_hps_io_gpio_inst_LOANIO18(HPS_ENET_TX_DATA[3]),
+					.hps_io_hps_io_gpio_inst_LOANIO19(HPS_ENET_RX_DATA[0]),
+					.hps_io_hps_io_gpio_inst_LOANIO20(HPS_ENET_MDIO),
+					.hps_io_hps_io_gpio_inst_LOANIO21(HPS_ENET_MDC),
+					.hps_io_hps_io_gpio_inst_LOANIO23(HPS_ENET_TX_EN),
+					.hps_io_hps_io_gpio_inst_LOANIO24(HPS_ENET_RX_CLK),
+					.hps_io_hps_io_gpio_inst_LOANIO25(HPS_ENET_RX_DATA[1]),
+					.hps_io_hps_io_gpio_inst_LOANIO26(HPS_ENET_RX_DATA[2]),
+					.hps_io_hps_io_gpio_inst_LOANIO27(HPS_ENET_RX_DATA[3]),
+					.host_0_hps_0_h2f_loan_io_in(loanio),
+					.host_0_hps_0_h2f_loan_io_oe(loanio_oe),
+               .openmac_0_mii_txClk(loanio[14]),    //                   hps_0_hps_io.hps_io_emac1_inst_TX_CLK
+               .openmac_0_mii_txData(loanio[18:15]),   //                               .hps_io_emac1_inst_TXD0
+               .openmac_0_mii_rxData({loanio[27:25],loanio[19]}),   //                               .hps_io_emac1_inst_RXD0
+//               .openmac_0_smi_dio(loanio[21]),         //                               .hps_io_emac1_inst_MDIO
+					.openmac_0_smi_clk(loanio[21]),
+////               .openmac_0_mii_rxDataValid(HPS_ENET_RX_DV),      //                               .hps_io_emac1_inst_RX_CTL
+               .openmac_0_mii_txEnable(loanio[23]),      //                               .hps_io_emac1_inst_TX_CTL
+               .openmac_0_mii_rxClk(loanio[24]),     //                               .hps_io_emac1_inst_RX_CLK
                //HPS SD card
                .hps_io_hps_io_sdio_inst_CMD(HPS_SD_CMD),              //                               .hps_io_sdio_inst_CMD
                .hps_io_hps_io_sdio_inst_D0(HPS_SD_DATA[0]),           //                               .hps_io_sdio_inst_D0

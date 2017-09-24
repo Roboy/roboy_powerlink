@@ -237,6 +237,11 @@
    internal="pcp_0.powerlink_led"
    type="conduit"
    dir="end" />
+ <interface
+   name="host_0_hps_0_h2f_loan_io"
+   internal="host_0.hps_0_h2f_loan_io"
+   type="conduit"
+   dir="end" />
  <module kind="clock_source" version="14.0" enabled="1" name="clk_50">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />

@@ -52,6 +52,19 @@ module mn_soc_host_de10_nano_soc (
 	hps_0_hps_io_hps_io_gpio_inst_GPIO53,
 	hps_0_hps_io_hps_io_gpio_inst_GPIO54,
 	hps_0_hps_io_hps_io_gpio_inst_GPIO61,
+	hps_0_hps_io_hps_io_gpio_inst_LOANIO14,
+	hps_0_hps_io_hps_io_gpio_inst_LOANIO15,
+	hps_0_hps_io_hps_io_gpio_inst_LOANIO16,
+	hps_0_hps_io_hps_io_gpio_inst_LOANIO17,
+	hps_0_hps_io_hps_io_gpio_inst_LOANIO18,
+	hps_0_hps_io_hps_io_gpio_inst_LOANIO19,
+	hps_0_hps_io_hps_io_gpio_inst_LOANIO20,
+	hps_0_hps_io_hps_io_gpio_inst_LOANIO21,
+	hps_0_hps_io_hps_io_gpio_inst_LOANIO23,
+	hps_0_hps_io_hps_io_gpio_inst_LOANIO24,
+	hps_0_hps_io_hps_io_gpio_inst_LOANIO25,
+	hps_0_hps_io_hps_io_gpio_inst_LOANIO26,
+	hps_0_hps_io_hps_io_gpio_inst_LOANIO27,
 	dipsw_pio_external_connection_export,
 	button_pio_external_connection_export,
 	hps_0_f2h_cold_reset_req_reset_n,
@@ -82,7 +95,10 @@ module mn_soc_host_de10_nano_soc (
 	lw_bridge_m0_debugaccess,
 	hps_0_h2f_gp_gp_in,
 	hps_0_h2f_gp_gp_out,
-	hps_0_h2f_cold_reset_reset_n);	
+	hps_0_h2f_cold_reset_reset_n,
+	hps_0_h2f_loan_io_in,
+	hps_0_h2f_loan_io_out,
+	hps_0_h2f_loan_io_oe);	
 
 	output	[14:0]	memory_mem_a;
 	output	[2:0]	memory_mem_ba;
@@ -136,6 +152,19 @@ module mn_soc_host_de10_nano_soc (
 	inout		hps_0_hps_io_hps_io_gpio_inst_GPIO53;
 	inout		hps_0_hps_io_hps_io_gpio_inst_GPIO54;
 	inout		hps_0_hps_io_hps_io_gpio_inst_GPIO61;
+	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO14;
+	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO15;
+	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO16;
+	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO17;
+	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO18;
+	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO19;
+	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO20;
+	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO21;
+	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO23;
+	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO24;
+	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO25;
+	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO26;
+	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO27;
 	input	[3:0]	dipsw_pio_external_connection_export;
 	input	[1:0]	button_pio_external_connection_export;
 	input		hps_0_f2h_cold_reset_req_reset_n;
@@ -167,4 +196,7 @@ module mn_soc_host_de10_nano_soc (
 	input	[31:0]	hps_0_h2f_gp_gp_in;
 	output	[31:0]	hps_0_h2f_gp_gp_out;
 	output		hps_0_h2f_cold_reset_reset_n;
+	output	[66:0]	hps_0_h2f_loan_io_in;
+	input	[66:0]	hps_0_h2f_loan_io_out;
+	input	[66:0]	hps_0_h2f_loan_io_oe;
 endmodule
