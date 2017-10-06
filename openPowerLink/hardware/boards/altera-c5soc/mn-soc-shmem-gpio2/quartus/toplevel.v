@@ -103,9 +103,12 @@ assign LED[7: 1] = fpga_led_internal;
 assign fpga_clk_50 = FPGA_CLK1_50;
 assign stm_hw_events = {{15{1'b0}}, SW, fpga_led_internal, fpga_debounced_buttons};
 
-wire [66:0] loanio;
+wire [66:0] loanio_in;
+wire [66:0] loanio_out;
 wire [66:0] loanio_oe;
 assign loanio_oe[27:14] = 1'b00001010011111;
+wire dio;
+assign dio = loanio_oe[23]?loanio_in[20]: 1'bZ;
 
 
 //=======================================================
@@ -148,16 +151,18 @@ soc_system u0(
 					.hps_io_hps_io_gpio_inst_LOANIO25(HPS_ENET_RX_DATA[1]),
 					.hps_io_hps_io_gpio_inst_LOANIO26(HPS_ENET_RX_DATA[2]),
 					.hps_io_hps_io_gpio_inst_LOANIO27(HPS_ENET_RX_DATA[3]),
-					.host_0_hps_0_h2f_loan_io_in(loanio),
+					.host_0_hps_0_h2f_loan_io_in(loanio_in),
+					.host_0_hps_0_h2f_loan_io_out(loanio_out),
 					.host_0_hps_0_h2f_loan_io_oe(loanio_oe),
-               .openmac_0_mii_txClk(loanio[14]),    //                   hps_0_hps_io.hps_io_emac1_inst_TX_CLK
-               .openmac_0_mii_txData(loanio[18:15]),   //                               .hps_io_emac1_inst_TXD0
-               .openmac_0_mii_rxData({loanio[27:25],loanio[19]}),   //                               .hps_io_emac1_inst_RXD0
-//               .openmac_0_smi_dio(loanio[21]),         //                               .hps_io_emac1_inst_MDIO
-					.openmac_0_smi_clk(loanio[21]),
-////               .openmac_0_mii_rxDataValid(HPS_ENET_RX_DV),      //                               .hps_io_emac1_inst_RX_CTL
-               .openmac_0_mii_txEnable(loanio[23]),      //                               .hps_io_emac1_inst_TX_CTL
-               .openmac_0_mii_rxClk(loanio[24]),     //                               .hps_io_emac1_inst_RX_CLK
+               .openmac_0_mii_txClk(loanio_out[14]),    //                   hps_0_hps_io.hps_io_emac1_inst_TX_CLK
+               .openmac_0_mii_txData(loanio_out[18:15]),   //                               .hps_io_emac1_inst_TXD0
+               .openmac_0_mii_rxData({loanio_in[27:25],loanio_in[19]}),   //                               .hps_io_emac1_inst_RXD0
+               .openmac_0_smi_dio(dio),         //                               .hps_io_emac1_inst_MDIO
+					.openmac_0_smi_clk(loanio_out[21]),
+//               .openmac_0_smi_nPhyRst(hps_fpga_reset_n),      //                               .hps_io_emac1_inst_RX_CTL
+               .openmac_0_mii_txEnable(loanio_in[23]),      //                               .hps_io_emac1_inst_TX_CTL
+               .openmac_0_mii_rxClk(loanio_out[24]),     //                               .hps_io_emac1_inst_RX_CLK
+					.openmac_0_mii_rxError(1'b0),
                //HPS SD card
                .hps_io_hps_io_sdio_inst_CMD(HPS_SD_CMD),              //                               .hps_io_sdio_inst_CMD
                .hps_io_hps_io_sdio_inst_D0(HPS_SD_DATA[0]),           //                               .hps_io_sdio_inst_D0

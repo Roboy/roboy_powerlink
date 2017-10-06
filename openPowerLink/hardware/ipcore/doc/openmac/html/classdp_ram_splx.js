@@ -1,0 +1,25 @@
+var classdp_ram_splx =
+[
+    [ "dpRamSplx.rtl", "classdp_ram_splx_1_1rtl.html", "classdp_ram_splx_1_1rtl" ],
+    [ "gByteenableWidthA", "classdp_ram_splx.html#a5cd1e2b52a92849db4fb5d920e8b57d4", null ],
+    [ "gInitFile", "classdp_ram_splx.html#a49aa587b86adb179e5fa377a5c6b4e0c", null ],
+    [ "global", "classdp_ram_splx.html#ac57613c3e03b80007872c5585d825cdb", null ],
+    [ "gNumberOfWordsA", "classdp_ram_splx.html#a4867416c8e8aa51dacf3cf7f796ed609", null ],
+    [ "gNumberOfWordsB", "classdp_ram_splx.html#a767340334704e6361fa9acea4beb295c", null ],
+    [ "gWordWidthA", "classdp_ram_splx.html#a923aed0994388469ac688acdd216b1d2", null ],
+    [ "gWordWidthB", "classdp_ram_splx.html#ae779b079dba1db70165a41fd3398b568", null ],
+    [ "iAddress_A", "classdp_ram_splx.html#a84ec3554b20b496ba82c197ac8962df0", null ],
+    [ "iAddress_B", "classdp_ram_splx.html#a5072479603e5b0d16b55d47996e1ca22", null ],
+    [ "iByteenable_A", "classdp_ram_splx.html#a42a4cc52f0d3919f990947c947f4e1c8", null ],
+    [ "iClk_A", "classdp_ram_splx.html#a04e6a0bd5814af186f8d277b70795241", null ],
+    [ "iClk_B", "classdp_ram_splx.html#ae8a15e9ca1105cd4171b59be4e5f8ba1", null ],
+    [ "ieee", "classdp_ram_splx.html#a0a6af6eef40212dbaf130d57ce711256", null ],
+    [ "iEnable_A", "classdp_ram_splx.html#a39e4c9af1dbf1a30574938fdbb31229d", null ],
+    [ "iEnable_B", "classdp_ram_splx.html#ae459e04e593c0a954675bb616cb9a110", null ],
+    [ "iWritedata_A", "classdp_ram_splx.html#a0e75b2497b807105abab3d50f77a425e", null ],
+    [ "iWriteEnable_A", "classdp_ram_splx.html#ab3d52cc2d1b282e44699a1a7605b4331", null ],
+    [ "libcommon", "classdp_ram_splx.html#acb0104078aa7553401ad7abeb4e7fc21", null ],
+    [ "numeric_std", "classdp_ram_splx.html#a2edc34402b573437d5f25fa90ba4013e", null ],
+    [ "oReaddata_B", "classdp_ram_splx.html#a687d4b3780d3ae8309c2d3472166c07e", null ],
+    [ "std_logic_1164", "classdp_ram_splx.html#acd03516902501cd1c7296a98e22c6fcb", null ]
+];
