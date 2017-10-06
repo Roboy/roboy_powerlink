@@ -4,7 +4,7 @@
 //=======================================================
 
 module toplevel(
-
+ 
     //////////// CLOCK //////////
     input               FPGA_CLK1_50,
     input               FPGA_CLK2_50,
@@ -106,9 +106,25 @@ assign stm_hw_events = {{15{1'b0}}, SW, fpga_led_internal, fpga_debounced_button
 wire [66:0] loanio_in;
 wire [66:0] loanio_out;
 wire [66:0] loanio_oe;
-assign loanio_oe[27:14] = 1'b00001010011111;
-wire dio;
-assign dio = loanio_oe[23]?loanio_in[20]: 1'bZ;
+
+assign loanio_oe[14] = 1'b1; //HPS_ENET_GTX_CLK
+assign loanio_oe[15] = 1'b1; //HPS_ENET_TX_DATA[0]
+assign loanio_oe[16] = 1'b1; //HPS_ENET_TX_DATA[1]
+assign loanio_oe[17] = 1'b1; //HPS_ENET_TX_DATA[2]
+assign loanio_oe[18] = 1'b1; //HPS_ENET_TX_DATA[3]
+assign loanio_oe[19] = 1'b0; //HPS_ENET_RX_DATA[0]
+assign loanio_oe[21] = 1'b1; //HPS_ENET_MDC
+assign loanio_oe[23] = 1'b1; //HPS_ENET_TX_EN
+assign loanio_oe[24] = 1'b0; //HPS_ENET_RX_CLK
+assign loanio_oe[25] = 1'b0; //HPS_ENET_RX_DATA[1]
+assign loanio_oe[26] = 1'b0; //HPS_ENET_RX_DATA[2]
+assign loanio_oe[27] = 1'b0; //HPS_ENET_RX_DATA[3]
+
+wire smi_data_outEnable, smi_dio;
+
+assign loanio_oe[20] = smi_data_outEnable;
+assign smi_dio = smi_data_outEnable? loanio_out[20]: 1'bZ;
+assign loanio_in[20] = smi_data_outEnable? 1'bZ : smi_dio;
 
 
 //=======================================================
@@ -136,7 +152,7 @@ soc_system u0(
                .memory_mem_dqs_n(HPS_DDR3_DQS_N),                           //                               .mem_dqs_n
                .memory_mem_odt(HPS_DDR3_ODT),                               //                               .mem_odt
                .memory_mem_dm(HPS_DDR3_DM),                                 //                               .mem_dm
-               .memory_oct_rzqin(HPS_DDR3_RZQ),                             //                               .oct_rzqin
+               .memory_oct_rzqin(HPS_DDR3_RZQ),                             //        
                //HPS ethernet
 					.hps_io_hps_io_gpio_inst_LOANIO14(HPS_ENET_GTX_CLK),
 					.hps_io_hps_io_gpio_inst_LOANIO15(HPS_ENET_TX_DATA[0]),
@@ -157,12 +173,13 @@ soc_system u0(
                .openmac_0_mii_txClk(loanio_out[14]),    //                   hps_0_hps_io.hps_io_emac1_inst_TX_CLK
                .openmac_0_mii_txData(loanio_out[18:15]),   //                               .hps_io_emac1_inst_TXD0
                .openmac_0_mii_rxData({loanio_in[27:25],loanio_in[19]}),   //                               .hps_io_emac1_inst_RXD0
-               .openmac_0_smi_dio(dio),         //                               .hps_io_emac1_inst_MDIO
-					.openmac_0_smi_clk(loanio_out[21]),
+					.openmac_0_smi_coe_smi_clk(loanio_out[21]),
+					.openmac_0_smi_coe_smi_dio(smi_dio),
+					.openmac_0_smi_smi_outEnable(smi_data_outEnable),
 //               .openmac_0_smi_nPhyRst(hps_fpga_reset_n),      //                               .hps_io_emac1_inst_RX_CTL
-               .openmac_0_mii_txEnable(loanio_in[23]),      //                               .hps_io_emac1_inst_TX_CTL
-               .openmac_0_mii_rxClk(loanio_out[24]),     //                               .hps_io_emac1_inst_RX_CLK
-					.openmac_0_mii_rxError(1'b0),
+               .openmac_0_mii_txEnable(loanio_out[23]),      //                               .hps_io_emac1_inst_TX_CTL
+               .openmac_0_mii_rxClk(loanio_in[24]),     //                               .hps_io_emac1_inst_RX_CLK
+					.openmac_0_mii_rxError(1'b0), 
                //HPS SD card
                .hps_io_hps_io_sdio_inst_CMD(HPS_SD_CMD),              //                               .hps_io_sdio_inst_CMD
                .hps_io_hps_io_sdio_inst_D0(HPS_SD_DATA[0]),           //                               .hps_io_sdio_inst_D0

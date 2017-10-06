@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="soc_system" kind="soc_system" version="1.0" fabric="QSYS">
  <!-- Format version 14.0 200 (Future versions may contain additional information.) -->
- <!-- 2017.10.05.13:17:13 -->
+ <!-- 2017.10.06.22:30:23 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1507202225</value>
+  <value>1507321815</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -553,7 +553,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.TIMESTAMP</name>
-   <value>1507202225</value>
+   <value>1507321815</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.compatible</name>
@@ -573,7 +573,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.timestamp</name>
-   <value>1507202225</value>
+   <value>1507321815</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.vendor</name>
@@ -589,7 +589,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="timestamp">
    <type>int</type>
-   <value>1507202225</value>
+   <value>1507321815</value>
    <derived>false</derived>
    <enabled>false</enabled>
    <visible>false</visible>
@@ -3670,6 +3670,12 @@ parameters are a RESULT of the module parameters. -->
     <width>1</width>
     <role>export</role>
    </port>
+   <port>
+    <name>smi_outEnable</name>
+    <direction>Output</direction>
+    <width>1</width>
+    <role>export</role>
+   </port>
   </interface>
  </module>
  <module
@@ -3733,7 +3739,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.SIZE_VALUE</name>
-   <value>4096</value>
+   <value>8192</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.WRITABLE</name>
@@ -3833,7 +3839,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="memorySize">
    <type>long</type>
-   <value>4096</value>
+   <value>8192</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -3956,7 +3962,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="derived_set_addr_width">
    <type>int</type>
-   <value>10</value>
+   <value>11</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -4085,7 +4091,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="addressSpan">
     <type>java.math.BigInteger</type>
-    <value>4096</value>
+    <value>8192</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -4173,7 +4179,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="explicitAddressSpan">
     <type>java.math.BigInteger</type>
-    <value>4096</value>
+    <value>8192</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>true</visible>
@@ -4384,7 +4390,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>address</name>
     <direction>Input</direction>
-    <width>10</width>
+    <width>11</width>
     <role>address</role>
    </port>
    <port>
@@ -4513,7 +4519,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="addressSpan">
     <type>java.math.BigInteger</type>
-    <value>4096</value>
+    <value>8192</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -4601,7 +4607,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="explicitAddressSpan">
     <type>java.math.BigInteger</type>
-    <value>4096</value>
+    <value>8192</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>true</visible>
@@ -4812,7 +4818,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>address2</name>
     <direction>Input</direction>
-    <width>10</width>
+    <width>11</width>
     <role>address</role>
    </port>
    <port>
@@ -9825,7 +9831,7 @@ parameters are a RESULT of the module parameters. -->
 the requested settings for a module instance. -->
   <parameter name="AUTO_GENERATION_ID">
    <type>java.lang.Integer</type>
-   <value>1507202225</value>
+   <value>1507321815</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -11639,7 +11645,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>sysid_qsys</moduleName>
     <slaveName>control_slave</slaveName>
     <name>sysid_qsys.control_slave</name>
-    <baseAddress>4096</baseAddress>
+    <baseAddress>8192</baseAddress>
     <span>8</span>
    </memoryBlock>
    <memoryBlock>
@@ -11648,7 +11654,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s1</slaveName>
     <name>com_mem.s1</name>
     <baseAddress>0</baseAddress>
-    <span>4096</span>
+    <span>8192</span>
    </memoryBlock>
   </interface>
   <interface name="hps_0_h2f_gp" kind="conduit_end" version="14.0">
@@ -28451,7 +28457,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>sysid_qsys</moduleName>
     <slaveName>control_slave</slaveName>
     <name>sysid_qsys.control_slave</name>
-    <baseAddress>1052672</baseAddress>
+    <baseAddress>1056768</baseAddress>
     <span>8</span>
    </memoryBlock>
    <memoryBlock>
@@ -28460,7 +28466,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s1</slaveName>
     <name>com_mem.s1</name>
     <baseAddress>1048576</baseAddress>
-    <span>4096</span>
+    <span>8192</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
@@ -55580,7 +55586,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>sysid_qsys</moduleName>
     <slaveName>control_slave</slaveName>
     <name>sysid_qsys.control_slave</name>
-    <baseAddress>1052672</baseAddress>
+    <baseAddress>1056768</baseAddress>
     <span>8</span>
    </memoryBlock>
    <memoryBlock>
@@ -55589,7 +55595,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s1</slaveName>
     <name>com_mem.s1</name>
     <baseAddress>1048576</baseAddress>
-    <span>4096</span>
+    <span>8192</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
@@ -57167,7 +57173,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>sysid_qsys</moduleName>
     <slaveName>control_slave</slaveName>
     <name>sysid_qsys.control_slave</name>
-    <baseAddress>4281339904</baseAddress>
+    <baseAddress>4281344000</baseAddress>
     <span>8</span>
    </memoryBlock>
    <memoryBlock>
@@ -57176,7 +57182,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s1</slaveName>
     <name>com_mem.s1</name>
     <baseAddress>4281335808</baseAddress>
-    <span>4096</span>
+    <span>8192</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
@@ -58064,7 +58070,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>sysid_qsys</moduleName>
     <slaveName>control_slave</slaveName>
     <name>sysid_qsys.control_slave</name>
-    <baseAddress>4281339904</baseAddress>
+    <baseAddress>4281344000</baseAddress>
     <span>8</span>
    </memoryBlock>
    <memoryBlock>
@@ -58073,7 +58079,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s1</slaveName>
     <name>com_mem.s1</name>
     <baseAddress>4281335808</baseAddress>
-    <span>4096</span>
+    <span>8192</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
@@ -89123,7 +89129,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>sysid_qsys</moduleName>
     <slaveName>control_slave</slaveName>
     <name>sysid_qsys.control_slave</name>
-    <baseAddress>4096</baseAddress>
+    <baseAddress>8192</baseAddress>
     <span>8</span>
    </memoryBlock>
    <memoryBlock>
@@ -89132,7 +89138,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s1</slaveName>
     <name>com_mem.s1</name>
     <baseAddress>0</baseAddress>
-    <span>4096</span>
+    <span>8192</span>
    </memoryBlock>
   </interface>
  </module>
@@ -90620,7 +90626,7 @@ parameters are a RESULT of the module parameters. -->
 the requested settings for a module instance. -->
   <parameter name="AUTO_GENERATION_ID">
    <type>java.lang.Integer</type>
-   <value>1507202225</value>
+   <value>1507321815</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -91388,7 +91394,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>sysid_qsys</moduleName>
     <slaveName>control_slave</slaveName>
     <name>sysid_qsys.control_slave</name>
-    <baseAddress>4096</baseAddress>
+    <baseAddress>8192</baseAddress>
     <span>8</span>
    </memoryBlock>
    <memoryBlock>
@@ -91396,7 +91402,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>openmac_0</moduleName>
     <slaveName>macReg</slaveName>
     <name>openmac_0.macReg</name>
-    <baseAddress>8192</baseAddress>
+    <baseAddress>16384</baseAddress>
     <span>8192</span>
    </memoryBlock>
    <memoryBlock>
@@ -91404,7 +91410,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>openmac_0</moduleName>
     <slaveName>macTimer</slaveName>
     <name>openmac_0.macTimer</name>
-    <baseAddress>4128</baseAddress>
+    <baseAddress>8224</baseAddress>
     <span>32</span>
    </memoryBlock>
    <memoryBlock>
@@ -91421,7 +91427,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s2</slaveName>
     <name>com_mem.s2</name>
     <baseAddress>0</baseAddress>
-    <span>4096</span>
+    <span>8192</span>
    </memoryBlock>
   </interface>
   <interface name="cpu_bridge" kind="avalon_master" version="14.0">
@@ -94639,7 +94645,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>sysid_qsys</moduleName>
     <slaveName>control_slave</slaveName>
     <name>sysid_qsys.control_slave</name>
-    <baseAddress>537399296</baseAddress>
+    <baseAddress>537403392</baseAddress>
     <span>8</span>
    </memoryBlock>
    <memoryBlock>
@@ -94647,7 +94653,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>openmac_0</moduleName>
     <slaveName>macReg</slaveName>
     <name>openmac_0.macReg</name>
-    <baseAddress>537403392</baseAddress>
+    <baseAddress>537411584</baseAddress>
     <span>8192</span>
    </memoryBlock>
    <memoryBlock>
@@ -94655,7 +94661,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>openmac_0</moduleName>
     <slaveName>macTimer</slaveName>
     <name>openmac_0.macTimer</name>
-    <baseAddress>537399328</baseAddress>
+    <baseAddress>537403424</baseAddress>
     <span>32</span>
    </memoryBlock>
    <memoryBlock>
@@ -94672,7 +94678,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s2</slaveName>
     <name>com_mem.s2</name>
     <baseAddress>537395200</baseAddress>
-    <span>4096</span>
+    <span>8192</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
@@ -101298,7 +101304,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>sysid_qsys</moduleName>
     <slaveName>control_slave</slaveName>
     <name>sysid_qsys.control_slave</name>
-    <baseAddress>4096</baseAddress>
+    <baseAddress>8192</baseAddress>
     <span>8</span>
    </memoryBlock>
    <memoryBlock>
@@ -101306,7 +101312,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>openmac_0</moduleName>
     <slaveName>macReg</slaveName>
     <name>openmac_0.macReg</name>
-    <baseAddress>8192</baseAddress>
+    <baseAddress>16384</baseAddress>
     <span>8192</span>
    </memoryBlock>
    <memoryBlock>
@@ -101314,7 +101320,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>openmac_0</moduleName>
     <slaveName>macTimer</slaveName>
     <name>openmac_0.macTimer</name>
-    <baseAddress>4128</baseAddress>
+    <baseAddress>8224</baseAddress>
     <span>32</span>
    </memoryBlock>
    <memoryBlock>
@@ -101331,7 +101337,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s2</slaveName>
     <name>com_mem.s2</name>
     <baseAddress>0</baseAddress>
-    <span>4096</span>
+    <span>8192</span>
    </memoryBlock>
   </interface>
  </module>
@@ -106538,7 +106544,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>sysid_qsys</moduleName>
     <slaveName>control_slave</slaveName>
     <name>sysid_qsys.control_slave</name>
-    <baseAddress>528384</baseAddress>
+    <baseAddress>532480</baseAddress>
     <span>8</span>
    </memoryBlock>
    <memoryBlock>
@@ -106546,7 +106552,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>openmac_0</moduleName>
     <slaveName>macReg</slaveName>
     <name>openmac_0.macReg</name>
-    <baseAddress>532480</baseAddress>
+    <baseAddress>540672</baseAddress>
     <span>8192</span>
    </memoryBlock>
    <memoryBlock>
@@ -106554,7 +106560,7 @@ parameters are a RESULT of the module parameters. -->
     <moduleName>openmac_0</moduleName>
     <slaveName>macTimer</slaveName>
     <name>openmac_0.macTimer</name>
-    <baseAddress>528416</baseAddress>
+    <baseAddress>532512</baseAddress>
     <span>32</span>
    </memoryBlock>
    <memoryBlock>
@@ -106571,7 +106577,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s2</slaveName>
     <name>com_mem.s2</name>
     <baseAddress>524288</baseAddress>
-    <span>4096</span>
+    <span>8192</span>
    </memoryBlock>
    <memoryBlock>
     <isBridge>false</isBridge>
@@ -120275,7 +120281,7 @@ parameters are a RESULT of the module parameters. -->
   </parameter>
   <parameter name="baseAddress">
    <type>java.math.BigInteger</type>
-   <value>0x1000</value>
+   <value>0x2000</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -120668,7 +120674,7 @@ parameters are a RESULT of the module parameters. -->
   </parameter>
   <parameter name="baseAddress">
    <type>java.math.BigInteger</type>
-   <value>0x1000</value>
+   <value>0x2000</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -120719,7 +120725,7 @@ parameters are a RESULT of the module parameters. -->
   </parameter>
   <parameter name="baseAddress">
    <type>java.math.BigInteger</type>
-   <value>0x2000</value>
+   <value>0x4000</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -120770,7 +120776,7 @@ parameters are a RESULT of the module parameters. -->
   </parameter>
   <parameter name="baseAddress">
    <type>java.math.BigInteger</type>
-   <value>0x1020</value>
+   <value>0x2020</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>

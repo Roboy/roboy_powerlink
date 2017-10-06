@@ -254,6 +254,12 @@ entity alteraOpenmacTop is
         coe_smi_clk             : out   std_logic_vector(gSmiPortCount-1 downto 0);
         --! SMI data I/OI (tri-state buffer)
         coe_smi_dio             : inout std_logic_vector(gSmiPortCount-1 downto 0);
+	--! Smi tri-state-buffer input
+   	--smi_data_in          : in std_logic_vector(gSmiPortCount-1 downto 0);
+   	--! Smi tri-state-buffer output
+        --smi_data_out         : out std_logic_vector(gSmiPortCount-1 downto 0);
+    	--! Smi tri-state-buffer output enable
+    	smi_outEnable   : out std_logic;
         -----------------------------------------------------------------------
         -- Other ports
         -----------------------------------------------------------------------
@@ -337,6 +343,8 @@ begin
     -- Assign SMI IO buffers
     coe_smi_dio <=  smi_data_out    when smi_data_outEnable = cActivated else
                     (others => 'Z');
+
+    smi_outEnable <= smi_data_outEnable;
     -- Simply assign the input vector.
     smi_data_in <= coe_smi_dio;
 

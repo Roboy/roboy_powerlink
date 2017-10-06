@@ -884,6 +884,7 @@ set_interface_property  smi ENABLED true
 add_interface_port      smi coe_smi_nPhyRst export Output gsmiportcount
 add_interface_port      smi coe_smi_clk export Output gsmiportcount
 add_interface_port      smi coe_smi_dio export Bidir gsmiportcount
+add_interface_port      smi smi_outEnable export Output gsmiportcount
 
 # connection point pktActivity
 add_interface           pktActivity conduit end
