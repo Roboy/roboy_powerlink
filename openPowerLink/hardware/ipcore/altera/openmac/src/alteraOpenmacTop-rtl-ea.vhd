@@ -253,13 +253,13 @@ entity alteraOpenmacTop is
         --! SMI clock
         coe_smi_clk             : out   std_logic_vector(gSmiPortCount-1 downto 0);
         --! SMI data I/OI (tri-state buffer)
-        coe_smi_dio             : inout std_logic_vector(gSmiPortCount-1 downto 0);
+        --coe_smi_dio             : inout std_logic_vector(gSmiPortCount-1 downto 0);
 	--! Smi tri-state-buffer input
-   	--smi_data_in          : in std_logic_vector(gSmiPortCount-1 downto 0);
-   	--! Smi tri-state-buffer output
-        --smi_data_out         : out std_logic_vector(gSmiPortCount-1 downto 0);
+    	smi_data_in          : in std_logic_vector(gSmiPortCount-1 downto 0);
+    	--! Smi tri-state-buffer output
+    	smi_data_out         : out std_logic_vector(gSmiPortCount-1 downto 0);
     	--! Smi tri-state-buffer output enable
-    	smi_outEnable   : out std_logic;
+    	smi_data_outEnable   : out std_logic;
         -----------------------------------------------------------------------
         -- Other ports
         -----------------------------------------------------------------------
@@ -291,11 +291,11 @@ architecture rtl of alteraOpenmacTop is
     signal miiRx                : tMiiPathArray(gPhyPortCount-1 downto 0);
 
     --! Smi tri-state-buffer input
-    signal smi_data_in          : std_logic_vector(gSmiPortCount-1 downto 0);
+    --signal smi_data_in          : std_logic_vector(gSmiPortCount-1 downto 0);
     --! Smi tri-state-buffer output
-    signal smi_data_out         : std_logic_vector(gSmiPortCount-1 downto 0);
+    --signal smi_data_out         : std_logic_vector(gSmiPortCount-1 downto 0);
     --! Smi tri-state-buffer output enable
-    signal smi_data_outEnable   : std_logic;
+    --signal smi_data_outEnable   : std_logic;
 begin
     ---------------------------------------------------------------------------
     -- Map outputs
@@ -341,12 +341,10 @@ begin
     -- Map IOs
     ---------------------------------------------------------------------------
     -- Assign SMI IO buffers
-    coe_smi_dio <=  smi_data_out    when smi_data_outEnable = cActivated else
-                    (others => 'Z');
-
-    smi_outEnable <= smi_data_outEnable;
+    --coe_smi_dio <=  coe_smi_data_out    when smi_data_outEnable = cActivated else
+    --                (others => 'Z');
     -- Simply assign the input vector.
-    smi_data_in <= coe_smi_dio;
+    --coe_smi_data_in <= coe_smi_dio;
 
     --! This is the openMAC toplevel instantiation.
     THEOPENMACTOP : entity work.openmacTop
