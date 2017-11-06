@@ -115,7 +115,7 @@
          type = "String";
       }
    }
-   element onchip_memory2_0.s1
+   element com_mem.s1
    {
       datum baseAddress
       {
@@ -123,7 +123,7 @@
          type = "String";
       }
    }
-   element com_mem.s1
+   element onchip_memory2_0.s1
    {
       datum baseAddress
       {
@@ -572,7 +572,7 @@
   <parameter name="AUTO_MAC_IRQ_INTERRUPTS_USED" value="1" />
   <parameter name="AUTO_GP_IRQ_INTERRUPTS_USED" value="0" />
   <parameter name="cpu0_resetCpuBridge" value="cpu_bridge" />
-  <parameter name="tcmemSize" value="40000" />
+  <parameter name="tcmemSize" value="32768" />
  </module>
  <connection kind="clock" version="14.0" start="clk_50.clk" end="sysid_qsys.clk" />
  <connection

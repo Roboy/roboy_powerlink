@@ -17,5 +17,7 @@ make install
 
 cd $current_dir
 cd $current_dir/drivers/altera-nios2/drv_daemon/build/
-./create-this-app --debug --board ../../../../hardware/boards/altera-c5soc/mn-soc-shmem-gpio2 
+make clean
+rm -rf bsp-nios2_gen2_0 bsp-pcp_0_cpu_0 drv_daemon.* liboplkmndrv-* Makefile  obj  system.mk
+./create-this-app --board ../../../../hardware/boards/altera-c5soc/mn-soc-shmem-gpio2 
 make all

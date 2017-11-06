@@ -749,7 +749,7 @@ static OMETH_H        omethCreateInt
     {
         //use heap
         pByte = (unsigned char*)
-                OMETH_UNCACHED_MALLOC(hEth->config.rxBuffers * len);
+        		OMETH_UNCACHED_MALLOC(hEth->config.rxBuffers * len);
 
         //store tx buffer address equ. rx buffer -> tx is handled by user!
         hEth->pTxBufBase = pByte;

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="soc_system" kind="soc_system" version="1.0" fabric="QSYS">
- <!-- Format version 14.0 200 (Future versions may contain additional information.) -->
- <!-- 2017.11.06.14:31:54 -->
+ <!-- Format version 14.0 209 (Future versions may contain additional information.) -->
+ <!-- 2017.11.06.19:40:43 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1509975107</value>
+  <value>1509993632</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -553,7 +553,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.TIMESTAMP</name>
-   <value>1509975107</value>
+   <value>1509993632</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.compatible</name>
@@ -573,7 +573,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.timestamp</name>
-   <value>1509975107</value>
+   <value>1509993632</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.vendor</name>
@@ -589,7 +589,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="timestamp">
    <type>int</type>
-   <value>1509975107</value>
+   <value>1509993632</value>
    <derived>false</derived>
    <enabled>false</enabled>
    <visible>false</visible>
@@ -9837,7 +9837,7 @@ parameters are a RESULT of the module parameters. -->
 the requested settings for a module instance. -->
   <parameter name="AUTO_GENERATION_ID">
    <type>java.lang.Integer</type>
-   <value>1509975107</value>
+   <value>1509993632</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -78202,7 +78202,7 @@ parameters are a RESULT of the module parameters. -->
 the requested settings for a module instance. -->
   <assignment>
    <name>embeddedsw.dts.compatible</name>
-   <value>snps,dwc-otg</value>
+   <value>snps,dwc-otg snps,dwc2</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.group</name>
@@ -78213,6 +78213,10 @@ the requested settings for a module instance. -->
    <value>dwc-otg</value>
   </assignment>
   <assignment>
+   <name>embeddedsw.dts.params.clock-names</name>
+   <value>otg</value>
+  </assignment>
+  <assignment>
    <name>embeddedsw.dts.params.dev-nperio-tx-fifo-size</name>
    <value>4096</value>
   </assignment>
@@ -78221,20 +78225,36 @@ the requested settings for a module instance. -->
    <value><![CDATA[<512 512 512 512 512 512 512 512 512 512 512 512 512 512 512>]]></value>
   </assignment>
   <assignment>
-   <name>embeddedsw.dts.params.dev-tx-fifo-size</name>
-   <value><![CDATA[<512 512 512 512 512 512 512 512 512 512 512 512 512 512 512>]]></value>
+   <name>embeddedsw.dts.params.dev-rx-fifo-size</name>
+   <value>512</value>
   </assignment>
   <assignment>
-   <name>embeddedsw.dts.params.dev_rx_fifo-size</name>
-   <value>512</value>
+   <name>embeddedsw.dts.params.dev-tx-fifo-size</name>
+   <value><![CDATA[<512 512 512 512 512 512 512 512 512 512 512 512 512 512 512>]]></value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.dma-mask</name>
    <value>268435455</value>
   </assignment>
   <assignment>
-   <name>embeddedsw.dts.params.host_rx_fifo-size</name>
-   <value>512</value>
+   <name>embeddedsw.dts.params.enable-dynamic-fifo</name>
+   <value>1</value>
+  </assignment>
+  <assignment>
+   <name>embeddedsw.dts.params.host-nperio-tx-fifo-size</name>
+   <value>0xa00</value>
+  </assignment>
+  <assignment>
+   <name>embeddedsw.dts.params.host-perio-tx-fifo-size</name>
+   <value>0xa00</value>
+  </assignment>
+  <assignment>
+   <name>embeddedsw.dts.params.host-rx-fifo-size</name>
+   <value>0xa00</value>
+  </assignment>
+  <assignment>
+   <name>embeddedsw.dts.params.phy-names</name>
+   <value>usb2-phy</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.status</name>
@@ -78822,7 +78842,7 @@ parameters are a RESULT of the module parameters. -->
 the requested settings for a module instance. -->
   <assignment>
    <name>embeddedsw.dts.compatible</name>
-   <value>snps,dwc-otg</value>
+   <value>snps,dwc-otg snps,dwc2</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.group</name>
@@ -78833,6 +78853,10 @@ the requested settings for a module instance. -->
    <value>dwc-otg</value>
   </assignment>
   <assignment>
+   <name>embeddedsw.dts.params.clock-names</name>
+   <value>otg</value>
+  </assignment>
+  <assignment>
    <name>embeddedsw.dts.params.dev-nperio-tx-fifo-size</name>
    <value>4096</value>
   </assignment>
@@ -78841,20 +78865,36 @@ the requested settings for a module instance. -->
    <value><![CDATA[<512 512 512 512 512 512 512 512 512 512 512 512 512 512 512>]]></value>
   </assignment>
   <assignment>
-   <name>embeddedsw.dts.params.dev-tx-fifo-size</name>
-   <value><![CDATA[<512 512 512 512 512 512 512 512 512 512 512 512 512 512 512>]]></value>
+   <name>embeddedsw.dts.params.dev-rx-fifo-size</name>
+   <value>512</value>
   </assignment>
   <assignment>
-   <name>embeddedsw.dts.params.dev_rx_fifo-size</name>
-   <value>512</value>
+   <name>embeddedsw.dts.params.dev-tx-fifo-size</name>
+   <value><![CDATA[<512 512 512 512 512 512 512 512 512 512 512 512 512 512 512>]]></value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.dma-mask</name>
    <value>268435455</value>
   </assignment>
   <assignment>
-   <name>embeddedsw.dts.params.host_rx_fifo-size</name>
-   <value>512</value>
+   <name>embeddedsw.dts.params.enable-dynamic-fifo</name>
+   <value>1</value>
+  </assignment>
+  <assignment>
+   <name>embeddedsw.dts.params.host-nperio-tx-fifo-size</name>
+   <value>0xa00</value>
+  </assignment>
+  <assignment>
+   <name>embeddedsw.dts.params.host-perio-tx-fifo-size</name>
+   <value>0xa00</value>
+  </assignment>
+  <assignment>
+   <name>embeddedsw.dts.params.host-rx-fifo-size</name>
+   <value>0xa00</value>
+  </assignment>
+  <assignment>
+   <name>embeddedsw.dts.params.phy-names</name>
+   <value>usb2-phy</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.status</name>
@@ -88086,7 +88126,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedClock">
     <type>java.lang.String</type>
-    <value></value>
+    <value>clk</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -88094,7 +88134,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedReset">
     <type>java.lang.String</type>
-    <value></value>
+    <value>clk_reset</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -90632,7 +90672,7 @@ parameters are a RESULT of the module parameters. -->
 the requested settings for a module instance. -->
   <parameter name="AUTO_GENERATION_ID">
    <type>java.lang.Integer</type>
-   <value>1509975107</value>
+   <value>1509993632</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -90766,7 +90806,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="tcmemSize">
    <type>java.lang.Integer</type>
-   <value>40000</value>
+   <value>32768</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -92874,7 +92914,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.DCACHE_SIZE</name>
-   <value>4096</value>
+   <value>8192</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.EXCEPTION_ADDR</name>
@@ -93006,7 +93046,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.dcache-size</name>
-   <value>4096</value>
+   <value>8192</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.icache-line-size</name>
@@ -93686,7 +93726,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="dcache_size">
    <type>int</type>
-   <value>4096</value>
+   <value>8192</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -93862,7 +93902,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="dcache_size_derived">
    <type>int</type>
-   <value>4096</value>
+   <value>8192</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -94062,7 +94102,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="tightlyCoupledDataMaster0MapParam">
    <type>java.lang.String</type>
-   <value><![CDATA[<address-map><slave name='tc_mem.s2' start='0x8000000' end='0x8009C40' /></address-map>]]></value>
+   <value><![CDATA[<address-map><slave name='tc_mem.s2' start='0x8000000' end='0x8008000' /></address-map>]]></value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -94102,7 +94142,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="tightlyCoupledInstructionMaster0MapParam">
    <type>java.lang.String</type>
-   <value><![CDATA[<address-map><slave name='tc_mem.s1' start='0x8000000' end='0x8009C40' /></address-map>]]></value>
+   <value><![CDATA[<address-map><slave name='tc_mem.s1' start='0x8000000' end='0x8008000' /></address-map>]]></value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -95369,7 +95409,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s2</slaveName>
     <name>pcp_0_tc_mem.s2</name>
     <baseAddress>134217728</baseAddress>
-    <span>40000</span>
+    <span>32768</span>
    </memoryBlock>
   </interface>
   <interface
@@ -95679,7 +95719,7 @@ parameters are a RESULT of the module parameters. -->
     <slaveName>s1</slaveName>
     <name>pcp_0_tc_mem.s1</name>
     <baseAddress>134217728</baseAddress>
-    <span>40000</span>
+    <span>32768</span>
    </memoryBlock>
   </interface>
   <interface name="d_irq" kind="interrupt_receiver" version="14.0">
@@ -96482,7 +96522,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.SIZE_VALUE</name>
-   <value>40000</value>
+   <value>32768</value>
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.WRITABLE</name>
@@ -96582,7 +96622,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="memorySize">
    <type>long</type>
-   <value>40000</value>
+   <value>32768</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -96705,7 +96745,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="derived_set_addr_width">
    <type>int</type>
-   <value>14</value>
+   <value>13</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -96834,7 +96874,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="addressSpan">
     <type>java.math.BigInteger</type>
-    <value>40000</value>
+    <value>32768</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -96922,7 +96962,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="explicitAddressSpan">
     <type>java.math.BigInteger</type>
-    <value>40000</value>
+    <value>32768</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>true</visible>
@@ -97133,7 +97173,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>address</name>
     <direction>Input</direction>
-    <width>14</width>
+    <width>13</width>
     <role>address</role>
    </port>
    <port>
@@ -97262,7 +97302,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="addressSpan">
     <type>java.math.BigInteger</type>
-    <value>40000</value>
+    <value>32768</value>
     <derived>true</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -97350,7 +97390,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="explicitAddressSpan">
     <type>java.math.BigInteger</type>
-    <value>40000</value>
+    <value>32768</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>true</visible>
@@ -97561,7 +97601,7 @@ parameters are a RESULT of the module parameters. -->
    <port>
     <name>address2</name>
     <direction>Input</direction>
-    <width>14</width>
+    <width>13</width>
     <role>address</role>
    </port>
    <port>
@@ -102602,7 +102642,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedClock">
     <type>java.lang.String</type>
-    <value></value>
+    <value>clk</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -102610,7 +102650,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedReset">
     <type>java.lang.String</type>
-    <value></value>
+    <value>clk_reset</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -102931,7 +102971,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedClock">
     <type>java.lang.String</type>
-    <value></value>
+    <value>clk</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -102939,7 +102979,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedReset">
     <type>java.lang.String</type>
-    <value></value>
+    <value>clk_reset</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -104243,7 +104283,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedClock">
     <type>java.lang.String</type>
-    <value></value>
+    <value>clk</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -104251,7 +104291,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedReset">
     <type>java.lang.String</type>
-    <value></value>
+    <value>clk_reset</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -104320,7 +104360,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedClock">
     <type>java.lang.String</type>
-    <value></value>
+    <value>clk</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -104328,7 +104368,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedReset">
     <type>java.lang.String</type>
-    <value></value>
+    <value>clk_reset</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -104397,7 +104437,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedClock">
     <type>java.lang.String</type>
-    <value></value>
+    <value>clk</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -104405,7 +104445,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedReset">
     <type>java.lang.String</type>
-    <value></value>
+    <value>clk_reset</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -104474,7 +104514,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedClock">
     <type>java.lang.String</type>
-    <value></value>
+    <value>clk</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -104482,7 +104522,7 @@ parameters are a RESULT of the module parameters. -->
    </parameter>
    <parameter name="associatedReset">
     <type>java.lang.String</type>
-    <value></value>
+    <value>clk_reset</value>
     <derived>false</derived>
     <enabled>true</enabled>
     <visible>false</visible>
@@ -121619,6 +121659,6 @@ parameters are a RESULT of the module parameters. -->
   <displayName>Interrupt Connection</displayName>
   <version>14.0</version>
  </plugin>
- <reportVersion>14.0 200</reportVersion>
+ <reportVersion>14.0 209</reportVersion>
  <uniqueIdentifier></uniqueIdentifier>
 </EnsembleReport>
