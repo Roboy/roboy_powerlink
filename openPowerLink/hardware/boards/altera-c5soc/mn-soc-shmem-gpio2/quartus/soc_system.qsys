@@ -50,7 +50,7 @@
    {
       datum baseAddress
       {
-         value = "8192";
+         value = "32768";
          type = "String";
       }
    }
@@ -66,7 +66,7 @@
    {
       datum baseAddress
       {
-         value = "16384";
+         value = "40960";
          type = "String";
       }
    }
@@ -74,7 +74,7 @@
    {
       datum baseAddress
       {
-         value = "8224";
+         value = "32800";
          type = "String";
       }
    }
@@ -111,11 +111,11 @@
    {
       datum baseAddress
       {
-         value = "32768";
+         value = "65536";
          type = "String";
       }
    }
-   element com_mem.s1
+   element onchip_memory2_0.s1
    {
       datum baseAddress
       {
@@ -123,7 +123,7 @@
          type = "String";
       }
    }
-   element onchip_memory2_0.s1
+   element com_mem.s1
    {
       datum baseAddress
       {
@@ -291,7 +291,7 @@
   <parameter name="initMemContent" value="true" />
   <parameter name="initializationFileName" value="onchip_mem.hex" />
   <parameter name="instanceID" value="NONE" />
-  <parameter name="memorySize" value="8192" />
+  <parameter name="memorySize" value="8096" />
   <parameter name="readDuringWriteMode" value="DONT_CARE" />
   <parameter name="simAllowMRAMContentsFile" value="false" />
   <parameter name="simMemInitOnlyFilename" value="0" />
@@ -572,7 +572,7 @@
   <parameter name="AUTO_MAC_IRQ_INTERRUPTS_USED" value="1" />
   <parameter name="AUTO_GP_IRQ_INTERRUPTS_USED" value="0" />
   <parameter name="cpu0_resetCpuBridge" value="cpu_bridge" />
-  <parameter name="tcmemSize" value="20480" />
+  <parameter name="tcmemSize" value="40000" />
  </module>
  <connection kind="clock" version="14.0" start="clk_50.clk" end="sysid_qsys.clk" />
  <connection
@@ -652,7 +652,7 @@
    start="host_0.lw_bridge_m0"
    end="sysid_qsys.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x2000" />
+  <parameter name="baseAddress" value="0x8000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -719,7 +719,7 @@
    start="pcp_0.slow_bridge"
    end="sysid_qsys.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x2000" />
+  <parameter name="baseAddress" value="0x8000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -728,7 +728,7 @@
    start="pcp_0.slow_bridge"
    end="openmac_0.macReg">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x4000" />
+  <parameter name="baseAddress" value="0xa000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -737,7 +737,7 @@
    start="pcp_0.slow_bridge"
    end="openmac_0.macTimer">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x2020" />
+  <parameter name="baseAddress" value="0x8020" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -746,7 +746,7 @@
    start="pcp_0.slow_bridge"
    end="openmac_0.pktBuf">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x8000" />
+  <parameter name="baseAddress" value="0x00010000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
