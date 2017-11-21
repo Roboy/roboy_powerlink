@@ -341,10 +341,10 @@ begin
     -- Map IOs
     ---------------------------------------------------------------------------
     -- Assign SMI IO buffers
-    --coe_smi_dio <=  coe_smi_data_out    when smi_data_outEnable = cActivated else
+    --coe_smi_dio <=  smi_data_out    when smi_data_outEnable = cActivated else
     --                (others => 'Z');
     -- Simply assign the input vector.
-    --coe_smi_data_in <= coe_smi_dio;
+    --smi_data_in <= coe_smi_dio;
 
     --! This is the openMAC toplevel instantiation.
     THEOPENMACTOP : entity work.openmacTop

@@ -59,6 +59,7 @@
 		.hps_0_hps_io_hps_io_gpio_inst_LOANIO19 (<connected-to-hps_0_hps_io_hps_io_gpio_inst_LOANIO19>), //                               .hps_io_gpio_inst_LOANIO19
 		.hps_0_hps_io_hps_io_gpio_inst_LOANIO20 (<connected-to-hps_0_hps_io_hps_io_gpio_inst_LOANIO20>), //                               .hps_io_gpio_inst_LOANIO20
 		.hps_0_hps_io_hps_io_gpio_inst_LOANIO21 (<connected-to-hps_0_hps_io_hps_io_gpio_inst_LOANIO21>), //                               .hps_io_gpio_inst_LOANIO21
+		.hps_0_hps_io_hps_io_gpio_inst_LOANIO22 (<connected-to-hps_0_hps_io_hps_io_gpio_inst_LOANIO22>), //                               .hps_io_gpio_inst_LOANIO22
 		.hps_0_hps_io_hps_io_gpio_inst_LOANIO23 (<connected-to-hps_0_hps_io_hps_io_gpio_inst_LOANIO23>), //                               .hps_io_gpio_inst_LOANIO23
 		.hps_0_hps_io_hps_io_gpio_inst_LOANIO24 (<connected-to-hps_0_hps_io_hps_io_gpio_inst_LOANIO24>), //                               .hps_io_gpio_inst_LOANIO24
 		.hps_0_hps_io_hps_io_gpio_inst_LOANIO25 (<connected-to-hps_0_hps_io_hps_io_gpio_inst_LOANIO25>), //                               .hps_io_gpio_inst_LOANIO25

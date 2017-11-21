@@ -1,5 +1,5 @@
 #!/bin/sh
 sopc-create-header-files \
 "./soc_system.sopcinfo" \
---single hps_0.h \
---module hps_0
+--single host_0.h \
+--module host_0

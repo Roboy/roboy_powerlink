@@ -194,12 +194,12 @@ int main(void)
     PRINTF("NODEID=0x%02X\n", instance_l.nodeId);
     lcd_printNodeId(instance_l.nodeId);
 
-    PRINTF("initalizing powerlink\n");
+    PRINTF("initializing powerlink\n");
     ret = initPowerlink(&instance_l);
     if (ret != kErrorOk)
         goto Exit;
 
-    PRINTF("initalizing app\n");
+    PRINTF("initializing app\n");
     ret = initApp();
     if (ret != kErrorOk)
         goto Exit;
@@ -397,13 +397,13 @@ static tOplkError loopMain(tInstance* pInstance_p)
         {
             case 0x01:
                 PRINTF("KEY0: SwReset\n");
-                lcd_printText("KEY0: SwReset", 2);
+//                lcd_printText("KEY0: SwReset", 2);
                 ret = oplk_execNmtCommand(kNmtEventSwReset);
                 break;
 
             case 0x02:
                 PRINTF("KEY1: SwitchOff\n");
-                lcd_printText("KEY1: SwitchOff", 2);
+//                lcd_printText("KEY1: SwitchOff", 2);
                 ret = oplk_execNmtCommand(kNmtEventSwitchOff);
                 break;
 

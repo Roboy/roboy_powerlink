@@ -107,18 +107,21 @@ wire [66:0] loanio_in;
 wire [66:0] loanio_out;
 wire [66:0] loanio_oe;
 
-assign loanio_oe[14] = 1'b1; //HPS_ENET_GTX_CLK
-assign loanio_oe[15] = 1'b1; //HPS_ENET_TX_DATA[0]
-assign loanio_oe[16] = 1'b1; //HPS_ENET_TX_DATA[1]
-assign loanio_oe[17] = 1'b1; //HPS_ENET_TX_DATA[2]
-assign loanio_oe[18] = 1'b1; //HPS_ENET_TX_DATA[3]
-assign loanio_oe[19] = 1'b0; //HPS_ENET_RX_DATA[0]
-assign loanio_oe[21] = 1'b1; //HPS_ENET_MDC
-assign loanio_oe[23] = 1'b1; //HPS_ENET_TX_EN
-assign loanio_oe[24] = 1'b1; //HPS_ENET_RX_CLK
-assign loanio_oe[25] = 1'b0; //HPS_ENET_RX_DATA[1]
-assign loanio_oe[26] = 1'b0; //HPS_ENET_RX_DATA[2]
-assign loanio_oe[27] = 1'b0; //HPS_ENET_RX_DATA[3]
+assign loanio_oe[14] = 1; //HPS_ENET_GTX_CLK
+assign loanio_oe[15] = 1; //HPS_ENET_TX_DATA[0]
+assign loanio_oe[16] = 1; //HPS_ENET_TX_DATA[1]
+assign loanio_oe[17] = 1; //HPS_ENET_TX_DATA[2]
+assign loanio_oe[18] = 1; //HPS_ENET_TX_DATA[3]
+assign loanio_oe[19] = 0; //HPS_ENET_RX_DATA[0]
+assign loanio_oe[21] = 1; //HPS_ENET_MDC
+assign loanio_oe[22] = 0; //HPS_ENET_RX_DV
+assign loanio_oe[23] = 1; //HPS_ENET_TX_EN
+assign loanio_oe[24] = 1; //HPS_ENET_RX_CLK
+assign loanio_oe[25] = 0; //HPS_ENET_RX_DATA[1]
+assign loanio_oe[26] = 0; //HPS_ENET_RX_DATA[2]
+assign loanio_oe[27] = 0; //HPS_ENET_RX_DATA[3]
+
+
 
 //=======================================================
 //  Structural coding
@@ -155,6 +158,7 @@ soc_system u0(
 					.hps_io_hps_io_gpio_inst_LOANIO19(HPS_ENET_RX_DATA[0]),
 					.hps_io_hps_io_gpio_inst_LOANIO20(HPS_ENET_MDIO),
 					.hps_io_hps_io_gpio_inst_LOANIO21(HPS_ENET_MDC),
+					.hps_io_hps_io_gpio_inst_LOANIO22(HPS_ENET_RX_DV),
 					.hps_io_hps_io_gpio_inst_LOANIO23(HPS_ENET_TX_EN),
 					.hps_io_hps_io_gpio_inst_LOANIO24(HPS_ENET_RX_CLK),
 					.hps_io_hps_io_gpio_inst_LOANIO25(HPS_ENET_RX_DATA[1]),
@@ -168,12 +172,13 @@ soc_system u0(
                .openmac_0_mii_rxData({loanio_in[27:25],loanio_in[19]}),   //                               .hps_io_emac1_inst_RXD0
 					.openmac_0_smi_coe_smi_clk(loanio_out[21]),
 //					.openmac_0_smi_dio(smi_dio),
+					.openmac_0_mii_rxDataValid(loanio_in[22]),
 					.openmac_0_smi_smi_data_outEnable(loanio_oe[20]),
-					.openmac_0_smi_smi_data_in(loanio_out[20]),
-					.openmac_0_smi_smi_data_out(loanio_in[20]),
+					.openmac_0_smi_smi_data_in(loanio_in[20]),
+					.openmac_0_smi_smi_data_out(loanio_out[20]),
 //               .openmac_0_smi_nPhyRst(hps_fpga_reset_n),      //                               .hps_io_emac1_inst_RX_CTL
                .openmac_0_mii_txEnable(loanio_out[23]),      //                               .hps_io_emac1_inst_TX_CTL
-               .openmac_0_mii_rxClk(loanio_out[24]),     //                               .hps_io_emac1_inst_RX_CLK
+               .openmac_0_mii_rxClk(loanio_in[24]),     //                               .hps_io_emac1_inst_RX_CLK
 					.openmac_0_mii_rxError(1'b0), 
                //HPS SD card
                .hps_io_hps_io_sdio_inst_CMD(HPS_SD_CMD),              //                               .hps_io_sdio_inst_CMD

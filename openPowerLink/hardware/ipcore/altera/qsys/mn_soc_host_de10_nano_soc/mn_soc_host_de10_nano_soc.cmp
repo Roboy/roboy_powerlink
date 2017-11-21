@@ -60,6 +60,7 @@
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO19 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO19
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO20 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO20
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO21 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO21
+			hps_0_hps_io_hps_io_gpio_inst_LOANIO22 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO22
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO23 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO23
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO24 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO24
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO25 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO25

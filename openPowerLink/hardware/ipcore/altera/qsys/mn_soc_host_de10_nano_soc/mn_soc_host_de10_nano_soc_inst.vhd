@@ -60,6 +60,7 @@
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO19 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO19
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO20 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO20
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO21 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO21
+			hps_0_hps_io_hps_io_gpio_inst_LOANIO22 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO22
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO23 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO23
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO24 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO24
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO25 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO25
@@ -164,6 +165,7 @@
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO19 => CONNECTED_TO_hps_0_hps_io_hps_io_gpio_inst_LOANIO19, --                               .hps_io_gpio_inst_LOANIO19
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO20 => CONNECTED_TO_hps_0_hps_io_hps_io_gpio_inst_LOANIO20, --                               .hps_io_gpio_inst_LOANIO20
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO21 => CONNECTED_TO_hps_0_hps_io_hps_io_gpio_inst_LOANIO21, --                               .hps_io_gpio_inst_LOANIO21
+			hps_0_hps_io_hps_io_gpio_inst_LOANIO22 => CONNECTED_TO_hps_0_hps_io_hps_io_gpio_inst_LOANIO22, --                               .hps_io_gpio_inst_LOANIO22
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO23 => CONNECTED_TO_hps_0_hps_io_hps_io_gpio_inst_LOANIO23, --                               .hps_io_gpio_inst_LOANIO23
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO24 => CONNECTED_TO_hps_0_hps_io_hps_io_gpio_inst_LOANIO24, --                               .hps_io_gpio_inst_LOANIO24
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO25 => CONNECTED_TO_hps_0_hps_io_hps_io_gpio_inst_LOANIO25, --                               .hps_io_gpio_inst_LOANIO25
