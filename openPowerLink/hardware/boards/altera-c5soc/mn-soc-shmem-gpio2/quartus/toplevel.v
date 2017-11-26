@@ -74,6 +74,9 @@ module toplevel(
     input               HPS_USB_NXT,
     output              HPS_USB_STP,
 
+	 ///////// GPIO /////////
+	 inout       [1:0]GPIO_0,
+	 
     //////////// KEY //////////
     input    [ 1: 0]    KEY,
 
@@ -116,12 +119,26 @@ assign loanio_oe[19] = 0; //HPS_ENET_RX_DATA[0]
 assign loanio_oe[21] = 1; //HPS_ENET_MDC
 assign loanio_oe[22] = 0; //HPS_ENET_RX_DV
 assign loanio_oe[23] = 1; //HPS_ENET_TX_EN
-assign loanio_oe[24] = 1; //HPS_ENET_RX_CLK
+assign loanio_oe[24] = 0; //HPS_ENET_RX_CLK
 assign loanio_oe[25] = 0; //HPS_ENET_RX_DATA[1]
 assign loanio_oe[26] = 0; //HPS_ENET_RX_DATA[2]
 assign loanio_oe[27] = 0; //HPS_ENET_RX_DATA[3]
 
+reg clock_divider;
+wire clk_25;
+assign clk_25 = clock_divider;
+assign loanio_out[14] = clk_25;
+assign GPIO_0[0] = clk_25;
+assign GPIO_0[1] = FPGA_CLK1_50;
+//pll_25MHz clk_25MHz(
+//	.refclk(FPGA_CLK1_50),
+//	.rst(1'b0),
+//	.outclk_0(clk_25)
+//);
 
+always @(posedge FPGA_CLK1_50) begin
+    clock_divider <= clock_divider + 1;
+end
 
 //=======================================================
 //  Structural coding
@@ -129,6 +146,7 @@ assign loanio_oe[27] = 0; //HPS_ENET_RX_DATA[3]
 soc_system u0(
                //Clock&Reset
                .clk_50_clk(FPGA_CLK1_50),                                      //                            clk.clk
+//					.clk_25_outclk0_clk(clk_25),
 					.reset_reset_n(hps_fpga_reset_n),
                .reset_1_reset_n(hps_fpga_reset_n),                            //                          reset.reset_n
 					.pcp_0_cpu_resetrequest_resetrequest(~hps_fpga_reset_n),
@@ -167,7 +185,7 @@ soc_system u0(
 					.host_0_hps_0_h2f_loan_io_in(loanio_in),
 					.host_0_hps_0_h2f_loan_io_out(loanio_out),
 					.host_0_hps_0_h2f_loan_io_oe(loanio_oe),
-               .openmac_0_mii_txClk(loanio_out[14]),    //                   hps_0_hps_io.hps_io_emac1_inst_TX_CLK
+               .openmac_0_mii_txClk(clk_25),    //                   hps_0_hps_io.hps_io_emac1_inst_TX_CLK
                .openmac_0_mii_txData(loanio_out[18:15]),   //                               .hps_io_emac1_inst_TXD0
                .openmac_0_mii_rxData({loanio_in[27:25],loanio_in[19]}),   //                               .hps_io_emac1_inst_RXD0
 					.openmac_0_smi_coe_smi_clk(loanio_out[21]),
@@ -222,7 +240,7 @@ soc_system u0(
                .hps_io_hps_io_gpio_inst_GPIO54(HPS_KEY),              //                               .hps_io_gpio_inst_GPIO54
                .hps_io_hps_io_gpio_inst_GPIO61(HPS_GSENSOR_INT),      //                               .hps_io_gpio_inst_GPIO61
                //FPGA Partion
-               .powerlink_led_export(fpga_led_internal),      //    led_pio_external_connection.export
+               .powerlink_led_export(fpga_led_internal[1:0]),      //    led_pio_external_connection.export
                .dipsw_pio_external_connection_export(SW),                   //  dipsw_pio_external_connection.export
                .button_pio_external_connection_export(fpga_debounced_buttons),
                                                                             // button_pio_external_connection.export

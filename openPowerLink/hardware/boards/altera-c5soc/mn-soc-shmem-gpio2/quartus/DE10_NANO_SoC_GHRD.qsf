@@ -485,4 +485,10 @@ set_global_assignment -name VERILOG_FILE ip/debounce/debounce.v
 set_global_assignment -name QIP_FILE ip/altsource_probe/hps_reset.qip
 set_global_assignment -name SIGNALTAP_FILE ethernet_mdio.stp
 set_global_assignment -name VHDL_FILE init_block.vhd
+set_global_assignment -name QIP_FILE pll_25MHz.qip
+set_global_assignment -name SIP_FILE pll_25MHz.sip
+set_location_assignment PIN_V12 -to GPIO_0[0]
+set_location_assignment PIN_E8 -to GPIO_0[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO_0[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO_0[0]
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

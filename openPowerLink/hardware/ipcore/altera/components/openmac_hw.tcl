@@ -877,6 +877,12 @@ add_interface_port      mii coe_mii_rxDataValid export Input gphyportcount
 add_interface_port      mii coe_mii_rxData export Input gphyportcount*4
 add_interface_port      mii coe_mii_rxClk export Input gphyportcount
 
+# coe_mii_txClk
+#add_interface           coe_mii_txClk clock end
+#set_interface_property  coe_mii_txClk clockRate 0
+#set_interface_property  coe_mii_txClk ENABLED true
+#add_interface_port      mii_tx_clk coe_mii_txClk clk Input 1
+
 # connection point smi
 add_interface           smi conduit end
 set_interface_property  smi ENABLED true
