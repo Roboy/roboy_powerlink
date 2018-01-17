@@ -88,7 +88,6 @@ var searchData=
   ['coe_5frmii_5ftxdata',['coe_rmii_txData',['../classaltera_openmac_top.html#a8e5d1ba1b00b77a638689b3a2a5931c0',1,'alteraOpenmacTop']]],
   ['coe_5frmii_5ftxenable',['coe_rmii_txEnable',['../classaltera_openmac_top.html#af07741f90c9e8406dd63adaa610dbcff',1,'alteraOpenmacTop']]],
   ['coe_5fsmi_5fclk',['coe_smi_clk',['../classaltera_openmac_top.html#a3e812fb2b9bd44a5e2c660c8e3baa9b6',1,'alteraOpenmacTop']]],
-  ['coe_5fsmi_5fdio',['coe_smi_dio',['../classaltera_openmac_top.html#ac9fcd781f701efa7aa90f88d5ac92908',1,'alteraOpenmacTop']]],
   ['coe_5fsmi_5fnphyrst',['coe_smi_nPhyRst',['../classaltera_openmac_top.html#acc7678c69f04dc55857426f8dc419b51',1,'alteraOpenmacTop']]],
   ['comb',['comb',['../classedgedetector_1_1rtl.html#aaebd29806e4afcb7cd2a0669deeca007',1,'edgedetector::rtl']]],
   ['combaddrdec',['combAddrDec',['../classaddr_decode_1_1rtl.html#a3776551a145aa2dff4f93713f0bfded3',1,'addrDecode::rtl']]],

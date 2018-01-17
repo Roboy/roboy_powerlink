@@ -60,13 +60,13 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classaxi__openmac.html#a571d565b5b713d899dc768e6e242a25a",
-"classaxi__openmac_1_1rtl.html#ab48fd8de36861a6c9099cb6a43508afa",
-"classdp_ram_splx.html#a767340334704e6361fa9acea4beb295c",
-"classmaster__handler_1_1master__handler.html#a48fea3786ed357a54e367149bb4bc287",
-"classopenmac_1_1struct.html#a3b1b843e100ef992f99eb41f07817e95",
-"classopenmac_top.html#ad45e6aacad91d458422469382bd08361",
-"classsync_tog_1_1rtl.html#a540c91b8fa5055a8eba8eaebc14b8bd9"
+"classaxi__openmac.html#a58cdf9c78d8d243fdbf0413d1e79175f",
+"classaxi__openmac_1_1rtl.html#ab5919ef3236889a5b639e5618da8e241",
+"classdp_ram_splx.html#a84ec3554b20b496ba82c197ac8962df0",
+"classmaster__handler_1_1master__handler.html#a5658b72e26c842fdcf0275bf285fd3f1",
+"classopenmac_1_1struct.html#a3cf763ae314e0cb4254667244bc7169d",
+"classopenmac_top.html#ae7fd80bee8261734468e0982382d413c",
+"classsync_tog_1_1rtl.html#a81b97a8e6a64dc4c8c639e5ec72febb0"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

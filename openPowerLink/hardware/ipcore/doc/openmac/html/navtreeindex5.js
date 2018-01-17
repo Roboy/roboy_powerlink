@@ -1,6 +1,5 @@
 var NAVTREEINDEX5 =
 {
-"classopenmac_1_1struct.html#a3b1b843e100ef992f99eb41f07817e95":[3,0,17,0,159],
 "classopenmac_1_1struct.html#a3cf763ae314e0cb4254667244bc7169d":[3,0,17,0,119],
 "classopenmac_1_1struct.html#a3fd75fcfce730dd4b023e92321bc4cfa":[3,0,17,0,94],
 "classopenmac_1_1struct.html#a419756f013394b5c70e17a9bc32c03b0":[3,0,17,0,185],
@@ -249,5 +248,6 @@ var NAVTREEINDEX5 =
 "classopenmac_top.html#ac6e878ef803d4e148e9db01f42c73c35":[3,0,20,15],
 "classopenmac_top.html#ac9b7aae0af8fbbb3f7335ad7a3ff49a4":[3,0,20,64],
 "classopenmac_top.html#acb0104078aa7553401ad7abeb4e7fc21":[3,0,20,38],
-"classopenmac_top.html#acd03516902501cd1c7296a98e22c6fcb":[3,0,20,65]
+"classopenmac_top.html#acd03516902501cd1c7296a98e22c6fcb":[3,0,20,65],
+"classopenmac_top.html#ad45e6aacad91d458422469382bd08361":[3,0,20,44]
 };

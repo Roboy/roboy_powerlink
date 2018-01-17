@@ -1,6 +1,5 @@
 var NAVTREEINDEX7 =
 {
-"classsync_tog_1_1rtl.html#a540c91b8fa5055a8eba8eaebc14b8bd9":[3,0,24,0,7],
 "classsync_tog_1_1rtl.html#a81b97a8e6a64dc4c8c639e5ec72febb0":[3,0,24,0,2],
 "classsync_tog_1_1rtl.html#a906560b1442923b5bcdcba3bd5d7cfd4":[3,0,24,0,4],
 "classsync_tog_1_1rtl.html#a964261c8f0aa771749579b36695415c8":[3,0,24,0,5],
@@ -47,8 +46,8 @@ var NAVTREEINDEX7 =
 "fifo_read-rtl-ea_8vhd.html":[4,0,1,0,0,2],
 "fifo_write-rtl-ea_8vhd.html":[4,0,1,0,0,3],
 "files.html":[4,0],
-"functions.html":[3,3,0,2],
 "functions.html":[3,3,0],
+"functions.html":[3,3,0,2],
 "functions_b.html":[3,3,0,3],
 "functions_c.html":[3,3,0,4],
 "functions_d.html":[3,3,0,5],

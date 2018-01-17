@@ -52,7 +52,6 @@
 			hps_0_hps_io_hps_io_gpio_inst_GPIO53   : inout std_logic                     := 'X';             -- hps_io_gpio_inst_GPIO53
 			hps_0_hps_io_hps_io_gpio_inst_GPIO54   : inout std_logic                     := 'X';             -- hps_io_gpio_inst_GPIO54
 			hps_0_hps_io_hps_io_gpio_inst_GPIO61   : inout std_logic                     := 'X';             -- hps_io_gpio_inst_GPIO61
-			hps_0_hps_io_hps_io_gpio_inst_LOANIO14 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO14
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO15 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO15
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO16 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO16
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO17 : inout std_logic                     := 'X';             -- hps_io_gpio_inst_LOANIO17
@@ -157,7 +156,6 @@
 			hps_0_hps_io_hps_io_gpio_inst_GPIO53   => CONNECTED_TO_hps_0_hps_io_hps_io_gpio_inst_GPIO53,   --                               .hps_io_gpio_inst_GPIO53
 			hps_0_hps_io_hps_io_gpio_inst_GPIO54   => CONNECTED_TO_hps_0_hps_io_hps_io_gpio_inst_GPIO54,   --                               .hps_io_gpio_inst_GPIO54
 			hps_0_hps_io_hps_io_gpio_inst_GPIO61   => CONNECTED_TO_hps_0_hps_io_hps_io_gpio_inst_GPIO61,   --                               .hps_io_gpio_inst_GPIO61
-			hps_0_hps_io_hps_io_gpio_inst_LOANIO14 => CONNECTED_TO_hps_0_hps_io_hps_io_gpio_inst_LOANIO14, --                               .hps_io_gpio_inst_LOANIO14
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO15 => CONNECTED_TO_hps_0_hps_io_hps_io_gpio_inst_LOANIO15, --                               .hps_io_gpio_inst_LOANIO15
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO16 => CONNECTED_TO_hps_0_hps_io_hps_io_gpio_inst_LOANIO16, --                               .hps_io_gpio_inst_LOANIO16
 			hps_0_hps_io_hps_io_gpio_inst_LOANIO17 => CONNECTED_TO_hps_0_hps_io_hps_io_gpio_inst_LOANIO17, --                               .hps_io_gpio_inst_LOANIO17

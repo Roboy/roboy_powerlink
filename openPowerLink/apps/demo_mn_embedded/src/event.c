@@ -263,6 +263,13 @@ static tOplkError processStateChangeEvent(const tEventNmtStateChange* pNmtStateC
         case kNmtMsReadyToOperate:
         case kNmtMsOperational:
         case kNmtMsBasicEthernet:           // no break
+        case kNmtCsNotActive:               // Implement
+		case kNmtCsPreOperational1:         // handling of
+		case kNmtCsStopped:                 // different
+		case kNmtCsPreOperational2:         // states here
+		case kNmtCsReadyToOperate:
+		case kNmtCsOperational:
+		case kNmtCsBasicEthernet:           // no break;
 
         default:
             PRINTF("StateChangeEvent(0x%X) originating event = 0x%X (%s)\n",

@@ -52,7 +52,6 @@ module mn_soc_host_de10_nano_soc (
 	hps_0_hps_io_hps_io_gpio_inst_GPIO53,
 	hps_0_hps_io_hps_io_gpio_inst_GPIO54,
 	hps_0_hps_io_hps_io_gpio_inst_GPIO61,
-	hps_0_hps_io_hps_io_gpio_inst_LOANIO14,
 	hps_0_hps_io_hps_io_gpio_inst_LOANIO15,
 	hps_0_hps_io_hps_io_gpio_inst_LOANIO16,
 	hps_0_hps_io_hps_io_gpio_inst_LOANIO17,
@@ -153,7 +152,6 @@ module mn_soc_host_de10_nano_soc (
 	inout		hps_0_hps_io_hps_io_gpio_inst_GPIO53;
 	inout		hps_0_hps_io_hps_io_gpio_inst_GPIO54;
 	inout		hps_0_hps_io_hps_io_gpio_inst_GPIO61;
-	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO14;
 	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO15;
 	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO16;
 	inout		hps_0_hps_io_hps_io_gpio_inst_LOANIO17;

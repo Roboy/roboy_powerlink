@@ -48,7 +48,6 @@ var classaltera_openmac_top =
     [ "coe_rmii_txData", "classaltera_openmac_top.html#a8e5d1ba1b00b77a638689b3a2a5931c0", null ],
     [ "coe_rmii_txEnable", "classaltera_openmac_top.html#af07741f90c9e8406dd63adaa610dbcff", null ],
     [ "coe_smi_clk", "classaltera_openmac_top.html#a3e812fb2b9bd44a5e2c660c8e3baa9b6", null ],
-    [ "coe_smi_dio", "classaltera_openmac_top.html#ac9fcd781f701efa7aa90f88d5ac92908", null ],
     [ "coe_smi_nPhyRst", "classaltera_openmac_top.html#acc7678c69f04dc55857426f8dc419b51", null ],
     [ "csi_dmaClk_clock", "classaltera_openmac_top.html#a37ce23edfd8d00d5cd61f03075e5ecf1", null ],
     [ "csi_mainClk_clock", "classaltera_openmac_top.html#acc302c9348204390e539131c74ba2e78", null ],
@@ -84,6 +83,9 @@ var classaltera_openmac_top =
     [ "rsi_dmaRst_reset", "classaltera_openmac_top.html#a1f1cefc7fc66e9f4efb5e4aa389b7302", null ],
     [ "rsi_mainRst_reset", "classaltera_openmac_top.html#a2c86946871f00021492daff2043e4792", null ],
     [ "rsi_pktRst_reset", "classaltera_openmac_top.html#aa2b9ed047db934b2cf7fd8b4be0653c2", null ],
+    [ "smi_data_in", "classaltera_openmac_top.html#a6c1bf4a82f7dac981114049c9d5b7efb", null ],
+    [ "smi_data_out", "classaltera_openmac_top.html#a0bf184ab4210e0f90cd52f7b75a76d35", null ],
+    [ "smi_data_outEnable", "classaltera_openmac_top.html#a6333d138ead1875830a40b99dfb78e7e", null ],
     [ "std_logic_1164", "classaltera_openmac_top.html#acd03516902501cd1c7296a98e22c6fcb", null ],
     [ "work", "classaltera_openmac_top.html#a9f49de6f5eed5b4488cba6c9cdd1c215", null ]
 ];

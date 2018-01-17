@@ -1,6 +1,5 @@
 var NAVTREEINDEX6 =
 {
-"classopenmac_top.html#ad45e6aacad91d458422469382bd08361":[3,0,20,44],
 "classopenmac_top.html#ae7fd80bee8261734468e0982382d413c":[3,0,20,22],
 "classopenmac_top.html#ae9a7621f36fbc2a0c9a3226ba33b8214":[3,0,20,19],
 "classopenmac_top.html#ae9d493385fedd89af3e20d73c5669d39":[3,0,20,29],
@@ -249,5 +248,6 @@ var NAVTREEINDEX6 =
 "classsync_tog.html#aef4da9ff43f17bf7f467edddb8509d00":[3,0,24,12],
 "classsync_tog_1_1rtl.html":[3,0,24,0],
 "classsync_tog_1_1rtl.html#a050ff29e81a2b89113106adebc65c173":[3,0,24,0,6],
-"classsync_tog_1_1rtl.html#a2d395115bd0eb0533ca01a113c48ba6d":[3,0,24,0,0]
+"classsync_tog_1_1rtl.html#a2d395115bd0eb0533ca01a113c48ba6d":[3,0,24,0,0],
+"classsync_tog_1_1rtl.html#a540c91b8fa5055a8eba8eaebc14b8bd9":[3,0,24,0,7]
 };

@@ -137,14 +137,6 @@
          type = "boolean";
       }
    }
-   element fpga_mem.s0
-   {
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
    element lw_bridge.s0
    {
       datum baseAddress
@@ -153,11 +145,11 @@
          type = "String";
       }
    }
-   element dipsw_pio.s1
+   element fpga_mem.s0
    {
       datum baseAddress
       {
-         value = "16";
+         value = "0";
          type = "String";
       }
    }
@@ -174,6 +166,14 @@
       datum baseAddress
       {
          value = "0";
+         type = "String";
+      }
+   }
+   element dipsw_pio.s1
+   {
+      datum baseAddress
+      {
+         value = "16";
          type = "String";
       }
    }
@@ -721,7 +721,7 @@
   <parameter name="TRACE_PinMuxing" value="Unused" />
   <parameter name="TRACE_Mode" value="N/A" />
   <parameter name="GPIO_Enable">No,No,No,No,No,No,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,Yes,No,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,No,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
-  <parameter name="LOANIO_Enable">No,No,No,No,No,No,No,No,No,No,No,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
+  <parameter name="LOANIO_Enable">No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
   <parameter name="F2H_AXI_CLOCK_FREQ" value="50000000" />
   <parameter name="H2F_AXI_CLOCK_FREQ" value="100000000" />
   <parameter name="H2F_LW_AXI_CLOCK_FREQ" value="50000000" />

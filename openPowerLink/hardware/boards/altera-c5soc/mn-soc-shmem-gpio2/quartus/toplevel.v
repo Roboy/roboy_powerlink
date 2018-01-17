@@ -168,7 +168,7 @@ soc_system u0(
                .memory_mem_dm(HPS_DDR3_DM),                                 //                               .mem_dm
                .memory_oct_rzqin(HPS_DDR3_RZQ),                             //        
                //HPS ethernet
-					.hps_io_hps_io_gpio_inst_LOANIO14(HPS_ENET_GTX_CLK),
+//					.hps_io_hps_io_gpio_inst_LOANIO14(HPS_ENET_GTX_CLK),
 					.hps_io_hps_io_gpio_inst_LOANIO15(HPS_ENET_TX_DATA[0]),
 					.hps_io_hps_io_gpio_inst_LOANIO16(HPS_ENET_TX_DATA[1]),
 					.hps_io_hps_io_gpio_inst_LOANIO17(HPS_ENET_TX_DATA[2]),
