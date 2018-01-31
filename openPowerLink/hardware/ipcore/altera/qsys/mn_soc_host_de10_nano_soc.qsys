@@ -137,19 +137,19 @@
          type = "boolean";
       }
    }
-   element fpga_mem.s0
-   {
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
    element lw_bridge.s0
    {
       datum baseAddress
       {
          value = "1048576";
+         type = "String";
+      }
+   }
+   element fpga_mem.s0
+   {
+      datum baseAddress
+      {
+         value = "0";
          type = "String";
       }
    }
@@ -161,19 +161,19 @@
          type = "String";
       }
    }
-   element button_pio.s1
-   {
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
    element timer_0.s1
    {
       datum baseAddress
       {
          value = "64";
+         type = "String";
+      }
+   }
+   element button_pio.s1
+   {
+      datum baseAddress
+      {
+         value = "0";
          type = "String";
       }
    }
@@ -257,11 +257,7 @@
    internal="hps_0.h2f_cold_reset"
    type="reset"
    dir="start" />
- <interface
-   name="hps_0_h2f_loan_io"
-   internal="hps_0.h2f_loan_io"
-   type="conduit"
-   dir="end" />
+ <interface name="hps_0_h2f_loan_io" internal="hps_0.h2f_loan_io" />
  <interface name="hps_0_emac1_md_clk" internal="hps_0.emac1_md_clk" />
  <module kind="altera_hps" version="14.0" enabled="1" name="hps_0">
   <parameter name="MEM_VENDOR" value="Other" />
@@ -683,8 +679,8 @@
   <parameter name="S2FINTERRUPT_WATCHDOG_Enable" value="false" />
   <parameter name="EMAC0_PinMuxing" value="Unused" />
   <parameter name="EMAC0_Mode" value="N/A" />
-  <parameter name="EMAC1_PinMuxing" value="Unused" />
-  <parameter name="EMAC1_Mode" value="N/A" />
+  <parameter name="EMAC1_PinMuxing" value="HPS I/O Set 0" />
+  <parameter name="EMAC1_Mode" value="RGMII" />
   <parameter name="NAND_PinMuxing" value="Unused" />
   <parameter name="NAND_Mode" value="N/A" />
   <parameter name="QSPI_PinMuxing" value="Unused" />
@@ -722,7 +718,7 @@
   <parameter name="TRACE_PinMuxing" value="Unused" />
   <parameter name="TRACE_Mode" value="N/A" />
   <parameter name="GPIO_Enable">No,No,No,No,No,No,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,Yes,No,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,No,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
-  <parameter name="LOANIO_Enable">No,No,No,No,No,No,No,No,No,No,No,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
+  <parameter name="LOANIO_Enable">No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
   <parameter name="F2H_AXI_CLOCK_FREQ" value="50000000" />
   <parameter name="H2F_AXI_CLOCK_FREQ" value="100000000" />
   <parameter name="H2F_LW_AXI_CLOCK_FREQ" value="50000000" />

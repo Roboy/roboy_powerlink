@@ -64,17 +64,14 @@ int omethPhyCfgUser(OMETH_H pEth_p)
     unsigned short  regData;
     unsigned short  regNumber;
 
-    //process all connected phys
-    for(i=0; i<phyCount; i++) {
-        // Set MII mode
-        regNumber = BASIC_STATUS;
-        // Read extended phy specific status register
-        ret = omethPhyRead(pEth_p, i, regNumber, &regData);
-
-        printf("BASIC STATUS %x\n", regData);
-        if (ret != 0)
-            goto Exit;
-    }
-    Exit:
+//    //process all connected phys
+//    for(i=0; i<phyCount; i++) {
+//        regNumber = 0x00;
+//        ret = omethPhyRead(pEth_p, i, regNumber, &regData);
+//        printf("BASIC MODE CONTROL %x\n", regData);
+//        regNumber = 0x00;
+//        ret = omethPhyRead(pEth_p, i, regNumber, &regData);
+//        printf("BASIC MODE STATUS %x\n", regData);
+//    }
     return ret;
 }
