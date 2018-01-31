@@ -51,6 +51,7 @@
 		.hps_0_hps_io_hps_io_gpio_inst_GPIO53   (<connected-to-hps_0_hps_io_hps_io_gpio_inst_GPIO53>),   //                               .hps_io_gpio_inst_GPIO53
 		.hps_0_hps_io_hps_io_gpio_inst_GPIO54   (<connected-to-hps_0_hps_io_hps_io_gpio_inst_GPIO54>),   //                               .hps_io_gpio_inst_GPIO54
 		.hps_0_hps_io_hps_io_gpio_inst_GPIO61   (<connected-to-hps_0_hps_io_hps_io_gpio_inst_GPIO61>),   //                               .hps_io_gpio_inst_GPIO61
+		.hps_0_hps_io_hps_io_gpio_inst_LOANIO14 (<connected-to-hps_0_hps_io_hps_io_gpio_inst_LOANIO14>), //                               .hps_io_gpio_inst_LOANIO14
 		.hps_0_hps_io_hps_io_gpio_inst_LOANIO15 (<connected-to-hps_0_hps_io_hps_io_gpio_inst_LOANIO15>), //                               .hps_io_gpio_inst_LOANIO15
 		.hps_0_hps_io_hps_io_gpio_inst_LOANIO16 (<connected-to-hps_0_hps_io_hps_io_gpio_inst_LOANIO16>), //                               .hps_io_gpio_inst_LOANIO16
 		.hps_0_hps_io_hps_io_gpio_inst_LOANIO17 (<connected-to-hps_0_hps_io_hps_io_gpio_inst_LOANIO17>), //                               .hps_io_gpio_inst_LOANIO17

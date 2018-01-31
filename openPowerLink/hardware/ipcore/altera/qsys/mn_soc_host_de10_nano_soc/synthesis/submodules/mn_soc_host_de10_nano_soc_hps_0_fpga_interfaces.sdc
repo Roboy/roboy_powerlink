@@ -1,0 +1,2 @@
+create_clock -period 10.0 [get_pins -compatibility_mode *|fpga_interfaces|peripheral_emac1|gmii_mdc_o]
+create_clock -period 10.0 [get_pins -compatibility_mode *|fpga_interfaces|peripheral_emac1|phy_txclk_o]

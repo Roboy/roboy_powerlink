@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: common_utilities
+Description: Description of common_utilities
+Version: 0.0.0
+Cflags: -I/usr/local/include
+Libs: -L/usr/local/lib -lrviz_visualization -lUDPSocket -lMotorConfig
+Requires: message_runtime

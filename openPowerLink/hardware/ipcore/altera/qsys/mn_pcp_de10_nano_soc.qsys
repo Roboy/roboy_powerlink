@@ -187,19 +187,6 @@
          type = "String";
       }
    }
-   element cpu_bridge.s0
-   {
-      datum _lockedAddress
-      {
-         value = "1";
-         type = "boolean";
-      }
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
    element flash_bridge.s0
    {
       datum _lockedAddress
@@ -221,6 +208,19 @@
          type = "String";
       }
    }
+   element cpu_bridge.s0
+   {
+      datum _lockedAddress
+      {
+         value = "1";
+         type = "boolean";
+      }
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
    element timer_0.s1
    {
       datum baseAddress
@@ -237,6 +237,14 @@
          type = "String";
       }
    }
+   element benchmark_pio.s1
+   {
+      datum baseAddress
+      {
+         value = "32";
+         type = "String";
+      }
+   }
    element tc_mem.s1
    {
       datum _lockedAddress
@@ -247,14 +255,6 @@
       datum baseAddress
       {
          value = "134217728";
-         type = "String";
-      }
-   }
-   element benchmark_pio.s1
-   {
-      datum baseAddress
-      {
-         value = "32";
          type = "String";
       }
    }
@@ -280,7 +280,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }

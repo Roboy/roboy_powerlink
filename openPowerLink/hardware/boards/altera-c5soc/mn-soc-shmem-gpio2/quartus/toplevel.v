@@ -109,7 +109,7 @@ assign stm_hw_events = {{15{1'b0}}, SW, fpga_led_internal, fpga_debounced_button
 wire [66:0] loanio_in;
 wire [66:0] loanio_out;
 wire [66:0] loanio_oe;
-
+//
 assign loanio_oe[14] = 1; //HPS_ENET_GTX_CLK
 assign loanio_oe[15] = 1; //HPS_ENET_TX_DATA[0]
 assign loanio_oe[16] = 1; //HPS_ENET_TX_DATA[1]
@@ -126,27 +126,59 @@ assign loanio_oe[27] = 0; //HPS_ENET_RX_DATA[3]
 
 reg clock_divider;
 wire clk_25;
-assign clk_25 = clock_divider;
-assign loanio_out[14] = clk_25;
-assign GPIO_0[0] = clk_25;
-assign GPIO_0[1] = FPGA_CLK1_50;
-//pll_25MHz clk_25MHz(
-//	.refclk(FPGA_CLK1_50),
-//	.rst(1'b0),
-//	.outclk_0(clk_25)
-//);
-
-always @(posedge FPGA_CLK1_50) begin
-    clock_divider <= clock_divider + 1;
-end
+//assign clk_25 = clock_divider;
+//assign loanio_out[14] = clk_25;
+//assign GPIO_0[0] = clk_25;
+//assign GPIO_0[1] = FPGA_CLK1_50;
+pll_25MHz clk_25MHz(
+	.refclk(FPGA_CLK1_50),
+	.rst(1'b0),
+	.outclk_0(clk_25)
+);
+//
+//always @(posedge FPGA_CLK1_50) begin
+//    clock_divider <= clock_divider + 1;
+//end
 
 //=======================================================
 //  Structural coding
 //=======================================================
+
+//wire phy_tx_clk;
+//wire phy_rx_clk;
+//wire phy_rxdv;
+//wire phy_rxer;
+//wire [3:0] phy_rxd;
+//wire phy_col;
+//wire phy_crs;
+//wire [3:0] phy_txd;
+//wire phy_txen;
+//wire phy_txer;
+//wire [1:0] phy_mac_speed;
+//wire phy_smi_di;
+//wire phy_smi_do;
+//wire phy_smi_dio_e;
+//wire phy_smi_clk;
+
+wire phy_tx_clk;
+wire mii_txEnable;
+wire mii_txError;
+wire mii_txClk;
+wire [3:0] mii_txData;
+wire mii_rxClk;
+wire mii_rxDataValid;
+wire [3:0] mii_rxData;
+wire mii_rxError;
+wire mii_col;
+wire [1:0] mii_mac_speed;
+wire mii_crs;
+
+assign GPIO_0[0] = loanio_in[24];
+assign GPIO_0[1] = loanio_out[14];
+
 soc_system u0(
                //Clock&Reset
                .clk_50_clk(FPGA_CLK1_50),                                      //                            clk.clk
-//					.clk_25_outclk0_clk(clk_25),
 					.reset_reset_n(hps_fpga_reset_n),
                .reset_1_reset_n(hps_fpga_reset_n),                            //                          reset.reset_n
 					.pcp_0_cpu_resetrequest_resetrequest(~hps_fpga_reset_n),
@@ -168,7 +200,7 @@ soc_system u0(
                .memory_mem_dm(HPS_DDR3_DM),                                 //                               .mem_dm
                .memory_oct_rzqin(HPS_DDR3_RZQ),                             //        
                //HPS ethernet
-//					.hps_io_hps_io_gpio_inst_LOANIO14(HPS_ENET_GTX_CLK),
+					.hps_io_hps_io_gpio_inst_LOANIO14(HPS_ENET_GTX_CLK),
 					.hps_io_hps_io_gpio_inst_LOANIO15(HPS_ENET_TX_DATA[0]),
 					.hps_io_hps_io_gpio_inst_LOANIO16(HPS_ENET_TX_DATA[1]),
 					.hps_io_hps_io_gpio_inst_LOANIO17(HPS_ENET_TX_DATA[2]),
@@ -182,22 +214,68 @@ soc_system u0(
 					.hps_io_hps_io_gpio_inst_LOANIO25(HPS_ENET_RX_DATA[1]),
 					.hps_io_hps_io_gpio_inst_LOANIO26(HPS_ENET_RX_DATA[2]),
 					.hps_io_hps_io_gpio_inst_LOANIO27(HPS_ENET_RX_DATA[3]),
-					.host_0_hps_0_h2f_loan_io_in(loanio_in),
-					.host_0_hps_0_h2f_loan_io_out(loanio_out),
-					.host_0_hps_0_h2f_loan_io_oe(loanio_oe),
-               .openmac_0_mii_txClk(clk_25),    //                   hps_0_hps_io.hps_io_emac1_inst_TX_CLK
-               .openmac_0_mii_txData(loanio_out[18:15]),   //                               .hps_io_emac1_inst_TXD0
-               .openmac_0_mii_rxData({loanio_in[27:25],loanio_in[19]}),   //                               .hps_io_emac1_inst_RXD0
+					.gmii_to_rgmii_adapter_0_hps_gmii_phy_tx_clk_o(clk_25),    //  gmii_to_rgmii_adapter_0_hps_gmii.phy_tx_clk_o
+					.gmii_to_rgmii_adapter_0_hps_gmii_rst_tx_n(hps_fpga_reset_n),        //                                  .rst_tx_n
+					.gmii_to_rgmii_adapter_0_hps_gmii_rst_rx_n(hps_fpga_reset_n),        //                                  .rst_rx_n
+					.gmii_to_rgmii_adapter_0_hps_gmii_phy_txd_o(mii_txData),       //                                  .phy_txd_o
+					.gmii_to_rgmii_adapter_0_hps_gmii_phy_txen_o(mii_txEnable),      //                                  .phy_txen_o
+					.gmii_to_rgmii_adapter_0_hps_gmii_phy_txer_o(mii_txError),      //                                  .phy_txer_o
+					.gmii_to_rgmii_adapter_0_hps_gmii_phy_mac_speed_o(2'b11),  // 100Mbps                                 .phy_mac_speed_o
+					.gmii_to_rgmii_adapter_0_hps_gmii_phy_tx_clk_i(mii_txClk),    //                                  .phy_tx_clk_i
+					.gmii_to_rgmii_adapter_0_hps_gmii_phy_rx_clk_i(mii_rxClk),    //                                  .phy_rx_clk_i
+					.gmii_to_rgmii_adapter_0_hps_gmii_phy_rxdv_i(mii_rxDataValid),      //                                  .phy_rxdv_i
+					.gmii_to_rgmii_adapter_0_hps_gmii_phy_rxer_i(mii_rxError),      //                                  .phy_rxer_i
+					.gmii_to_rgmii_adapter_0_hps_gmii_phy_rxd_i(mii_rxData),       //                                  .phy_rxd_i
+					.gmii_to_rgmii_adapter_0_hps_gmii_phy_col_i(mii_col),       //                                  .phy_col_i
+					.gmii_to_rgmii_adapter_0_hps_gmii_phy_crs_i(mii_crs),       //                                  .phy_crs_i
+					.gmii_to_rgmii_adapter_0_phy_rgmii_rgmii_rx_clk(loanio_in[24]),   // gmii_to_rgmii_adapter_0_phy_rgmii.rgmii_rx_clk
+					.gmii_to_rgmii_adapter_0_phy_rgmii_rgmii_rxd({loanio_in[27:25],loanio_in[19]}),      //                                  .rgmii_rxd
+					.gmii_to_rgmii_adapter_0_phy_rgmii_rgmii_rx_ctl(loanio_in[22]),   //                                  .rgmii_rx_ctl
+					.gmii_to_rgmii_adapter_0_phy_rgmii_rgmii_tx_clk(loanio_out[14]),   //                                  .rgmii_tx_clk
+					.gmii_to_rgmii_adapter_0_phy_rgmii_rgmii_txd(loanio_out[18:15]),      //                                  .rgmii_txd
+					.gmii_to_rgmii_adapter_0_phy_rgmii_rgmii_tx_ctl(loanio_out[23]),
+					.openmac_0_mii_rxClk(mii_rxClk),    
+					.openmac_0_mii_txClk(clk_25),    
+               .openmac_0_mii_txData(mii_txData),   //                               .hps_io_emac1_inst_TXD0
+               .openmac_0_mii_rxData(mii_rxData),   //                               .hps_io_emac1_inst_RXD0
 					.openmac_0_smi_coe_smi_clk(loanio_out[21]),
 //					.openmac_0_smi_dio(smi_dio),
-					.openmac_0_mii_rxDataValid(loanio_in[22]),
+					.openmac_0_mii_rxDataValid(mii_rxDataValid),
 					.openmac_0_smi_smi_data_outEnable(loanio_oe[20]),
 					.openmac_0_smi_smi_data_in(loanio_in[20]),
 					.openmac_0_smi_smi_data_out(loanio_out[20]),
 //               .openmac_0_smi_nPhyRst(hps_fpga_reset_n),      //                               .hps_io_emac1_inst_RX_CTL
-               .openmac_0_mii_txEnable(loanio_out[23]),      //                               .hps_io_emac1_inst_TX_CTL
-               .openmac_0_mii_rxClk(loanio_in[24]),     //                               .hps_io_emac1_inst_RX_CLK
-					.openmac_0_mii_rxError(1'b0), 
+               .openmac_0_mii_txEnable(mii_txEnable),      //                               .hps_io_emac1_inst_TX_CTL
+					.openmac_0_mii_rxError(mii_rxError), 
+//					.host_0_hps_emac_interface_splitter_0_hps_gmii_phy_tx_clk_i(FPGA_CLK1_50),    // host_0_hps_emac_interface_splitter_0_hps_gmii.phy_tx_clk_i
+//					.host_0_hps_emac_interface_splitter_0_hps_gmii_phy_rx_clk_i(FPGA_CLK1_50),    //                                              .phy_rx_clk_i
+//					.host_0_hps_emac_interface_splitter_0_hps_gmii_phy_rxdv_i(phy_rxdv),      //                                              .phy_rxdv_i
+//					.host_0_hps_emac_interface_splitter_0_hps_gmii_phy_rxer_i(phy_rxer),      //                                              .phy_rxer_i
+//					.host_0_hps_emac_interface_splitter_0_hps_gmii_phy_rxd_i(phy_rxd),       //                                              .phy_rxd_i
+//					.host_0_hps_emac_interface_splitter_0_hps_gmii_phy_col_i(phy_col),       //                                              .phy_col_i
+//					.host_0_hps_emac_interface_splitter_0_hps_gmii_phy_crs_i(phy_crs),       //                                              .phy_crs_i
+////					.host_0_hps_emac_interface_splitter_0_hps_gmii_phy_tx_clk_o(FPGA_CLK1_50),    //                                              .phy_tx_clk_o
+//					.host_0_hps_emac_interface_splitter_0_hps_gmii_rst_tx_n(1'b1),        //                                              .rst_tx_n
+//					.host_0_hps_emac_interface_splitter_0_hps_gmii_rst_rx_n(1'b1),        //                                              .rst_rx_n
+//					.host_0_hps_emac_interface_splitter_0_hps_gmii_phy_txd_o(phy_txd),       //                                              .phy_txd_o
+//					.host_0_hps_emac_interface_splitter_0_hps_gmii_phy_txen_o(phy_txen),      //                                              .phy_txen_o
+//					.host_0_hps_emac_interface_splitter_0_hps_gmii_phy_txer_o(phy_txer),      //                                              .phy_txer_o
+//					.host_0_hps_emac_interface_splitter_0_hps_gmii_phy_mac_speed_o(phy_mac_speed),
+//					.host_0_hps_emac_interface_splitter_0_mdio_gmii_mdi_i(phy_smi_di),          //     host_0_hps_emac_interface_splitter_0_mdio.gmii_mdi_i
+//		         .host_0_hps_emac_interface_splitter_0_mdio_gmii_mdo_o(phy_smi_do),          //                                              .gmii_mdo_o
+//		         .host_0_hps_emac_interface_splitter_0_mdio_gmii_mdo_o_e(phy_smi_dio_e), 
+//					.host_0_hps_0_emac1_md_clk_clk(phy_smi_clk),
+//					.openmac_0_mii_txEnable(phy_txen),                                        //                                 openmac_0_mii.txEnable
+//		         .openmac_0_mii_txData(phy_txd),                                          //                                              .txData
+//					.openmac_0_mii_txClk(phy_tx_clk),                                           //                                              .txClk
+//					.openmac_0_mii_rxError(phy_rxer),                                         //                                              .rxError
+//					.openmac_0_mii_rxDataValid(phy_rxdv),                                     //                                              .rxDataValid
+//					.openmac_0_mii_rxData(phy_rxd),                                          //                                              .rxData
+//					.openmac_0_mii_rxClk(phy_rx_clk),  
+//					.openmac_0_smi_coe_smi_clk(loanio_out[21]),
+//					.openmac_0_smi_smi_data_outEnable(phy_smi_dio_e),
+//					.openmac_0_smi_smi_data_in(phy_smi_di),
+//					.openmac_0_smi_smi_data_out(phy_smi_di),
                //HPS SD card
                .hps_io_hps_io_sdio_inst_CMD(HPS_SD_CMD),              //                               .hps_io_sdio_inst_CMD
                .hps_io_hps_io_sdio_inst_D0(HPS_SD_DATA[0]),           //                               .hps_io_sdio_inst_D0

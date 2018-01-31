@@ -16,15 +16,7 @@
    {
       datum _sortIndex
       {
-         value = "2";
-         type = "int";
-      }
-   }
-   element clk_25
-   {
-      datum _sortIndex
-      {
-         value = "0";
+         value = "1";
          type = "int";
       }
    }
@@ -32,7 +24,7 @@
    {
       datum _sortIndex
       {
-         value = "1";
+         value = "0";
          type = "int";
       }
       datum sopceditor_expanded
@@ -45,7 +37,7 @@
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "7";
          type = "int";
       }
       datum sopceditor_expanded
@@ -58,15 +50,23 @@
    {
       datum baseAddress
       {
-         value = "32768";
+         value = "8192";
          type = "String";
+      }
+   }
+   element gmii_to_rgmii_adapter_0
+   {
+      datum _sortIndex
+      {
+         value = "8";
+         type = "int";
       }
    }
    element host_0
    {
       datum _sortIndex
       {
-         value = "6";
+         value = "5";
          type = "int";
       }
    }
@@ -74,7 +74,7 @@
    {
       datum baseAddress
       {
-         value = "40960";
+         value = "16384";
          type = "String";
       }
    }
@@ -82,7 +82,7 @@
    {
       datum baseAddress
       {
-         value = "32800";
+         value = "8224";
          type = "String";
       }
    }
@@ -90,7 +90,7 @@
    {
       datum _sortIndex
       {
-         value = "3";
+         value = "2";
          type = "int";
       }
    }
@@ -98,7 +98,7 @@
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "6";
          type = "int";
       }
       datum sopceditor_expanded
@@ -111,7 +111,7 @@
    {
       datum _sortIndex
       {
-         value = "4";
+         value = "3";
          type = "int";
       }
    }
@@ -119,8 +119,16 @@
    {
       datum baseAddress
       {
-         value = "65536";
+         value = "32768";
          type = "String";
+      }
+   }
+   element pll_0
+   {
+      datum _sortIndex
+      {
+         value = "9";
+         type = "int";
       }
    }
    element onchip_memory2_0.s1
@@ -151,7 +159,7 @@
    {
       datum _sortIndex
       {
-         value = "5";
+         value = "4";
          type = "int";
       }
       datum sopceditor_expanded
@@ -185,11 +193,6 @@
  <interface
    name="openmac_0_mii"
    internal="openmac_0.mii"
-   type="conduit"
-   dir="end" />
- <interface
-   name="openmac_0_smi"
-   internal="openmac_0.smi"
    type="conduit"
    dir="end" />
  <interface name="memory" internal="host_0.memory" type="conduit" dir="end" />
@@ -255,7 +258,49 @@
    internal="openmac_0.pktActivity"
    type="conduit"
    dir="end" />
- <interface name="clk_25_outclk0" internal="clk_25.outclk0" />
+ <interface
+   name="host_0_hps_0_emac1_gtx_clk"
+   internal="host_0.hps_0_emac1_gtx_clk" />
+ <interface name="host_0_hps_0_emac1_md_clk" internal="host_0.hps_0_emac1_md_clk" />
+ <interface name="host_0_hps_0_emac1" internal="host_0.hps_0_emac1" />
+ <interface name="openmac_0_rmii" internal="openmac_0.rmii" />
+ <interface
+   name="openmac_0_smi"
+   internal="openmac_0.smi"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="host_0_hps_emac_interface_splitter_0_hps_gmii"
+   internal="host_0.hps_emac_interface_splitter_0_hps_gmii" />
+ <interface
+   name="host_0_hps_emac_interface_splitter_0_mdio"
+   internal="host_0.hps_emac_interface_splitter_0_mdio" />
+ <interface
+   name="host_0_hps_emac_interface_splitter_0_ptp"
+   internal="host_0.hps_emac_interface_splitter_0_ptp" />
+ <interface name="host_0_eth_mdio_0_mdio" internal="host_0.eth_mdio_0_mdio" />
+ <interface
+   name="host_0_hps_0_emac1_rx_clk_in"
+   internal="host_0.hps_0_emac1_rx_clk_in" />
+ <interface
+   name="host_0_hps_0_emac1_tx_clk_in"
+   internal="host_0.hps_0_emac1_tx_clk_in" />
+ <interface
+   name="host_0_hps_0_emac1_tx_reset"
+   internal="host_0.hps_0_emac1_tx_reset" />
+ <interface
+   name="host_0_hps_0_emac1_rx_reset"
+   internal="host_0.hps_0_emac1_rx_reset" />
+ <interface
+   name="gmii_to_rgmii_adapter_0_hps_gmii"
+   internal="gmii_to_rgmii_adapter_0.hps_gmii"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="gmii_to_rgmii_adapter_0_phy_rgmii"
+   internal="gmii_to_rgmii_adapter_0.phy_rgmii"
+   type="conduit"
+   dir="end" />
  <module kind="clock_source" version="14.0" enabled="1" name="clk_50">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
@@ -538,7 +583,7 @@
   <parameter name="initMemContent" value="true" />
   <parameter name="initializationFileName" value="onchip_mem.hex" />
   <parameter name="instanceID" value="NONE" />
-  <parameter name="memorySize" value="400000" />
+  <parameter name="memorySize" value="450000" />
   <parameter name="readDuringWriteMode" value="DONT_CARE" />
   <parameter name="simAllowMRAMContentsFile" value="false" />
   <parameter name="simMemInitOnlyFilename" value="0" />
@@ -588,7 +633,17 @@
   <parameter name="cpu0_resetCpuBridge" value="cpu_bridge" />
   <parameter name="tcmemSize" value="32768" />
  </module>
- <module kind="altera_pll" version="14.0" enabled="0" name="clk_25">
+ <module
+   kind="altera_gmii_to_rgmii_adapter"
+   version="1.0"
+   enabled="1"
+   name="gmii_to_rgmii_adapter_0">
+  <parameter name="TX_PIPELINE_DEPTH" value="1" />
+  <parameter name="RX_PIPELINE_DEPTH" value="1" />
+  <parameter name="DEVICE_FAMILY" value="Cyclone V" />
+  <parameter name="AUTO_DEVICE" value="5CSEBA6U23I7" />
+ </module>
+ <module kind="altera_pll" version="14.0" enabled="1" name="pll_0">
   <parameter name="debug_print_output" value="false" />
   <parameter name="debug_use_rbc_taf_method" value="false" />
   <parameter name="device_family" value="Cyclone V" />
@@ -603,7 +658,7 @@
   <parameter name="gui_dsm_out_sel" value="1st_order" />
   <parameter name="gui_use_locked" value="false" />
   <parameter name="gui_en_adv_params" value="false" />
-  <parameter name="gui_number_of_clocks" value="1" />
+  <parameter name="gui_number_of_clocks" value="2" />
   <parameter name="gui_multiply_factor" value="1" />
   <parameter name="gui_frac_multiply_factor" value="1" />
   <parameter name="gui_divide_factor_n" value="1" />
@@ -617,7 +672,7 @@
   <parameter name="gui_actual_phase_shift0" value="0" />
   <parameter name="gui_duty_cycle0" value="50" />
   <parameter name="gui_cascade_counter1" value="false" />
-  <parameter name="gui_output_clock_frequency1" value="100.0" />
+  <parameter name="gui_output_clock_frequency1" value="2.5" />
   <parameter name="gui_divide_factor_c1" value="1" />
   <parameter name="gui_actual_output_clock_frequency1" value="0 MHz" />
   <parameter name="gui_ps_units1" value="ps" />
@@ -871,7 +926,7 @@
    start="host_0.lw_bridge_m0"
    end="sysid_qsys.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x8000" />
+  <parameter name="baseAddress" value="0x2000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -938,7 +993,7 @@
    start="pcp_0.slow_bridge"
    end="sysid_qsys.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x8000" />
+  <parameter name="baseAddress" value="0x2000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -947,7 +1002,7 @@
    start="pcp_0.slow_bridge"
    end="openmac_0.macReg">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0xa000" />
+  <parameter name="baseAddress" value="0x4000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -956,7 +1011,7 @@
    start="pcp_0.slow_bridge"
    end="openmac_0.macTimer">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x8020" />
+  <parameter name="baseAddress" value="0x2020" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -965,7 +1020,7 @@
    start="pcp_0.slow_bridge"
    end="openmac_0.pktBuf">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00010000" />
+  <parameter name="baseAddress" value="0x8000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -1009,12 +1064,32 @@
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection kind="clock" version="14.0" start="clk_50.clk" end="clk_25.refclk" />
+ <connection
+   kind="clock"
+   version="14.0"
+   start="clk_50.clk"
+   end="gmii_to_rgmii_adapter_0.peri_clock" />
  <connection
    kind="reset"
    version="14.0"
    start="clk_50.clk_reset"
-   end="clk_25.reset" />
+   end="gmii_to_rgmii_adapter_0.peri_reset" />
+ <connection kind="clock" version="14.0" start="clk_50.clk" end="pll_0.refclk" />
+ <connection
+   kind="reset"
+   version="14.0"
+   start="clk_50.clk_reset"
+   end="pll_0.reset" />
+ <connection
+   kind="clock"
+   version="14.0"
+   start="pll_0.outclk0"
+   end="gmii_to_rgmii_adapter_0.pll_25m_clock" />
+ <connection
+   kind="clock"
+   version="14.0"
+   start="pll_0.outclk1"
+   end="gmii_to_rgmii_adapter_0.pll_2_5m_clock" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="false" />

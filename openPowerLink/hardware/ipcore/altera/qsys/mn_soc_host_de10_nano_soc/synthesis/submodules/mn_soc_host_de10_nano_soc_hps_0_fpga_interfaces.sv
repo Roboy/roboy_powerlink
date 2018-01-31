@@ -162,6 +162,34 @@ module mn_soc_host_de10_nano_soc_hps_0_fpga_interfaces(
  ,input wire [32 - 1 : 0 ] f2h_irq_p0
 // f2h_irq1
  ,input wire [32 - 1 : 0 ] f2h_irq_p1
+// emac_ptp_ref_clock
+ ,input wire [1 - 1 : 0 ] emac_ptp_ref_clk
+// emac1
+ ,output wire [8 - 1 : 0 ] emac1_phy_txd_o
+ ,output wire [1 - 1 : 0 ] emac1_phy_txen_o
+ ,output wire [1 - 1 : 0 ] emac1_phy_txer_o
+ ,input wire [1 - 1 : 0 ] emac1_phy_rxdv_i
+ ,input wire [1 - 1 : 0 ] emac1_phy_rxer_i
+ ,input wire [8 - 1 : 0 ] emac1_phy_rxd_i
+ ,input wire [1 - 1 : 0 ] emac1_phy_col_i
+ ,input wire [1 - 1 : 0 ] emac1_phy_crs_i
+ ,output wire [1 - 1 : 0 ] emac1_gmii_mdo_o
+ ,output wire [1 - 1 : 0 ] emac1_gmii_mdo_o_e
+ ,input wire [1 - 1 : 0 ] emac1_gmii_mdi_i
+ ,output wire [1 - 1 : 0 ] emac1_ptp_pps_o
+ ,input wire [1 - 1 : 0 ] emac1_ptp_aux_ts_trig_i
+// emac1_md_clk
+ ,output wire [1 - 1 : 0 ] emac1_gmii_mdc_o
+// emac1_rx_clk_in
+ ,input wire [1 - 1 : 0 ] emac1_clk_rx_i
+// emac1_tx_clk_in
+ ,input wire [1 - 1 : 0 ] emac1_clk_tx_i
+// emac1_gtx_clk
+ ,output wire [1 - 1 : 0 ] emac1_phy_txclk_o
+// emac1_tx_reset
+ ,output wire [1 - 1 : 0 ] emac1_rst_clk_tx_n_o
+// emac1_rx_reset
+ ,output wire [1 - 1 : 0 ] emac1_rst_clk_rx_n_o
 );
 
 
@@ -199,6 +227,9 @@ cyclonev_hps_interface_clocks_resets clocks_resets(
   })
 ,.f2h_warm_rst_req_n({
     f2h_warm_rst_req_n[0:0] // 0:0
+  })
+,.ptp_ref_clk({
+    emac_ptp_ref_clk[0:0] // 0:0
   })
 ,.f2h_dbg_rst_req_n({
     f2h_dbg_rst_req_n[0:0] // 0:0
@@ -650,6 +681,67 @@ cyclonev_hps_interface_interrupts interrupts(
  .irq({
     f2h_irq_p1[31:0] // 63:32
    ,f2h_irq_p0[31:0] // 31:0
+  })
+);
+
+
+cyclonev_hps_interface_peripheral_emac peripheral_emac1(
+ .phy_col_i({
+    emac1_phy_col_i[0:0] // 0:0
+  })
+,.gmii_mdc_o({
+    emac1_gmii_mdc_o[0:0] // 0:0
+  })
+,.phy_rxd_i({
+    emac1_phy_rxd_i[7:0] // 7:0
+  })
+,.phy_txclk_o({
+    emac1_phy_txclk_o[0:0] // 0:0
+  })
+,.ptp_aux_ts_trig_i({
+    emac1_ptp_aux_ts_trig_i[0:0] // 0:0
+  })
+,.phy_txd_o({
+    emac1_phy_txd_o[7:0] // 7:0
+  })
+,.phy_crs_i({
+    emac1_phy_crs_i[0:0] // 0:0
+  })
+,.gmii_mdo_o_e({
+    emac1_gmii_mdo_o_e[0:0] // 0:0
+  })
+,.ptp_pps_o({
+    emac1_ptp_pps_o[0:0] // 0:0
+  })
+,.rst_clk_rx_n_o({
+    emac1_rst_clk_rx_n_o[0:0] // 0:0
+  })
+,.gmii_mdi_i({
+    emac1_gmii_mdi_i[0:0] // 0:0
+  })
+,.clk_rx_i({
+    emac1_clk_rx_i[0:0] // 0:0
+  })
+,.phy_txen_o({
+    emac1_phy_txen_o[0:0] // 0:0
+  })
+,.gmii_mdo_o({
+    emac1_gmii_mdo_o[0:0] // 0:0
+  })
+,.phy_rxer_i({
+    emac1_phy_rxer_i[0:0] // 0:0
+  })
+,.rst_clk_tx_n_o({
+    emac1_rst_clk_tx_n_o[0:0] // 0:0
+  })
+,.phy_rxdv_i({
+    emac1_phy_rxdv_i[0:0] // 0:0
+  })
+,.clk_tx_i({
+    emac1_clk_tx_i[0:0] // 0:0
+  })
+,.phy_txer_o({
+    emac1_phy_txer_o[0:0] // 0:0
   })
 );
 

@@ -102,7 +102,7 @@ Calls the POWERLINK initialization and background task
 \ingroup module_daemon
 */
 
-#include "sys/alt_stdio.h"
+//#include "sys/alt_stdio.h"
 //------------------------------------------------------------------------------
 int main(void)
 {

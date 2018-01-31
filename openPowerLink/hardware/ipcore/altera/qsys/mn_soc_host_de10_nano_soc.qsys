@@ -137,6 +137,14 @@
          type = "boolean";
       }
    }
+   element fpga_mem.s0
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
    element lw_bridge.s0
    {
       datum baseAddress
@@ -145,7 +153,15 @@
          type = "String";
       }
    }
-   element fpga_mem.s0
+   element dipsw_pio.s1
+   {
+      datum baseAddress
+      {
+         value = "16";
+         type = "String";
+      }
+   }
+   element button_pio.s1
    {
       datum baseAddress
       {
@@ -158,22 +174,6 @@
       datum baseAddress
       {
          value = "64";
-         type = "String";
-      }
-   }
-   element button_pio.s1
-   {
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
-   element dipsw_pio.s1
-   {
-      datum baseAddress
-      {
-         value = "16";
          type = "String";
       }
    }
@@ -262,6 +262,7 @@
    internal="hps_0.h2f_loan_io"
    type="conduit"
    dir="end" />
+ <interface name="hps_0_emac1_md_clk" internal="hps_0.emac1_md_clk" />
  <module kind="altera_hps" version="14.0" enabled="1" name="hps_0">
   <parameter name="MEM_VENDOR" value="Other" />
   <parameter name="MEM_FORMAT" value="DISCRETE" />
@@ -721,7 +722,7 @@
   <parameter name="TRACE_PinMuxing" value="Unused" />
   <parameter name="TRACE_Mode" value="N/A" />
   <parameter name="GPIO_Enable">No,No,No,No,No,No,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,Yes,No,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,Yes,Yes,No,No,No,No,No,No,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
-  <parameter name="LOANIO_Enable">No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
+  <parameter name="LOANIO_Enable">No,No,No,No,No,No,No,No,No,No,No,No,No,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No,No</parameter>
   <parameter name="F2H_AXI_CLOCK_FREQ" value="50000000" />
   <parameter name="H2F_AXI_CLOCK_FREQ" value="100000000" />
   <parameter name="H2F_LW_AXI_CLOCK_FREQ" value="50000000" />

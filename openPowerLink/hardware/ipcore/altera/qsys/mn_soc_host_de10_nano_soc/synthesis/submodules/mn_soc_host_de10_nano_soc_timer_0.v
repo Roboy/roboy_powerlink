@@ -1,4 +1,4 @@
-//Legal Notice: (C)2017 Altera Corporation. All rights reserved.  Your
+//Legal Notice: (C)2018 Altera Corporation. All rights reserved.  Your
 //use of Altera Corporation's design tools, logic functions and other
 //software and tools, and its AMPP partner logic functions, and any
 //output files any of the foregoing (including device programming or
@@ -66,7 +66,7 @@ module mn_soc_host_de10_nano_soc_timer_0 (
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
-          internal_counter <= 16'd49999;
+          internal_counter <= 16'hC34F;
       else if (counter_is_running || force_reload)
           if (counter_is_zero    || force_reload)
               internal_counter <= counter_load_value;
@@ -76,7 +76,7 @@ module mn_soc_host_de10_nano_soc_timer_0 (
 
 
   assign counter_is_zero = internal_counter == 0;
-  assign counter_load_value = 16'd49999;
+  assign counter_load_value = 16'hC34F;
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)

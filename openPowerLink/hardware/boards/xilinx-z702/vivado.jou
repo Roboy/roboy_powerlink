@@ -1,0 +1,25 @@
+#-----------------------------------------------------------
+# Vivado v2016.2 (64-bit)
+# SW Build 1577090 on Thu Jun  2 16:32:35 MDT 2016
+# IP Build 1577682 on Fri Jun  3 12:00:54 MDT 2016
+# Start of session at: Fri Jan 26 15:13:26 2018
+# Process ID: 27446
+# Current directory: /home/letrend/workspace/roboy_middleware/src/roboy_powerlink/openPowerLink/hardware/boards/xilinx-z702
+# Command line: vivado
+# Log file: /home/letrend/workspace/roboy_middleware/src/roboy_powerlink/openPowerLink/hardware/boards/xilinx-z702/vivado.log
+# Journal file: /home/letrend/workspace/roboy_middleware/src/roboy_powerlink/openPowerLink/hardware/boards/xilinx-z702/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /home/letrend/Downloads/openPOWERLINK_V2.6.2/hardware/boards/xilinx-z702/mn-dual-shmem-gpio/vivado/system/system.xpr
+update_compile_order -fileset sources_1
+set_property board_part em.avnet.com:microzed_7010:part0:1.1 [current_project]
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream
+wait_on_run impl_1
+open_bd_design {/home/letrend/Downloads/openPOWERLINK_V2.6.2/hardware/boards/xilinx-z702/mn-dual-shmem-gpio/vivado/system/system.srcs/sources_1/bd/system/system.bd}
+close_project
+open_project /home/letrend/Documents/microzed-7010/project_1/project_1.xpr
+update_compile_order -fileset sources_1
+file mkdir /home/letrend/Documents/microzed-7010/project_1/project_1.sdk
+write_hwdef -force  -file /home/letrend/Documents/microzed-7010/project_1/project_1.sdk/design_1_wrapper.hdf
+write_hwdef -force  -file /home/letrend/Documents/microzed-7010/project_1/design_1_wrapper.hdf
