@@ -97,7 +97,7 @@ typedef struct
 static int              aUsedNodeIds_l[] = {1, 32, 110, 0};
 static UINT             cnt_l;
 static APP_NODE_VAR_T   aNodeVar_l[MAX_NODES];
-static PI_IN*           pProcessImageIn_l;
+//static PI_IN*           pProcessImageIn_l;
 static const PI_OUT*    pProcessImageOut_l;
 
 //------------------------------------------------------------------------------
@@ -180,49 +180,49 @@ tOplkError processSync(void)
 
     cnt_l++;
 
-    aNodeVar_l[0].input = pProcessImageOut_l->CN1_DigitalInput_00h_AU8_DigitalInput;
-//    aNodeVar_l[1].input = pProcessImageOut_l->CN32_DigitalInput_00h_AU8_DigitalInput;
-//    aNodeVar_l[2].input = pProcessImageOut_l->CN110_DigitalInput_00h_AU8_DigitalInput;
-
-    for (i = 0; (i < MAX_NODES) && (aUsedNodeIds_l[i] != 0); i++)
-    {
-        /* Running LEDs */
-        /* period for LED flashing determined by inputs */
-        aNodeVar_l[i].period = (aNodeVar_l[i].input == 0) ? 1 : (aNodeVar_l[i].input * 20);
-        if (cnt_l % aNodeVar_l[i].period == 0)
-        {
-            if (aNodeVar_l[i].leds == 0x00)
-            {
-                aNodeVar_l[i].leds = 0x1;
-                aNodeVar_l[i].toggle = 1;
-            }
-            else
-            {
-                if (aNodeVar_l[i].toggle)
-                {
-                    aNodeVar_l[i].leds <<= 1;
-                    if (aNodeVar_l[i].leds == APP_LED_MASK_1)
-                        aNodeVar_l[i].toggle = 0;
-                }
-                else
-                {
-                    aNodeVar_l[i].leds >>= 1;
-                    if (aNodeVar_l[i].leds == 0x01)
-                        aNodeVar_l[i].toggle = 1;
-                }
-            }
-        }
-
-        if (aNodeVar_l[i].input != aNodeVar_l[i].inputOld)
-            aNodeVar_l[i].inputOld = aNodeVar_l[i].input;
-
-        if (aNodeVar_l[i].leds != aNodeVar_l[i].ledsOld)
-            aNodeVar_l[i].ledsOld = aNodeVar_l[i].leds;
-    }
-
-    pProcessImageIn_l->CN1_DigitalOutput_00h_AU8_DigitalOutput = aNodeVar_l[0].leds;
-//    pProcessImageIn_l->CN32_DigitalOutput_00h_AU8_DigitalOutput = aNodeVar_l[1].leds;
-//    pProcessImageIn_l->CN110_DigitalOutput_00h_AU8_DigitalOutput = aNodeVar_l[2].leds;
+//    aNodeVar_l[0].input = pProcessImageOut_l->CN1_DigitalInput_00h_AU8_DigitalInput;
+////    aNodeVar_l[1].input = pProcessImageOut_l->CN32_DigitalInput_00h_AU8_DigitalInput;
+////    aNodeVar_l[2].input = pProcessImageOut_l->CN110_DigitalInput_00h_AU8_DigitalInput;
+//
+//    for (i = 0; (i < MAX_NODES) && (aUsedNodeIds_l[i] != 0); i++)
+//    {
+//        /* Running LEDs */
+//        /* period for LED flashing determined by inputs */
+//        aNodeVar_l[i].period = (aNodeVar_l[i].input == 0) ? 1 : (aNodeVar_l[i].input * 20);
+//        if (cnt_l % aNodeVar_l[i].period == 0)
+//        {
+//            if (aNodeVar_l[i].leds == 0x00)
+//            {
+//                aNodeVar_l[i].leds = 0x1;
+//                aNodeVar_l[i].toggle = 1;
+//            }
+//            else
+//            {
+//                if (aNodeVar_l[i].toggle)
+//                {
+//                    aNodeVar_l[i].leds <<= 1;
+//                    if (aNodeVar_l[i].leds == APP_LED_MASK_1)
+//                        aNodeVar_l[i].toggle = 0;
+//                }
+//                else
+//                {
+//                    aNodeVar_l[i].leds >>= 1;
+//                    if (aNodeVar_l[i].leds == 0x01)
+//                        aNodeVar_l[i].toggle = 1;
+//                }
+//            }
+//        }
+//
+//        if (aNodeVar_l[i].input != aNodeVar_l[i].inputOld)
+//            aNodeVar_l[i].inputOld = aNodeVar_l[i].input;
+//
+//        if (aNodeVar_l[i].leds != aNodeVar_l[i].ledsOld)
+//            aNodeVar_l[i].ledsOld = aNodeVar_l[i].leds;
+//    }
+//
+//    pProcessImageIn_l->CN1_DigitalOutput_00h_AU8_DigitalOutput = aNodeVar_l[0].leds;
+////    pProcessImageIn_l->CN32_DigitalOutput_00h_AU8_DigitalOutput = aNodeVar_l[1].leds;
+////    pProcessImageIn_l->CN110_DigitalOutput_00h_AU8_DigitalOutput = aNodeVar_l[2].leds;
 
     ret = oplk_exchangeProcessImageIn();
 
@@ -251,13 +251,13 @@ static tOplkError initProcessImage(void)
 
     PRINTF("Initializing process image...\n");
     PRINTF("Size of process image: Input = %lu Output = %lu\n",
-           (ULONG)sizeof(PI_IN),
+           (ULONG)0,
            (ULONG)sizeof(PI_OUT));
-    ret = oplk_allocProcessImage(sizeof(PI_IN), sizeof(PI_OUT));
+    ret = oplk_allocProcessImage(0, sizeof(PI_OUT));
     if (ret != kErrorOk)
         return ret;
 
-    pProcessImageIn_l = (PI_IN*)oplk_getProcessImageIn();
+//    pProcessImageIn_l = (PI_IN*)oplk_getProcessImageIn();
     pProcessImageOut_l = (const PI_OUT*)oplk_getProcessImageOut();
 
     errorIndex = obdpi_setupProcessImage();
