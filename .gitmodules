@@ -1,0 +1,3 @@
+[submodule "openPowerLink/hardware/boards/altera-c5soc/mn-soc-shmem-gpio2/quartus/ip"]
+	path = openPowerLink/hardware/boards/altera-c5soc/mn-soc-shmem-gpio2/quartus/ip
+	url = https://github.com/Roboy/roboy_fpga_code
