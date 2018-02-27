@@ -11,7 +11,7 @@ This file contains the generic functions of the user PDO CAL module.
 
 /*------------------------------------------------------------------------------
 Copyright (c) 2012, SYSTEC electronic GmbH
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -203,8 +203,8 @@ tOplkError pdoucal_postSetupPdoBuffers(size_t rxPdoMemSize_p,
     tEvent      event;
     tPdoMemSize pdoMemSize;
 
-    pdoMemSize.rxPdoMemSize = rxPdoMemSize_p;
-    pdoMemSize.txPdoMemSize = txPdoMemSize_p;
+    pdoMemSize.rxPdoMemSize = (UINT32)rxPdoMemSize_p;
+    pdoMemSize.txPdoMemSize = (UINT32)txPdoMemSize_p;
     event.eventSink = kEventSinkPdokCal;
     event.eventType = kEventTypePdokSetupPdoBuf;
     event.eventArg.pEventArg = &pdoMemSize;

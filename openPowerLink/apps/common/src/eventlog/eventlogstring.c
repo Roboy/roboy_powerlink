@@ -15,7 +15,7 @@ kEventlogFormatReadable is intended to be read by humans.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -146,7 +146,8 @@ static const char* const sLogEventNodeEvent_l[] =
     "NmtNodeEventReadyToStart",
     "NmtNodeEventNmtState",
     "NmtNodeEventError",
-    "NmtNodeEventAmniReceived"
+    "NmtNodeEventAmniReceived",
+    "NmtNodeEventConfDone"
 };
 
 //------------------------------------------------------------------------------

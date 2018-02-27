@@ -10,7 +10,7 @@ the openPOWERLINK kernel stack.
 \ingroup module_driver_linux_kernel
 *******************************************************************************/
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -341,12 +341,23 @@ The function implements openPOWERLINK kernel module close function.
 static int powerlinkRelease(struct inode* pInode_p,
                             struct file* pFile_p)
 {
+    tCtrlKernelStatus   status;
+    UINT16              retVal;
+
     UNUSED_PARAMETER(pInode_p);
     UNUSED_PARAMETER(pFile_p);
 
     DEBUG_LVL_ALWAYS_TRACE("PLK: + %s()...\n", __func__);
 
     stopHeartbeatTimer();
+
+    // Close lower driver resources
+    status = ctrlkcal_getStatus();
+    if (status == kCtrlStatusRunning)
+    {
+        ctrlk_executeCmd(kCtrlShutdown, &retVal, &status, NULL);
+    }
+
     ctrlk_exit();
     atomic_dec(&openCount_g);
 

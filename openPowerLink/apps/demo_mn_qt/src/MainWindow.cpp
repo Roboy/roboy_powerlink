@@ -6,8 +6,9 @@
 
 This file contains the implementation of the main window class.
 *******************************************************************************/
+
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2017, B&R Industrial Automation GmbH
 Copyright (c) 2013, SYSTEC electronic GmbH
 All rights reserved.
 
@@ -37,29 +38,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //------------------------------------------------------------------------------
 // includes
 //------------------------------------------------------------------------------
-#include <QtGui>
 #include <MainWindow.h>
-
-#include <QHBoxLayout>
-#include <QPixmap>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QFrame>
-#include <QTextEdit>
 #include <QMessageBox>
-
-
-#include <State.h>
-#include <Output.h>
-#include <Input.h>
-#include <CnState.h>
 #include <Api.h>
-#include <SdoDialog.h>
+#include <SdoTransferDialog.h>
 #include <NmtCommandDialog.h>
 
 #if defined(CONFIG_USE_PCAP)
-#include <InterfaceSelectDialog.h>
+#include <InterfaceSelectionDialog.h>
 #endif
 
 
@@ -73,182 +59,75 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Constructor of main window class.
 
-\param[in,out]  parent              Pointer to the parent window
+\param[in,out]  pParent_p           Pointer to the parent window
 */
 //------------------------------------------------------------------------------
-MainWindow::MainWindow(QWidget* parent)
-    : QWidget(parent)
+MainWindow::MainWindow(QWidget* pParent_p) :
+    QMainWindow(pParent_p),
+    fStackIsRunning(false),
+    pSdoDialog(NULL)
 {
-    this->pApi = NULL;
-    this->pSdoDialog = NULL;
-    this->nmtEvent = kNmtEventResetNode;
+    // Setup UI elements
+    this->ui.setupUi(this);
 
-    resize(1000, 600);
+    // Set dynamic GUI information
+    UINT32 oplkVersion = Api::getVersion();
+    QString versionString = QString("Version " +
+                            QString::number(PLK_STACK_VER(oplkVersion)) + "." +
+                            QString::number(PLK_STACK_REF(oplkVersion)) + "." +
+                            QString::number(PLK_STACK_REL(oplkVersion)));
+    this->ui.pVersionLabel->setText(versionString);
 
-    QVBoxLayout* pWindowLayout = new QVBoxLayout();
-    pWindowLayout->setObjectName("MainLayout");
-    setLayout(pWindowLayout);
+    this->ui.pNmtStateWidget->showNmtStateText();
 
-    // ---------------------------------------------------------------------
-    // Head Region
-    // ---------------------------------------------------------------------
-    this->pHeadRegion = new QHBoxLayout();
-    this->pHeadRegion->setObjectName("HeadRegion");
+    // Init stack
+    this->pApi = new Api(this);
+}
 
-    this->pLogo = new QPixmap(":/img/powerlink_open_source.png");
-    this->pLabel = new QLabel();
-    this->pLabel->setPixmap(*pLogo);
-    this->pHeadRegion->addWidget(this->pLabel, 1, Qt::AlignLeft);
+//------------------------------------------------------------------------------
+/**
+\brief  Destructor
 
-    this->version = oplk_getVersion();
-    QLabel* pVersion = new QLabel("openPOWERLINK MN QT Demo\nVersion " +
-                                   QString::number(PLK_STACK_VER(this->version)) + "." +
-                                   QString::number(PLK_STACK_REF(this->version)) + "." +
-                                   QString::number(PLK_STACK_REL(this->version)));
-    this->pHeadRegion->addWidget(pVersion, Qt::AlignCenter,Qt::AlignLeft);
-
-    pWindowLayout->addLayout(this->pHeadRegion);
-    pWindowLayout->addSpacing(10);
-
-    this->pFrameSepHeadMiddle = new QFrame();
-    this->pFrameSepHeadMiddle->setFrameStyle(QFrame::HLine);
-    pWindowLayout->addWidget(this->pFrameSepHeadMiddle);
-
-    // ---------------------------------------------------------------------
-    // Middle Region
-    // ---------------------------------------------------------------------
-
-    // separate in left and right side
-    QHBoxLayout* pMiddleRegion = new QHBoxLayout();
-    pMiddleRegion->setObjectName("MiddleRegion");
-
-    this->pCnState = new CnState;
-    pMiddleRegion->addWidget(this->pCnState);
-
-    pFrameSepMiddle = new QFrame();
-    pFrameSepMiddle->setFrameStyle(QFrame::VLine);
-    pMiddleRegion->addWidget(pFrameSepMiddle);
-
-    this->pInput = new Input;
-    pMiddleRegion->addWidget(this->pInput);
-
-    this->pFrameSepMiddle2 = new QFrame();
-    this->pFrameSepMiddle2->setFrameStyle(QFrame::VLine);
-    pMiddleRegion->addWidget(this->pFrameSepMiddle2);
-
-
-    this->pOutput = new Output;
-    pMiddleRegion->addWidget(this->pOutput);
-
-    pWindowLayout->addLayout(pMiddleRegion, 8);
-    pWindowLayout->addStretch(10);
-
-    this->pFrameSepMiddleStatus = new QFrame();
-    this->pFrameSepMiddleStatus->setFrameStyle(QFrame::HLine);
-    pWindowLayout->addWidget(this->pFrameSepMiddleStatus);
-
-    // ---------------------------------------------------------------------
-    // Status Region
-    // ---------------------------------------------------------------------
-    QHBoxLayout* pStatusRegion = new QHBoxLayout();
-    pStatusRegion->setObjectName("StatusRegion");
-
-    // POWERLINK network state
-    this->pState = new State;
-    pStatusRegion->addWidget(this->pState);
-
-    pWindowLayout->addLayout(pStatusRegion, 0);
-
-    this->pFrameSepStatusFoot = new QFrame();
-    this->pFrameSepStatusFoot->setFrameStyle(QFrame::HLine);
-    pWindowLayout->addWidget(this->pFrameSepStatusFoot);
-
-    // ---------------------------------------------------------------------
-    // Foot Region
-    // ---------------------------------------------------------------------
-    QHBoxLayout* pFootRegion = new QHBoxLayout();
-    pFootRegion->setObjectName("FootRegion");
-
-    QLabel* pNodeIdLabel = new QLabel("Node-ID:");
-    pFootRegion->addWidget(pNodeIdLabel);
-
-    QString sNodeId;
-    sNodeId.setNum(Api::defaultNodeId());
-
-    QValidator* pValidator = new QIntValidator(1, 254, this);
-    this->pNodeIdEdit = new QLineEdit(sNodeId);
-    this->pNodeIdEdit->setValidator(pValidator);
-    pFootRegion->addWidget(this->pNodeIdEdit);
-
-    pFootRegion->addSpacing(20);
-
-    this->pStartStopOplk = new QPushButton(tr("Start POWERLINK"));
-    pFootRegion->addWidget(this->pStartStopOplk);
-    connect(this->pStartStopOplk,
-            SIGNAL(clicked()),
-            this,
-            SLOT(startPowerlink()));
-
-    this->pShowSdoDialog = new QPushButton(tr("SDO..."));
-    pFootRegion->addWidget(this->pShowSdoDialog);
-    connect(this->pShowSdoDialog,
-            SIGNAL(clicked()),
-            this,
-            SLOT(showSdoDialog()));
-
-    this->pNmtCmd = new QPushButton(tr("Exec NMT command"));
-    this->pNmtCmd->setEnabled(false);
-    pFootRegion->addWidget(this->pNmtCmd);
-    connect(this->pNmtCmd,
-            SIGNAL(clicked()),
-            this,
-            SLOT(execNmtCmd()));
-
-    pFootRegion->addStretch();
-
-    this->pToggleMax = new QPushButton(tr("Full Screen"));
-    pFootRegion->addWidget(this->pToggleMax);
-    connect(this->pToggleMax,
-            SIGNAL(clicked()),
-            this,
-            SLOT(toggleWindowState()));
-
-    QPushButton* pQuit = new QPushButton(tr("Quit"));
-    pFootRegion->addWidget(pQuit);
-    connect(pQuit,
-            SIGNAL(clicked()),
-            qApp,
-            SLOT(quit()));
-
-    pWindowLayout->addLayout(pFootRegion, 0);
-
-    // ---------------------------------------------------------------------
-    // Text Console Region
-    // ---------------------------------------------------------------------
-    QHBoxLayout* pTextRegion = new QHBoxLayout();
-    pTextRegion->setObjectName("TextRegion");
-
-    this->pTextEdit = new QTextEdit();
-    pTextRegion->addWidget(this->pTextEdit);
-    this->pTextEdit->setReadOnly(true);
-
-    pWindowLayout->addLayout(pTextRegion, 0);
+Destructs the main window class.
+*/
+//------------------------------------------------------------------------------
+MainWindow::~MainWindow()
+{
+    delete this->pApi;
 }
 
 //------------------------------------------------------------------------------
 /**
 \brief  Toggle window state
 
-toggleWindowState() toggles between fullscreen and normal window state.
+Toggles between fullscreen and normal window state.
 */
 //------------------------------------------------------------------------------
 void MainWindow::toggleWindowState()
 {
-    setWindowState(windowState() ^ Qt::WindowFullScreen);
-    if (windowState() & Qt::WindowFullScreen)
-        this->pToggleMax->setText(tr("Window"));
+    // Toggle the window state
+    this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
+
+    // Change the labeling of the button
+    if (this->windowState() & Qt::WindowFullScreen)
+        this->ui.pToggleMax->setText(tr("Window"));
     else
-        this->pToggleMax->setText(tr("Full Screen"));
+        this->ui.pToggleMax->setText(tr("Full Screen"));
+}
+
+//------------------------------------------------------------------------------
+/**
+\brief  Start or stop POWERLINK
+
+Starts or stops the openPOWERLINK stack.
+*/
+//------------------------------------------------------------------------------
+void MainWindow::startStopStack()
+{
+    if (!this->fStackIsRunning)
+        this->startPowerlink();
+    else
+        this->stopPowerlink();
 }
 
 //------------------------------------------------------------------------------
@@ -260,13 +139,11 @@ Starts the openPOWERLINK stack.
 //------------------------------------------------------------------------------
 void MainWindow::startPowerlink()
 {
-    bool            fConvOk;
-    unsigned int    nodeId;
-
 #if defined(CONFIG_USE_PCAP)
     // start the selection dialog
-    InterfaceSelectDialog* pInterfaceDialog = new InterfaceSelectDialog();
-    if (pInterfaceDialog->fillList(this->devName) < 0)
+    InterfaceSelectionDialog    interfaceDialog;
+
+    if (interfaceDialog.fillList() < 0)
     {
         QMessageBox::warning(this,
                              "PCAP not working!",
@@ -276,44 +153,38 @@ void MainWindow::startPowerlink()
         return;
     }
 
-    if (pInterfaceDialog->exec() == QDialog::Rejected)
+    interfaceDialog.setActive(this->devName);
+    if (interfaceDialog.exec() == QDialog::Rejected)
         return;
 
-    this->devName = pInterfaceDialog->getDevName();
-    delete pInterfaceDialog;
+    this->devName = interfaceDialog.getDevName();
 #else
-    this->devName = "plk";
+    this->devName = QString("plk");
 #endif
 
-    this->pNodeIdEdit->setEnabled(false);
-    nodeId = this->pNodeIdEdit->text().toUInt(&fConvOk);
-    if (fConvOk == false)
-        nodeId = Api::defaultNodeId();
+    // Update GUI elements to started stack
+    this->ui.pNodeIdInput->setEnabled(false);
+    this->ui.pExecNmtCmd->setEnabled(true);
+    this->ui.pStartStopOplk->setText(tr("Stop POWERLINK"));
 
-    this->pNmtCmd->setEnabled(true);
+    // Start the stack
+    this->pApi->start((unsigned int)this->ui.pNodeIdInput->value(), this->devName);
 
-    // change the button to stop
-    this->pStartStopOplk->setText(tr("Stop POWERLINK"));
-    this->pStartStopOplk->disconnect(this, SLOT(startPowerlink()));
-    connect(this->pStartStopOplk,
-            SIGNAL(clicked()),
-            this,
-            SLOT(stopPowerlink()));
-
-    this->pApi = new Api(this, nodeId, devName);
-
-    if (pSdoDialog)
+    // Connect some signals/slots for the SDO dialog
+    if (this->pSdoDialog)
     {
         QObject::connect(this->pApi,
                          SIGNAL(userDefEvent(void*)),
-                         pSdoDialog,
+                         this->pSdoDialog,
                          SLOT(userDefEvent(void*)),
                          Qt::DirectConnection);
         QObject::connect(this->pApi,
                          SIGNAL(sdoFinished(tSdoComFinished)),
-                         pSdoDialog,
+                         this->pSdoDialog,
                          SLOT(sdoFinished(tSdoComFinished)));
     }
+
+    this->fStackIsRunning = true;
 }
 
 //------------------------------------------------------------------------------
@@ -325,17 +196,15 @@ Stops the openPOWERLINK stack.
 //------------------------------------------------------------------------------
 void MainWindow::stopPowerlink()
 {
-    delete this->pApi;
+    this->fStackIsRunning = false;
 
-    this->pStartStopOplk->setText(tr("Start POWERLINK"));
-    this->pStartStopOplk->disconnect(this, SLOT(stopPowerlink()));
-    connect(this->pStartStopOplk,
-            SIGNAL(clicked()),
-            this,
-            SLOT(startPowerlink()));
+    // Stop the stack
+    this->pApi->stop();
 
-    this->pNodeIdEdit->setEnabled(true);
-    this->pNmtCmd->setEnabled(false);
+    // Update GUI elements to stopped stack
+    this->ui.pStartStopOplk->setText(tr("Start POWERLINK"));
+    this->ui.pNodeIdInput->setEnabled(true);
+    this->ui.pExecNmtCmd->setEnabled(false);
 }
 
 //------------------------------------------------------------------------------
@@ -347,21 +216,15 @@ Execute NMT command/event entered in dialog.
 //------------------------------------------------------------------------------
 void MainWindow::execNmtCmd()
 {
-    NmtCommandDialog* pDialog = new NmtCommandDialog(this->nmtEvent);
+    NmtCommandDialog    nmtCommandDialog;
 
-    if (pDialog->exec() == QDialog::Rejected)
+    if (nmtCommandDialog.exec() == QDialog::Accepted)
     {
-        delete pDialog;
-        return;
+        tNmtEvent   nmtCommand = nmtCommandDialog.getNmtEvent();
+
+        if (nmtCommand != kNmtEventNoEvent)
+            Api::execNmtCommand(nmtCommand);
     }
-
-    this->nmtEvent = pDialog->getNmtEvent();
-    delete pDialog;
-
-    if (this->nmtEvent == kNmtEventNoEvent)
-        return;
-
-    oplk_execNmtCommand(this->nmtEvent);
 }
 
 //------------------------------------------------------------------------------
@@ -375,7 +238,7 @@ void MainWindow::showSdoDialog()
 {
     if (!this->pSdoDialog)
     {
-        this->pSdoDialog = new SdoDialog();
+        this->pSdoDialog = new SdoTransferDialog();
         if (this->pApi)
         {
             QObject::connect(this->pApi,
@@ -401,14 +264,80 @@ void MainWindow::showSdoDialog()
 
 //------------------------------------------------------------------------------
 /**
-\brief  Print a log entry
+\brief  Print a log message
 
-The function prints a log entry.
+The function prints a log message.
 
-\param[in]      str                 String to print.
+\param[in]      msg_p               String to print.
 */
 //------------------------------------------------------------------------------
-void MainWindow::printlog(const QString& str)
+void MainWindow::printLogMessage(const QString& msg_p)
 {
-    this->pTextEdit->append(str);
+    this->ui.pTextEdit->append(msg_p);
+}
+
+//------------------------------------------------------------------------------
+/**
+\brief  NMT state changed
+
+Handle an NMT state change of this node.
+
+\param[in]      nmtState_p          New NMT state
+*/
+//------------------------------------------------------------------------------
+void MainWindow::nmtStateChanged(tNmtState nmtState_p)
+{
+    // Show the new state in the widget
+    this->ui.pNmtStateWidget->setNmtState(nmtState_p);
+
+    // Handle the new NMT state
+    if (nmtState_p == kNmtGsOff)
+    {
+        this->ui.pCnListWidget->removeAllNodes();
+        this->ui.pCnInputWidget->removeAllNodes();
+        this->ui.pCnOutputWidget->removeAllNodes();
+    }
+}
+
+//------------------------------------------------------------------------------
+/**
+\brief  NMT state of another node changed
+
+Handle an NMT state change of another node in the network.
+
+\param[in]      nodeId_p            Node ID of CN
+\param[in]      state_p             State of CN
+*/
+//------------------------------------------------------------------------------
+void MainWindow::nodeNmtStateChanged(unsigned int nodeId_p, tNmtState state_p)
+{
+    // Show the new state in the widget
+    this->ui.pCnListWidget->setState(nodeId_p, state_p);
+
+    // Reflect the changes on the other widgets
+    switch (state_p)
+    {
+        case kNmtCsBasicEthernet:
+        case kNmtCsStopped:
+        case kNmtGsInitialising:
+        case kNmtGsResetApplication:
+        case kNmtGsResetCommunication:
+        case kNmtGsResetConfiguration:
+        case kNmtCsPreOperational1:
+        case kNmtCsPreOperational2:
+        case kNmtCsReadyToOperate:
+        case kNmtCsOperational:
+            this->ui.pCnListWidget->addNode(nodeId_p);
+            this->ui.pCnInputWidget->addNode(nodeId_p);
+            this->ui.pCnOutputWidget->addNode(nodeId_p);
+            break;
+
+        case kNmtCsNotActive:
+        case kNmtGsOff:
+        default:
+            this->ui.pCnListWidget->removeNode(nodeId_p);
+            this->ui.pCnInputWidget->removeNode(nodeId_p);
+            this->ui.pCnOutputWidget->removeNode(nodeId_p);
+            break;
+    }
 }

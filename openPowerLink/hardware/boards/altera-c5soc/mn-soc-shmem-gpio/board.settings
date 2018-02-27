@@ -2,7 +2,7 @@
 #
 # Board settings for openPOWERLINK stack on Altera Nios II
 #
-# Copyright (c) 2014, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+# Copyright (c) 2014, B&R Industrial Automation GmbH
 # Copyright (c) 2015, Kalycito Infotech Private Limited
 # All rights reserved.
 #
@@ -46,7 +46,7 @@ CFG_DRV_SYS_TIMER_NAME=${CFG_DRV_SUB_NAME}_timer_0
 CFG_DRV_TC_MEM_NAME=${CFG_DRV_SUB_NAME}_tc_mem
 
 # Default Use Memory
-CFG_DRV_DEF_MEM_NAME=address_span_extender
+CFG_DRV_DEF_MEM_NAME=address_span_extender_cpu_bridge
 
 # BSP type
 CFG_DRV_BSP_TYPE=hal

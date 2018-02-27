@@ -10,6 +10,7 @@ application library on Windows which is using the kernelspace interface.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
+Copyright (c) 2017, B&R Industrial Automation GmbH
 Copyright (c) 2015, Kalycito Infotech Private Limited
 All rights reserved.
 
@@ -61,9 +62,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define CONFIG_INCLUDE_SDOS
 #define CONFIG_INCLUDE_SDOC
 #define CONFIG_INCLUDE_SDO_ASND
+#define CONFIG_INCLUDE_SDO_RW_MULTIPLE
 #define CONFIG_INCLUDE_CFM
 #define CONFIG_INCLUDE_PRES_FORWARD
 #define CONFIG_INCLUDE_VETH
+#define CONFIG_INCLUDE_SDO_UDP
 #define CONFIG_DLLCAL_QUEUE                             IOCTL_QUEUE
 
 #define CONFIG_VETH_SET_DEFAULT_GATEWAY                 FALSE

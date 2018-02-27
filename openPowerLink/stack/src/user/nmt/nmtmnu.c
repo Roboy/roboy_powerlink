@@ -11,7 +11,7 @@ This file contains the implementation of the NMT MNU module.
 
 /*------------------------------------------------------------------------------
 Copyright (c) 2015, SYSTEC electronic GmbH
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2017, B&R Industrial Automation GmbH
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -81,19 +81,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // const defines
 //------------------------------------------------------------------------------
 
-// TracePoint support for realtime-debugging
-#ifdef _DBG_TRACE_POINTS_
-void TgtDbgSignalTracePoint(UINT8 tracePointNumber_p);
-void TgtDbgPostTraceValue(UINT32 traceValue_p);
-#define TGT_DBG_SIGNAL_TRACE_POINT(p)   TgtDbgSignalTracePoint(p)
-#define TGT_DBG_POST_TRACE_VALUE(v)     TgtDbgPostTraceValue(v)
-#else
-#define TGT_DBG_SIGNAL_TRACE_POINT(p)
-#define TGT_DBG_POST_TRACE_VALUE(v)
-#endif
-#define NMTMNU_DBG_POST_TRACE_VALUE(event_p, nodeId_p, errorCode_p)       \
-    TGT_DBG_POST_TRACE_VALUE((kEventSinkNmtMnu << 28) | (event_p << 24) | \
-                             (nodeId_p << 16) | errorCode_p)
+#define NMTMNU_DBG_POST_TRACE_VALUE(event_p, nodeId_p, errorCode_p)               \
+    DEBUG_LVL_NMTMN_TRACE("nmtmnu: event: %02X, nodeId: %02X, errorCode: %04X\n", \
+                          event_p,                                                \
+                          nodeId_p,                                               \
+                          errorCode_p);
 
 // defines for flags in node info structure
 #define NMTMNU_NODE_FLAG_ISOCHRON               0x0001  // CN is being accessed isochronously
@@ -230,6 +222,8 @@ typedef enum
     kNmtMnuIntNodeEventTimerStateMon        = 0x0C,
     kNmtMnuIntNodeEventTimerLonger          = 0x0D,
     kNmtMnuIntNodeEventError                = 0x0E,
+    kNmtMnuIntNodeEventSwUpdated            = 0x0F,
+    kNmtMnuIntNodeEventSwOk                 = 0x10,
 } eNmtMnuIntNodeEvent;
 
 /**
@@ -255,6 +249,7 @@ typedef enum
     kNmtMnuNodeStateReadyToOp               = 0x05, // BootStep2 completed
     kNmtMnuNodeStateComChecked              = 0x06, // Communication checked successfully
     kNmtMnuNodeStateOperational             = 0x07, // CN is in NMT state OPERATIONAL
+    kNmtMnuNodeStateSwOk                    = 0x08, // CN software updated or already up-to-date
 } eNmtMnuNodeState;
 
 /**
@@ -285,6 +280,8 @@ typedef struct
     UINT16              prcFlags;               ///< PRC specific node flags
     UINT32              relPropagationDelayNs;  ///< Propagation delay in nanoseconds
     UINT32              pResTimeFirstNs;        ///< PRes time
+    BOOL                fPrcSupportIsMissing;   ///< A node configured to be used for PRC is not supporting it
+    UINT32              nodeCfgBackup;          ///< Backup of nodeCfg member is used if fPrcSupportIsMissing is TRUE
 } tNmtMnuNodeInfo;
 
 /**
@@ -406,6 +403,8 @@ static ULONG      computeCeilDiv(ULONG numerator_p,
 
 static tNmtState  correctNmtState(UINT8 nmtState_p);
 
+static void handleMissingPrcSupport(UINT nodeId_p, UINT32 featureFlags_p);
+
 /* internal node event handler functions */
 static INT processNodeEventNoIdentResponse(UINT nodeId_p,
                                            tNmtState nodeNmtState_p,
@@ -482,6 +481,16 @@ static INT processNodeEventError(UINT nodeId_p,
                                  tNmtState nmtState_p,
                                  UINT16 errorCode_p,
                                  tOplkError* pRet_p);
+static INT processNodeEventSwUpdated(UINT nodeId_p,
+                                     tNmtState nodeNmtState_p,
+                                     tNmtState nmtState_p,
+                                     UINT16 errorCode_p,
+                                     tOplkError* pRet_p);
+static INT processNodeEventSwOk(UINT nodeId_p,
+                                tNmtState nodeNmtState_p,
+                                tNmtState nmtState_p,
+                                UINT16 errorCode_p,
+                                tOplkError* pRet_p);
 
 //------------------------------------------------------------------------------
 // local vars
@@ -506,7 +515,9 @@ static tProcessNodeEventFunc apfnNodeEventFuncs_l[] =
     processNodeEventTimerStatReq,       // kNmtMnuIntNodeEventTimerStatReq
     processNodeEventTimerStateMon,      // kNmtMnuIntNodeEventTimerStateMon
     processNodeEventTimerLonger,        // kNmtMnuIntNodeEventTimerLonger
-    processNodeEventError               // kNmtMnuIntNodeEventError
+    processNodeEventError,              // kNmtMnuIntNodeEventError
+    processNodeEventSwUpdated,          // kNmtMnuIntNodeEventSwUpdated
+    processNodeEventSwOk,               // kNmtMnuIntNodeEventSwOk
 };
 
 //============================================================================//
@@ -1426,6 +1437,19 @@ tOplkError nmtmnu_processEvent(const tEvent* pEvent_p)
                         nodeEvent = kNmtMnuIntNodeEventBoot;
                         break;
 
+                    case kNmtNodeCommandSwOk:
+                        nodeEvent = kNmtMnuIntNodeEventSwOk;
+                        break;
+
+                    case kNmtNodeCommandSwUpdated:
+                        nodeEvent = kNmtMnuIntNodeEventSwUpdated;
+                        break;
+
+                    case kNmtNodeCommandSwErr:
+                        nodeEvent = kNmtMnuIntNodeEventError;
+                        errorCode = E_NMT_BPO1_SW_UPDATE;
+                        break;
+
                     case kNmtNodeCommandConfOk:
                         nodeEvent = kNmtMnuIntNodeEventConfigured;
                         break;
@@ -1627,6 +1651,8 @@ static tOplkError cbIdentResponse(UINT nodeId_p,
     {   // node answered IdentRequest
         errorCode = E_NO_ERROR;
         nmtState = correctNmtState(ami_getUint8Le(&pIdentResponse_p->nmtStatus));
+
+        handleMissingPrcSupport(nodeId_p, pIdentResponse_p->featureFlagsLe);
 
         // check IdentResponse $$$ move to ProcessIntern, because this function may be called also if CN
 
@@ -2702,17 +2728,45 @@ static INT processNodeEventBoot(UINT nodeId_p,
                                 UINT16 errorCode_p,
                                 tOplkError* pRet_p)
 {
-    const tNmtMnuNodeInfo*  pNodeInfo;
+    tNmtMnuNodeInfo*  pNodeInfo;
 
     UNUSED_PARAMETER(errorCode_p);
     UNUSED_PARAMETER(nmtState_p);
 
     pNodeInfo = NMTMNU_GET_NODEINFO(nodeId_p);
 
-    // $$$ check identification (vendor ID, product code, revision no, serial no)
     if (pNodeInfo->nodeState == kNmtMnuNodeStateIdentified)
     {
-        // $$$ check software
+        if ((nmtMnuInstance_g.nmtStartup & NMT_STARTUP_SWVERSIONCHECK) != 0)
+        {
+            *pRet_p = nmtMnuInstance_g.pfnCbNodeEvent(nodeId_p,
+                                                      kNmtNodeEventUpdateSw,
+                                                      nodeNmtState_p,
+                                                      E_NO_ERROR,
+                                                      (pNodeInfo->nodeCfg & NMT_NODEASSIGN_MANDATORY_CN) != 0);
+            if (*pRet_p == kErrorOk)
+            {
+                pNodeInfo->nodeState = kNmtMnuNodeStateSwOk;
+            }
+        }
+        else
+        {
+            pNodeInfo->nodeState = kNmtMnuNodeStateSwOk;
+        }
+
+        if (pNodeInfo->nodeState == kNmtMnuNodeStateSwOk)
+        {
+            // check/start configuration
+            // inform application
+            *pRet_p = nmtMnuInstance_g.pfnCbNodeEvent(nodeId_p,
+                                                      kNmtNodeEventCheckConf,
+                                                      nodeNmtState_p,
+                                                      E_NO_ERROR,
+                                                      (pNodeInfo->nodeCfg & NMT_NODEASSIGN_MANDATORY_CN) != 0);
+        }
+    }
+    else if (pNodeInfo->nodeState == kNmtMnuNodeStateSwOk)
+    {
         // check/start configuration
         // inform application
         *pRet_p = nmtMnuInstance_g.pfnCbNodeEvent(nodeId_p,
@@ -2720,21 +2774,6 @@ static INT processNodeEventBoot(UINT nodeId_p,
                                                   nodeNmtState_p,
                                                   E_NO_ERROR,
                                                   (pNodeInfo->nodeCfg & NMT_NODEASSIGN_MANDATORY_CN) != 0);
-        if (*pRet_p == kErrorReject)
-        {   // interrupt boot process on user request
-            NMTMNU_DBG_POST_TRACE_VALUE(kNmtMnuIntNodeEventBoot,
-                                        nodeId_p,
-                                        ((pNodeInfo->nodeState << 8) | *pRet_p));
-            *pRet_p = kErrorOk;
-            return 0;
-        }
-        else if (*pRet_p != kErrorOk)
-        {
-            NMTMNU_DBG_POST_TRACE_VALUE(kNmtMnuIntNodeEventBoot,
-                                        nodeId_p,
-                                        ((pNodeInfo->nodeState << 8) | *pRet_p));
-            return 0;
-        }
     }
     else if (pNodeInfo->nodeState == kNmtMnuNodeStateConfRestored)
     {
@@ -2745,25 +2784,34 @@ static INT processNodeEventBoot(UINT nodeId_p,
                                                   nodeNmtState_p,
                                                   E_NO_ERROR,
                                                   (pNodeInfo->nodeCfg & NMT_NODEASSIGN_MANDATORY_CN) != 0);
-        if (*pRet_p == kErrorReject)
-        {   // interrupt boot process on user request
-            NMTMNU_DBG_POST_TRACE_VALUE(kNmtMnuIntNodeEventBoot,
-                                        nodeId_p,
-                                        ((pNodeInfo->nodeState << 8) | *pRet_p));
-            *pRet_p = kErrorOk;
-            return 0;
-        }
-        else if (*pRet_p != kErrorOk)
-        {
-            NMTMNU_DBG_POST_TRACE_VALUE(kNmtMnuIntNodeEventBoot,
-                                        nodeId_p,
-                                        ((pNodeInfo->nodeState << 8) | *pRet_p));
-            return 0;
-        }
     }
-    else if (pNodeInfo->nodeState != kNmtMnuNodeStateResetConf)
+    else if (pNodeInfo->nodeState == kNmtMnuNodeStateResetConf)
+    {
+        *pRet_p = nmtMnuInstance_g.pfnCbNodeEvent(nodeId_p,
+                                                  kNmtNodeEventConfDone,
+                                                  nodeNmtState_p,
+                                                  E_NO_ERROR,
+                                                  (pNodeInfo->nodeCfg & NMT_NODEASSIGN_MANDATORY_CN) != 0);
+    }
+    else
     {   // wrong CN state
         // ignore event
+        return 0;
+    }
+
+    if (*pRet_p == kErrorReject)
+    {   // interrupt boot process on user request
+        NMTMNU_DBG_POST_TRACE_VALUE(kNmtMnuIntNodeEventBoot,
+                                    nodeId_p,
+                                    ((pNodeInfo->nodeState << 8) | *pRet_p));
+        *pRet_p = kErrorOk;
+        return 0;
+    }
+    else if (*pRet_p != kErrorOk)
+    {
+        NMTMNU_DBG_POST_TRACE_VALUE(kNmtMnuIntNodeEventBoot,
+                                    nodeId_p,
+                                    ((pNodeInfo->nodeState << 8) | *pRet_p));
         return 0;
     }
 
@@ -2807,7 +2855,7 @@ static INT processNodeEventConfigured(UINT nodeId_p,
 
     pNodeInfo = NMTMNU_GET_NODEINFO(nodeId_p);
 
-    if ((pNodeInfo->nodeState != kNmtMnuNodeStateIdentified) &&
+    if ((pNodeInfo->nodeState != kNmtMnuNodeStateSwOk) &&
         (pNodeInfo->nodeState != kNmtMnuNodeStateConfRestored) &&
         (pNodeInfo->nodeState != kNmtMnuNodeStateResetConf))
     {   // wrong CN state, ignore event
@@ -2894,7 +2942,7 @@ INT processNodeEventNoIdentResponse(UINT nodeId_p,
                                     nodeId_p,
                                     ((pNodeInfo->nodeState << 8) | 0x80 |
                                     ((pNodeInfo->flags & NMTMNU_NODE_FLAG_COUNT_STATREQ) >> 6) |
-                                    ((TimerArg.argument.value & NMTMNU_TIMERARG_COUNT_SR) >> 8)));
+                                    ((timerArg.argument.value & NMTMNU_TIMERARG_COUNT_SR) >> 8)));
         *pRet_p = timeru_modifyTimer(&pNodeInfo->timerHdlStatReq,
                                      nmtMnuInstance_g.statusRequestDelay,
                                      &timerArg);
@@ -2976,7 +3024,7 @@ static INT processNodeEventStatusResponse(UINT nodeId_p,
                                     nodeId_p,
                                     ((pNodeInfo->nodeState << 8) | 0x80 |
                                      ((pNodeInfo->flags & NMTMNU_NODE_FLAG_COUNT_STATREQ) >> 6) |
-                                     ((TimerArg.argument.value & NMTMNU_TIMERARG_COUNT_SR) >> 8)));
+                                     ((timerArg.argument.value & NMTMNU_TIMERARG_COUNT_SR) >> 8)));
         *pRet_p = timeru_modifyTimer(&pNodeInfo->timerHdlStatReq,
                                      nmtMnuInstance_g.statusRequestDelay,
                                      &timerArg);
@@ -3049,6 +3097,7 @@ static INT processNodeEventError(UINT nodeId_p,
 
     // currently only issued on kNmtNodeCommandConfErr
     if ((pNodeInfo->nodeState != kNmtMnuNodeStateIdentified) &&
+        (pNodeInfo->nodeState != kNmtMnuNodeStateSwOk) &&
         (pNodeInfo->nodeState != kNmtMnuNodeStateConfRestored))
     {   // wrong CN state, ignore event
         return 0;
@@ -3062,6 +3111,92 @@ static INT processNodeEventError(UINT nodeId_p,
                             nmtState_p);
     if (*pRet_p == kErrorReject)
         *pRet_p = kErrorOk;
+
+    return 0;
+}
+
+//------------------------------------------------------------------------------
+/**
+\brief  Process software update done node event
+
+The function processes the internal node event kNmtMnuIntNodeEventSwUpdated.
+
+\param[in]      nodeId_p            Node ID to process.
+\param[in]      nodeNmtState_p      NMT state of the node.
+\param[in]      nmtState_p          NMT state of the MN
+\param[in]      errorCode_p         Error codes.
+\param[out]     pRet_p              Pointer to store return value
+
+\return The function returns 0 if the higher level event handler should continue
+        processing or -1 if it should exit.
+*/
+//------------------------------------------------------------------------------
+static INT processNodeEventSwUpdated(UINT nodeId_p,
+                                     tNmtState nodeNmtState_p,
+                                     tNmtState nmtState_p,
+                                     UINT16 errorCode_p,
+                                     tOplkError* pRet_p)
+{
+    tNmtMnuNodeInfo*    pNodeInfo;
+
+    UNUSED_PARAMETER(nodeNmtState_p);
+    UNUSED_PARAMETER(errorCode_p);
+    UNUSED_PARAMETER(nmtState_p);
+
+    pNodeInfo = NMTMNU_GET_NODEINFO(nodeId_p);
+
+    if (pNodeInfo->nodeState != kNmtMnuNodeStateIdentified)
+    {
+       return 0;
+    }
+
+    *pRet_p = nmtmnu_sendNmtCommand(nodeId_p, kNmtCmdSwReset);
+
+    return 0;
+}
+
+//------------------------------------------------------------------------------
+/**
+\brief  Process software update okay node event
+
+The function processes the internal node event kNmtMnuIntNodeEventSwOk.
+
+\param[in]      nodeId_p            Node ID to process.
+\param[in]      nodeNmtState_p      NMT state of the node.
+\param[in]      nmtState_p          NMT state of the MN
+\param[in]      errorCode_p         Error codes.
+\param[out]     pRet_p              Pointer to store return value
+
+\return The function returns 0 if the higher level event handler should continue
+        processing or -1 if it should exit.
+*/
+//------------------------------------------------------------------------------
+static INT processNodeEventSwOk(UINT nodeId_p,
+                                tNmtState nodeNmtState_p,
+                                tNmtState nmtState_p,
+                                UINT16 errorCode_p,
+                                tOplkError* pRet_p)
+{
+    tNmtMnuNodeInfo*    pNodeInfo;
+
+    UNUSED_PARAMETER(nodeNmtState_p);
+    UNUSED_PARAMETER(errorCode_p);
+    UNUSED_PARAMETER(nmtState_p);
+
+    pNodeInfo = NMTMNU_GET_NODEINFO(nodeId_p);
+
+    if (pNodeInfo->nodeState != kNmtMnuNodeStateIdentified)
+    {
+       return 0;
+    }
+
+    pNodeInfo->nodeState = kNmtMnuNodeStateSwOk;
+
+    processNodeEventBoot(nodeId_p,
+                         nodeNmtState_p,
+                         nmtState_p,
+                         errorCode_p,
+                         pRet_p);
 
     return 0;
 }
@@ -3096,7 +3231,8 @@ static INT processNodeEventExecResetNode(UINT nodeId_p,
 
     pNodeInfo = NMTMNU_GET_NODEINFO(nodeId_p);
 
-    if (pNodeInfo->nodeState != kNmtMnuNodeStateIdentified)
+    if ((pNodeInfo->nodeState != kNmtMnuNodeStateIdentified) &&
+        (pNodeInfo->nodeState != kNmtMnuNodeStateSwOk))
     {   // wrong CN state, ignore event
         return 0;
     }
@@ -3142,7 +3278,7 @@ static INT processNodeEventExecResetConf(UINT nodeId_p,
 
     pNodeInfo = NMTMNU_GET_NODEINFO(nodeId_p);
 
-    if ((pNodeInfo->nodeState != kNmtMnuNodeStateIdentified) &&
+    if ((pNodeInfo->nodeState != kNmtMnuNodeStateSwOk) &&
         (pNodeInfo->nodeState != kNmtMnuNodeStateConfRestored))
     {   // wrong CN state
        // ignore event
@@ -3150,7 +3286,7 @@ static INT processNodeEventExecResetConf(UINT nodeId_p,
     }
 
     pNodeInfo->nodeState = kNmtMnuNodeStateResetConf;
-    NMTMNU_DBG_POST_TRACE_VALUE(nodeEvent_p,
+    NMTMNU_DBG_POST_TRACE_VALUE(kNmtMnuIntNodeEventExecResetConf,
                                 nodeId_p,
                                 (((nodeNmtState_p & 0xFF) << 8) | kNmtCmdResetConfiguration));
 
@@ -5277,6 +5413,46 @@ static tNmtState correctNmtState(UINT8 nmtState_p)
     }
 
     return correctedNmtState;
+}
+
+//------------------------------------------------------------------------------
+/**
+\brief  Handle missing PRC support
+
+The function handles a node which is configured to be used with PRC but misses
+to support PRC. The node configuration is changed to asynchronous only what
+avoids that the NMTMNU continuously resets the node. This enables the application
+to e.g. update the node with a firmware revision that supports PRC.
+
+\param[in]      nodeId_p            Node ID of an identified node
+\param[in]      featureFlags_p      The node's feature flags
+*/
+//------------------------------------------------------------------------------
+static void handleMissingPrcSupport(UINT nodeId_p, UINT32 featureFlags_p)
+{
+    tNmtMnuNodeInfo* pNodeInfo = NMTMNU_GET_NODEINFO(nodeId_p);
+
+    if (pNodeInfo->fPrcSupportIsMissing)
+    {
+        if ((featureFlags_p & NMT_FEATUREFLAGS_PRC) != 0)
+        {
+            pNodeInfo->nodeCfg = pNodeInfo->nodeCfgBackup;
+            pNodeInfo->nodeCfgBackup = 0;
+            pNodeInfo->fPrcSupportIsMissing = FALSE;
+        }
+    }
+    else
+    {
+        if (((featureFlags_p & NMT_FEATUREFLAGS_PRC) == 0) &&
+            ((pNodeInfo->nodeCfg & NMT_NODEASSIGN_PRES_CHAINING) != 0))
+        {
+            pNodeInfo->fPrcSupportIsMissing = TRUE;
+            pNodeInfo->nodeCfgBackup = pNodeInfo->nodeCfg;
+
+            pNodeInfo->nodeCfg &= ~NMT_NODEASSIGN_PRES_CHAINING;
+            pNodeInfo->nodeCfg |= NMT_NODEASSIGN_ASYNCONLY_NODE;
+        }
+    }
 }
 
 /// \}

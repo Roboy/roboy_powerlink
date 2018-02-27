@@ -8,7 +8,7 @@ The file contains definitions for the socketwrapper.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -81,8 +81,8 @@ socket wrapper module if a frame is received from the socket.
 \param[in]      pRemote_p           Pointer to socket wrapper address structure
 
 */
-typedef void (*tSocketWrapperReceiveCb)(const UINT8* pData_p,
-                                        UINT dataSize_p,
+typedef void (*tSocketWrapperReceiveCb)(const void* pData_p,
+                                        size_t dataSize_p,
                                         const tSocketWrapperAddress* pRemote_p);
 
 //------------------------------------------------------------------------------
@@ -99,8 +99,8 @@ tOplkError      socketwrapper_bind(tSocketWrapper pSocketWrapper_p,
 void            socketwrapper_close(tSocketWrapper pSocketWrapper_p);
 tOplkError      socketwrapper_send(tSocketWrapper pSocketWrapper_p,
                                    const tSocketWrapperAddress* pRemote_p,
-                                   const UINT8* pData_p,
-                                   UINT dataSize_p);
+                                   const void* pData_p,
+                                   size_t dataSize_p);
 void            socketwrapper_criticalSection(BOOL fEnable_p);
 tOplkError      socketwrapper_arpQuery(tSocketWrapper pSocketWrapper_p,
                                        UINT32 remoteIpAddress_p);

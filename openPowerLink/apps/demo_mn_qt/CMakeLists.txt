@@ -2,7 +2,7 @@
 #
 # CMake file of CiA 302 MN QT demo application
 #
-# Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+# Copyright (c) 2017, B&R Industrial Automation GmbH
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -52,9 +52,7 @@ OPTION(CFG_INCLUDE_MN_REDUNDANCY "Use MN redundancy functions (if compiled into 
 SET(OBJDICT CiA302-4_MN)            # Set object dictionary to use
 FIND_OPLK_LIBRARY("mn")             # Find suitable openPOWERLINK library
 
-FIND_PACKAGE(Qt5Core REQUIRED)      # Find Qt5
-FIND_PACKAGE(Qt5Gui REQUIRED)
-FIND_PACKAGE(Qt5Widgets REQUIRED)
+FIND_PACKAGE(Qt5 COMPONENTS Core Widgets REQUIRED)     # Find Qt5
 
 # Instruct CMake to run moc automatically when needed.
 SET(CMAKE_AUTOMOC ON)
@@ -67,40 +65,48 @@ SET_PROPERTY(CACHE CFG_DEMO_PROJECT PROPERTY STRINGS Demo_3CN Demo_RMN_3CN)
 SET(DEMO_SOURCES
     ${DEMO_SOURCE_DIR}/main.cpp
     ${DEMO_SOURCE_DIR}/MainWindow.cpp
-    ${DEMO_SOURCE_DIR}/SdoDialog.cpp
+    ${DEMO_SOURCE_DIR}/SdoTransferDialog.cpp
     ${DEMO_SOURCE_DIR}/Api.cpp
-    ${DEMO_SOURCE_DIR}/CnState.cpp
-    ${DEMO_SOURCE_DIR}/DataInOutThread.cpp
-    ${DEMO_SOURCE_DIR}/Input.cpp
-    ${DEMO_SOURCE_DIR}/Output.cpp
-    ${DEMO_SOURCE_DIR}/ProcessThread.cpp
-    ${DEMO_SOURCE_DIR}/State.cpp
-    ${DEMO_SOURCE_DIR}/Leds.cpp
-    ${DEMO_SOURCE_DIR}/NodeState.cpp
+    ${DEMO_SOURCE_DIR}/CnListWidget.cpp
+    ${DEMO_SOURCE_DIR}/SyncEventHandler.cpp
+    ${DEMO_SOURCE_DIR}/IoWidget.cpp
+    ${DEMO_SOURCE_DIR}/EventHandler.cpp
+    ${DEMO_SOURCE_DIR}/MultiColorLed.cpp
+    ${DEMO_SOURCE_DIR}/BinaryLedWidget.cpp
+    ${DEMO_SOURCE_DIR}/NmtStateWidget.cpp
     ${DEMO_SOURCE_DIR}/NmtCommandDialog.cpp
     ${DEMO_SOURCE_DIR}/EventLog.cpp
-    ${COMMON_SOURCE_DIR}/obdcreate/obdcreate.c
-    ${OBJDICT_DIR}/${OBJDICT}/obdpi.c
-    ${CONTRIB_SOURCE_DIR}/console/printlog.c
-    ${COMMON_SOURCE_DIR}/eventlog/eventlogstring.c
+    )
+
+SET(DEMO_FORMS
+    ${DEMO_SOURCE_DIR}/MainWindow.ui
+    ${DEMO_SOURCE_DIR}/NmtCommandDialog.ui
+    ${DEMO_SOURCE_DIR}/SdoTransferDialog.ui
     )
 
 SET(DEMO_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/resources/resources.qrc)
 
 SET(DEMO_HEADERS
     ${DEMO_INCLUDE_DIR}/Api.h
-    ${DEMO_INCLUDE_DIR}/CnState.h
-    ${DEMO_INCLUDE_DIR}/DataInOutThread.h
-    ${DEMO_INCLUDE_DIR}/Input.h
-    ${DEMO_INCLUDE_DIR}/Output.h
-    ${DEMO_INCLUDE_DIR}/ProcessThread.h
-    ${DEMO_INCLUDE_DIR}/State.h
-    ${DEMO_INCLUDE_DIR}/Leds.h
+    ${DEMO_INCLUDE_DIR}/CnListWidget.h
+    ${DEMO_INCLUDE_DIR}/SyncEventHandler.h
+    ${DEMO_INCLUDE_DIR}/IoWidget.h
+    ${DEMO_INCLUDE_DIR}/EventHandler.h
+    ${DEMO_INCLUDE_DIR}/MultiColorLed.h
+    ${DEMO_INCLUDE_DIR}/BinaryLedWidget.h
     ${DEMO_INCLUDE_DIR}/MainWindow.h
-    ${DEMO_INCLUDE_DIR}/SdoDialog.h
-    ${DEMO_INCLUDE_DIR}/NodeState.h
+    ${DEMO_INCLUDE_DIR}/SdoTransferDialog.h
+    ${DEMO_INCLUDE_DIR}/NmtStateWidget.h
     ${DEMO_INCLUDE_DIR}/NmtCommandDialog.h
     ${DEMO_INCLUDE_DIR}/EventLog.h
+    )
+
+# Set common sources for this demo
+SET(COMMON_SOURCES
+    ${COMMON_SOURCE_DIR}/obdcreate/obdcreate.c
+    ${OBJDICT_DIR}/${OBJDICT}/obdpi.c
+    ${CONTRIB_SOURCE_DIR}/console/printlog.c
+    ${COMMON_SOURCE_DIR}/eventlog/eventlogstring.c
     )
 
 INCLUDE_DIRECTORIES(
@@ -124,7 +130,7 @@ IF(CFG_INCLUDE_MN_REDUNDANCY)
     ADD_DEFINITIONS(-DCONFIG_INCLUDE_NMT_RMN)
 ENDIF(CFG_INCLUDE_MN_REDUNDANCY)
 
-#ADD_DEFINITIONS(-DCONFIG_OBD_USE_STORE_RESTORE)
+#ADD_DEFINITIONS(-DCONFIG_APP_STORE_RESTORE)
 #ADD_DEFINITIONS(-DCONFIG_DLL_PRES_CHAINING_CN)
 #ADD_DEFINITIONS(-DCONFIG_INCLUDE_MASND)
 
@@ -132,8 +138,9 @@ ENDIF(CFG_INCLUDE_MN_REDUNDANCY)
 # Setup compile definitions depending on configuration
 
 IF(CFG_KERNEL_STACK_DIRECTLINK OR CFG_KERNEL_STACK_USERSPACE_DAEMON)
-    SET(DEMO_SOURCES ${DEMO_SOURCES} ${DEMO_SOURCE_DIR}/InterfaceSelectDialog.cpp)
-    SET(DEMO_HEADERS ${DEMO_HEADERS} ${DEMO_INCLUDE_DIR}/InterfaceSelectDialog.h)
+    SET(DEMO_FORMS ${DEMO_FORMS} ${DEMO_SOURCE_DIR}/InterfaceSelectionDialog.ui)
+    SET(DEMO_SOURCES ${DEMO_SOURCES} ${DEMO_SOURCE_DIR}/InterfaceSelectionDialog.cpp)
+    SET(DEMO_HEADERS ${DEMO_HEADERS} ${DEMO_INCLUDE_DIR}/InterfaceSelectionDialog.h)
     ADD_DEFINITIONS(-DCONFIG_USE_PCAP)
 ENDIF(CFG_KERNEL_STACK_DIRECTLINK OR CFG_KERNEL_STACK_USERSPACE_DAEMON)
 
@@ -164,17 +171,20 @@ ADD_DEFINITIONS(${QT_DEFINITIONS})
 ################################################################################
 #
 
-
 # Setup QT5 Wrappers
 QT5_ADD_RESOURCES(DEMO_RESOURCES_RCC ${DEMO_RESOURCES})
+QT5_WRAP_UI(UI_HEADERS ${DEMO_FORMS})
 
 ################################################################################
 # Group Source Files
 
+SOURCE_GROUP("Form Files" FILES ${DEMO_FORMS})
 SOURCE_GROUP("Source Files" FILES ${DEMO_SOURCES})
-SOURCE_GROUP("QT-generated Files" FILES ${DEMO_RESOURCES_RCC})
+SOURCE_GROUP("Common Source Files" FILES ${COMMON_SOURCES})
+SOURCE_GROUP("Common Source Files" FILES ${DEMO_ARCH_SOURCES})
+SOURCE_GROUP("Generated Files" FILES ${DEMO_RESOURCES_RCC})
+SOURCE_GROUP("Generated Files" FILES ${UI_HEADERS})
 SOURCE_GROUP("Header Files" FILES ${DEMO_HEADERS})
-SOURCE_GROUP("openPOWERLINK Header Files" FILES ${OPLK_HEADERS})
 SOURCE_GROUP("Object Dictionary" FILES
     ${COMMON_SOURCE_DIR}/obdcreate/obdcreate.c
     ${COMMON_SOURCE_DIR}/obdcreate/obdcreate.h
@@ -187,7 +197,9 @@ SOURCE_GROUP("Object Dictionary" FILES
 # Set the executable
 ADD_EXECUTABLE(demo_mn_qt ${DEMO_SOURCES}
                           ${DEMO_ARCH_SOURCES}
+                          ${COMMON_SOURCES}
                           ${DEMO_HEADERS}
+                          ${UI_HEADERS}
                           ${DEMO_RESOURCES_RCC}
                           ${CMAKE_CURRENT_BINARY_DIR}/mnobd.cdc
               )

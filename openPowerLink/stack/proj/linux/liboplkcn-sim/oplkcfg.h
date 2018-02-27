@@ -10,7 +10,7 @@ on Linux with simulation interface.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2017, B&R Industrial Automation GmbH
 Copyright (c) 2016, Franz Profelt (franz.profelt@gmail.com)
 All rights reserved.
 
@@ -61,6 +61,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define CONFIG_INCLUDE_SDOS
 #define CONFIG_INCLUDE_SDOC
 #define CONFIG_INCLUDE_SDO_ASND
+#define CONFIG_INCLUDE_SDO_RW_MULTIPLE
 #define CONFIG_INCLUDE_MASND
 #define CONFIG_INCLUDE_LEDK
 
@@ -125,7 +126,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Set this string to true if OD configuration save and load feature is
 // supported by the device
-#ifdef CONFIG_STORE_RESTORE
+#ifdef CONFIG_INCLUDE_STORE_RESTORE
 #define CONFIG_OBD_USE_STORE_RESTORE                TRUE
 #define CONFIG_OBD_CALC_OD_SIGNATURE                TRUE
 #endif

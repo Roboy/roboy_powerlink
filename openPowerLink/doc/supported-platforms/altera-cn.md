@@ -45,7 +45,8 @@ The software project for the host can be found in `apps`:
 - Minimum cycle length: 400 us
 - PReq-PRes Latency: 1 us
 - Process data: 4 bytes input and 4 bytes output.
-- There is 1 RPDO and 1 TPDO available. Cross-traffic is disabled.
+- There are 1 TPDO and 3 RPDO frames available. The number of RPDO frames depend on the number of
+  PDO_RxCommParam_XXh_REC and PDO_RxMappParam_XXh_AU64 indices in the `apps/common/objdicts/CiA401_CN/objdict.h` file
 
 # Requirements and tools {#sect_altera-cn_requirements}
 
@@ -406,7 +407,7 @@ The SOF file for the TERASIC_DE2-115 (INK) is located in the following subdirect
 
   or in debug mode use:
 
-  - `$ make download-elf && nios2-terminal -i <instance USB-Blaster (1 or 0)>`
+  - `$ make download-elf && nios2-terminal --instance=<0 or 1> --cable "USB-Blaster[USB-<0 or 1>]"`
 
 \note Workaround for testing without a Nios II license:\n
       If you did not specify a valid Nios II IP-Core license, the terminal windows
@@ -526,6 +527,17 @@ Steps in the previous sections \ref sect_altera-cn_build-hardware and \ref sect_
    This command will store the FPGA bitstream and the software in the board's
    flash memory. After the next power cycle the complete design will load
    automatically from flash.
+
+## How to enable configuration store/restore {#sect_altera-cn_cfg_storage}
+
+To enable the configuration storage feature, set both:
+- `-DCONFIG_APP_STORE_RESTORE`
+  in apps/demo_cn_embedded/build/altera-nios2/app.settings
+- `-DCONFIG_INCLUDE_STORE_RESTORE`
+  in stack/build/altera-nios2/liboplkcnapp-hostif/lib.settings
+
+\note This configuration store/restore feature is only implemented on the platform
+      `hardware/boards/terasic-de2-115/cn-single-hostif-gpio` and uses the CFI-flash memory.
 
 ## Troubleshooting {#sect_altera-cn_trouble}
 

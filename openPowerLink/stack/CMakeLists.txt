@@ -2,7 +2,7 @@
 #
 # Main CMake file for openPOWERLINK stack libraries
 #
-# Copyright (c) 2014, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+# Copyright (c) 2014, B&R Industrial Automation GmbH
 # Copyright (c) 2016, Kalycito Infotech Private Limited
 # All rights reserved.
 #
@@ -68,7 +68,7 @@ IF(NOT CMAKE_GENERATOR MATCHES "Visual Studio")
     ENDIF()
 ENDIF()
 
-SET(CFG_DEBUG_LVL "0xC0000400L" CACHE STRING "Debug Level for debug output")
+SET(CFG_DEBUG_LVL "0xC0000000L" CACHE STRING "Debug Level for debug output")
 
 STRING(TOUPPER "${CMAKE_BUILD_TYPE}" LIB_BUILD_TYPE)
 IF("${LIB_BUILD_TYPE}" STREQUAL "DEBUG")

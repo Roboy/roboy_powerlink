@@ -8,7 +8,7 @@ This file contains definitions for the SDO module.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 Copyright (c) 2013, SYSTEC electronic GmbH
 All rights reserved.
 
@@ -90,7 +90,8 @@ typedef enum
     kSdoComTransferTxAborted            = 0x02,     ///< SDO transfer is aborted (abort code is going to be sent)
     kSdoComTransferRxAborted            = 0x03,     ///< SDO transfer has been aborted by the remote side
     kSdoComTransferFinished             = 0x04,     ///< SDO transfer is finished
-    kSdoComTransferLowerLayerAbort      = 0x05      ///< SDO transfer has been aborted by the SDO sequence layer
+    kSdoComTransferLowerLayerAbort      = 0x05,     ///< SDO transfer has been aborted by the SDO sequence layer
+    kSdoComTransferRxSubAborted         = 0x06      ///< SDO transfer has been aborted by the remote side with multiple sub-abort codes
 } eSdoComConState;
 
 /**
@@ -108,7 +109,9 @@ This enumeration lists all valid SDO access types.
 typedef enum
 {
     kSdoAccessTypeRead                  = 0x00,     ///< SDO read access
-    kSdoAccessTypeWrite                 = 0x01      ///< SDO write access
+    kSdoAccessTypeWrite                 = 0x01,     ///< SDO write access
+    kSdoAccessTypeMultiWrite            = 0x02,     ///< SDO multi-write access
+    kSdoAccessTypeMultiRead             = 0x03      ///< SDO multi-read access
 } eSdoAccessType;
 
 /**
@@ -133,6 +136,7 @@ typedef struct
     UINT                targetIndex;                ///< Index which was accessed
     UINT                targetSubIndex;             ///< Sub-index which was accessed
     UINT                transferredBytes;           ///< The number of bytes transferred
+    UINT                multiSubAccCnt;             ///< Number of multi-write objects access attempts which fit in this transfer
     void*               pUserArg;                   ///< The user defined argument pointer
 } tSdoComFinished;
 
@@ -158,16 +162,33 @@ typedef struct
 } tSdoObdConHdl;
 
 /**
+\brief Structure for multiple parameter access
+
+This structure is used as sub-entry of a multiple parameter access the local or
+a remote node (via SDO MultiWrite-/MultiReadbyIndex). It is only used for the
+SDO client.
+*/
+typedef struct
+{
+    UINT                index;                      ///< Index to read/write
+    UINT                subIndex;                   ///< Sub-index to read/write
+    void*               pData_le;                   ///< Pointer to little endian data.
+                                                    /**> Multi-write: pointer to source data
+                                                         Multi-read:  pointer to storage destination */
+    UINT                dataSize;                   ///< Size of buffer for read- and size of data for write access
+} tSdoMultiAccEntry;
+
+/**
 \brief Callback for object dictionary to finish an SDO read or write access
 
 This callback function is used for the object dictionary to finish a read or
 write access from an SDO command layer server.
 
-\param tSdoObdConHdl    SDO command layer connection to the object dictionary
+\param pObdHdl_p                SDO command layer connection to the object dictionary
 
 \return The function returns a tOplkError error code.
 */
-typedef tOplkError (*tCmdLayerObdFinishedCb)(tSdoObdConHdl*);
+typedef tOplkError (*tCmdLayerObdFinishedCb)(tSdoObdConHdl* pObdHdl_p);
 
 /**
 \brief Callback for SDO read or write access to the object dictionary
@@ -175,13 +196,14 @@ typedef tOplkError (*tCmdLayerObdFinishedCb)(tSdoObdConHdl*);
 This callback function is used for the SDO command layer server to process
 an object dictionary access.
 
-\param tSdoObdConHdl            SDO command layer connection to the
+\param pSdoHdl_p                SDO command layer connection to the
                                 object dictionary
-\param tCmdLayerObdFinishedCb   Callback for object dictionary to finish
+\param pfnFinishSdoCb_p         Callback for object dictionary to finish
                                 SDO read or write access
 
 \return The function returns a tOplkError error code.
 */
-typedef tOplkError (*tComdLayerObdCb)(tSdoObdConHdl*, tCmdLayerObdFinishedCb);
+typedef tOplkError (*tComdLayerObdCb)(tSdoObdConHdl* pSdoHdl_p,
+                                      tCmdLayerObdFinishedCb pfnFinishSdoCb_p);
 
 #endif /* _INC_oplk_sdo_H_ */

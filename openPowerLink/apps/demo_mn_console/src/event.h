@@ -8,7 +8,7 @@ The file contains the definitions for the MN demo event handler.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 Copyright (c) 2013, SYSTEC electronic GmbH
 Copyright (c) 2013, Kalycito Infotech Private Ltd.All rights reserved.
 All rights reserved.
@@ -51,6 +51,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // typedef
 //------------------------------------------------------------------------------
 
+/**
+\brief Event configuration
+*/
+typedef struct
+{
+    BOOL*           pfGsOff;                    ///< Pointer to GsOff flag (determines if the stack is down)
+    tOplkApiCbEvent pfnFirmwareManagerCallback; ///< Callback function to firmware manager
+} tEventConfig;
+
 //------------------------------------------------------------------------------
 // function prototypes
 //------------------------------------------------------------------------------
@@ -59,7 +68,7 @@ extern "C"
 {
 #endif
 
-void        initEvents(BOOL* pfGsOff_p);
+void        initEvents(const tEventConfig* config);
 tOplkError  processEvents(tOplkApiEventType eventType_p,
                           const tOplkApiEventArg* pEventArg_p,
                           void* pUserArg_p);

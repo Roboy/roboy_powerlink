@@ -10,7 +10,7 @@ This file contains the implementation of the user stack control module.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 Copyright (c) 2015, SYSTEC electronic GmbH
 All rights reserved.
 
@@ -42,6 +42,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //------------------------------------------------------------------------------
 #include <common/oplkinc.h>
 #include <common/target.h>
+#include <common/ami.h>
 #include <user/ctrlu.h>
 #include <user/ctrlucal.h>
 #include <user/eventu.h>
@@ -2043,7 +2044,9 @@ static tOplkError cbNodeEvent(UINT nodeId_p,
     eventArg.nodeEvent.fMandatory = fMandatory_p;
 
     ret = ctrlu_callUserEventCallback(kOplkApiEventNode, &eventArg);
-    if (((nodeEvent_p == kNmtNodeEventCheckConf) || (nodeEvent_p == kNmtNodeEventUpdateConf)) &&
+    if (((nodeEvent_p == kNmtNodeEventCheckConf) ||
+        (nodeEvent_p == kNmtNodeEventUpdateConf) ||
+        (nodeEvent_p == kNmtNodeEventUpdateSw)) &&
         (ret != kErrorOk))
         return ret;
 
@@ -2504,11 +2507,7 @@ static tOplkError storeOdPart(tObdCbParam* pParam_p)
         // Function is called after reading from OD
         if (pParam_p->obdEvent == kObdEvPostRead)
         {
-            // From 1.8.x:
-            // WARNING: This does not work on big endian machines!
-            //          The SDO adoptable object handling feature provides a clean
-            //          way to implement it.
-            *((UINT32*)pParam_p->pArg) = devCap;
+            ami_setUint32Le((void*)pParam_p->pArg, *(const UINT32*)&devCap);
         }
     }
 
@@ -2592,13 +2591,10 @@ static tOplkError restoreOdPart(tObdCbParam* pParam_p)
     }
     else
     {
-        // Was this function called after reading from OD
+        // Function is called after reading from OD
         if (pParam_p->obdEvent == kObdEvPostRead)
         {
-            // WARNING: This does not work on big endian machines!
-            //          The SDO adoptable object handling feature provides a clean
-            //          way to implement it.
-            *((UINT32*)pParam_p->pArg) = devCap;
+            ami_setUint32Le((void*)pParam_p->pArg, *(const UINT32*)&devCap);
         }
     }
 

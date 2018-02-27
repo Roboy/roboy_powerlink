@@ -2,7 +2,8 @@
 #
 # Windows definitions for console demo application
 #
-# Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+# Copyright (c) 2016, B&R Industrial Automation GmbH
+# Copyright (c) 2017, Kalycito Infotech Private Limited.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -41,6 +42,7 @@ SET (DEMO_ARCH_SOURCES
      ${COMMON_SOURCE_DIR}/system/system-windows.c
      ${CONTRIB_SOURCE_DIR}/console/console-windows.c
      ${CONTRIB_SOURCE_DIR}/trace/trace-windows.c
+     ${CONTRIB_SOURCE_DIR}/getopt/getopt.c
      )
 
 INCLUDE_DIRECTORIES(${CONTRIB_SOURCE_DIR}/pcap/windows/WpdPack/Include)
@@ -54,7 +56,11 @@ ELSE ()
     LINK_DIRECTORIES(${CONTRIB_SOURCE_DIR}/pcap/windows/WpdPack/Lib)
 ENDIF()
 
-SET(ARCH_LIBRARIES wpcap iphlpapi)
+IF (CFG_KERNEL_STACK_PCIE OR CFG_KERNEL_STACK_KERNEL_MODULE)
+    SET(ARCH_LIBRARIES iphlpapi ws2_32.lib)
+ELSE ()
+    SET(ARCH_LIBRARIES wpcap iphlpapi)
+ENDIF()
 
 ################################################################################
 # Set architecture specific installation files

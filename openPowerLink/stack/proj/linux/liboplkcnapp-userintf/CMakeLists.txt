@@ -2,7 +2,7 @@
 #
 # CMake file for openPOWERLINK application CN library with userspace interface
 #
-# Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+# Copyright (c) 2016, B&R Industrial Automation GmbH
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -70,7 +70,7 @@ SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -std=c99 -pthread -f
 ADD_DEFINITIONS(-D_GNU_SOURCE -D_POSIX_C_SOURCE=200112L)
 
 IF(CFG_STORE_RESTORE)
-    ADD_DEFINITIONS(-DCONFIG_STORE_RESTORE)
+    ADD_DEFINITIONS(-DCONFIG_INCLUDE_STORE_RESTORE)
 ENDIF()
 
 # Additional include directories

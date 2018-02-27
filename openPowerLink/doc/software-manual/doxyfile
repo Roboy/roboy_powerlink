@@ -38,7 +38,7 @@ PROJECT_NAME           = openPOWERLINK
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = 2.5.2
+PROJECT_NUMBER         = 2.6.2
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -815,12 +815,15 @@ INPUT                  = ../../stack/src \
                          ../supported-platforms/altera-cn.md \
                          ../supported-platforms/xilinx.md \
                          ../supported-platforms/zynq.md \
+                         ../supported-platforms/zynq-hybrid.md \
+                         ../supported-platforms/zynq-emacps.md \
                          ../supported-platforms/altera-soc.md \
                          ../../readme.md \
                          ../../license.md \
                          ../../revision.md \
                          ../../update.md \
-                         ../../issues.md
+                         ../../issues.md \
+                         ../../contributing.md
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

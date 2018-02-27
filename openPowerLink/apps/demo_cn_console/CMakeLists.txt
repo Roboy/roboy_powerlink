@@ -2,7 +2,7 @@
 #
 # CMake file of CiA 401 CN console demo application
 #
-# Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+# Copyright (c) 2016, B&R Industrial Automation GmbH
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -61,7 +61,6 @@ SET(DEMO_SOURCES
     ${COMMON_SOURCE_DIR}/eventlog/eventlog.c
     ${COMMON_SOURCE_DIR}/eventlog/eventlogstring.c
     ${CONTRIB_SOURCE_DIR}/console/printlog.c
-    ${CONTRIB_SOURCE_DIR}/getopt/getopt.c
     )
 
 INCLUDE_DIRECTORIES(
@@ -83,7 +82,7 @@ IF(CFG_IP_STACK)
 ENDIF(CFG_IP_STACK)
 
 IF(CFG_STORE_RESTORE)
-    ADD_DEFINITIONS(-DCONFIG_OBD_USE_STORE_RESTORE)
+    ADD_DEFINITIONS(-DCONFIG_APP_STORE_RESTORE)
 ENDIF(CFG_STORE_RESTORE)
 
 

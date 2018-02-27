@@ -10,7 +10,7 @@ This file contains the implementation of the SDO Test Sequence Layer.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2017, B&R Industrial Automation GmbH
 Copyright (c) 2013, SYSTEC electronic GmbH
 All rights reserved.
 
@@ -78,7 +78,7 @@ typedef struct
                              UINT targetNodeId_p);                  ///< Init Connection function pointer
     tOplkError (*pfnSendData)(tSdoConHdl sdoConHandle_p,            ///< Send Data function pointer
                               tPlkFrame* pSrcData_p,
-                              UINT32 dataSize_p);                   ///< Send Data function pointer
+                              size_t dataSize_p);                   ///< Send Data function pointer
     tOplkError (*pfnDelCon)(tSdoConHdl sdoConHandle_p);             ///< Delete Connection function pointer
 } tSdoTestSeqFunc;
 
@@ -126,13 +126,18 @@ typedef struct
     sdoApiCbSeqTest             apiCb;        ///< API callback
 } tSdoTestSeq;
 
+//------------------------------------------------------------------------------
+// local vars
+//------------------------------------------------------------------------------
+static tSdoTestSeq sdoTestSeqInst_l;
+
 /**
 \brief  SDO sequence layer UDP functions
 
-This array sets the function pointers to the UDP functions.
+This structure sets the function pointers to the UDP functions.
 */
 #if defined(CONFIG_INCLUDE_SDO_UDP)
-tSdoTestSeqFunc sdoTestSeqUdpFuncs =
+static tSdoTestSeqFunc sdoTestSeqUdpFuncs_l =
 {
     sdoudp_init,
     sdoudp_exit,
@@ -145,10 +150,10 @@ tSdoTestSeqFunc sdoTestSeqUdpFuncs =
 /**
 \brief  SDO sequence layer ASnd functions
 
-This array sets the function pointers to the ASnd functions.
+This structure sets the function pointers to the ASnd functions.
 */
 #if defined(CONFIG_INCLUDE_SDO_ASND)
-tSdoTestSeqFunc sdoTestSeqAsndFuncs =
+static tSdoTestSeqFunc sdoTestSeqAsndFuncs_l =
 {
     sdoasnd_init,
     sdoasnd_exit,
@@ -159,16 +164,11 @@ tSdoTestSeqFunc sdoTestSeqAsndFuncs =
 #endif
 
 //------------------------------------------------------------------------------
-// local vars
-//------------------------------------------------------------------------------
-static tSdoTestSeq sdoTestSeqInst_l;
-
-//------------------------------------------------------------------------------
 // local function prototypes
 //------------------------------------------------------------------------------
 static tOplkError conCb(tSdoConHdl sdoConHdl_p,
                         const tAsySdoSeq* pSdoSeqData_p,
-                        UINT dataSize_p);
+                        size_t dataSize_p);
 
 //============================================================================//
 //            P U B L I C   F U N C T I O N S                                 //
@@ -345,7 +345,7 @@ tOplkError sdotestseq_sendFrame(UINT nodeId_p,
                     return ret;
 
 #if defined(CONFIG_INCLUDE_SDO_UDP)
-                pCon->pFuncTable = &sdoTestSeqUdpFuncs;
+                pCon->pFuncTable = &sdoTestSeqUdpFuncs_l;
 #endif
                 break;
 
@@ -360,7 +360,7 @@ tOplkError sdotestseq_sendFrame(UINT nodeId_p,
                     return ret;
 
 #if defined(CONFIG_INCLUDE_SDO_ASND)
-                pCon->pFuncTable = &sdoTestSeqAsndFuncs;
+                pCon->pFuncTable = &sdoTestSeqAsndFuncs_l;
 #endif
                 break;
 
@@ -449,7 +449,7 @@ reception of SDO sequence layer frames.
 //------------------------------------------------------------------------------
 static tOplkError conCb(tSdoConHdl sdoConHdl_p,
                         const tAsySdoSeq* pSdoSeqData_p,
-                        UINT dataSize_p)
+                        size_t dataSize_p)
 {
     tOplkError ret;
 

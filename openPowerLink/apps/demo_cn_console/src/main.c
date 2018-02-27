@@ -11,7 +11,7 @@ application.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 Copyright (c) 2013, SYSTEC electronic GmbH
 Copyright (c) 2013, Kalycito Infotech Private Ltd.All rights reserved.
 All rights reserved.
@@ -50,7 +50,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <system/system.h>
 #include <obdcreate/obdcreate.h>
+
+#if (TARGET_SYSTEM == _WIN32_)
 #include <getopt/getopt.h>
+#else
+#include <unistd.h>
+#endif
+
 #include <console/console.h>
 #include <eventlog/eventlog.h>
 
@@ -545,6 +551,7 @@ static int getOptions(int argc_p,
 #if defined(CONFIG_USE_PCAP)
                 printf("Usage: %s [-n NODE_ID] [-l LOGFILE] [-d DEV_NAME] [-v LOGLEVEL] [-t LOGCATEGORY] [-p]\n", argv_p[0]);
                 printf(" -d DEV_NAME: Ethernet device name to use e.g. eth1\n");
+                printf("              If option is skipped the program prompts for the interface.\n");
 #else
                 printf("Usage: %s [-n NODE_ID] [-l LOGFILE] [-v LOGLEVEL] [-t LOGCATEGORY] [-p]\n", argv_p[0]);
 #endif

@@ -2,7 +2,7 @@
 #
 # Library creation settings file for Altera Nios II
 #
-# Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+# Copyright (c) 2016, B&R Industrial Automation GmbH
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -69,6 +69,9 @@ ${CONTRIB_SOURCE_DIR} \
 CFG_LIB_CFLAGS="\
 -DCONFIG_HOSTIF_PCP=FALSE \
 "
+# Add the following line to CFG_LIB_CFLAGS if the host cpu BSP and
+# hardware supports configuration storage (on the cfi-flash memory):
+# -DCONFIG_INCLUDE_STORE_RESTORE \
 
 CFG_LIB_ARGS="\
 --set LIB_CFLAGS_DEFINED_SYMBOLS=-G4 \

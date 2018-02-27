@@ -6,8 +6,9 @@
 
 This file implements the openPOWERLINK API class.
 *******************************************************************************/
+
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2017, B&R Industrial Automation GmbH
 Copyright (c) 2013, SYSTEC electronic GmbH
 All rights reserved.
 
@@ -41,23 +42,21 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Api.h>
 
 #include <QMetaType>
-#include <QWidget>
 #include <QMessageBox>
 
 #include <MainWindow.h>
-#include <ProcessThread.h>
-#include <DataInOutThread.h>
-#include <State.h>
-#include <Output.h>
-#include <Input.h>
-#include <CnState.h>
+#include <EventLog.h>
+#include <EventHandler.h>
+#include <SyncEventHandler.h>
+#include <NmtStateWidget.h>
+#include <IoWidget.h>
+#include <CnListWidget.h>
 
 #include <oplk/debugstr.h>
 #include <obdcreate/obdcreate.h>
 
-#include <stdio.h>
-#include <string.h>
-#include <limits.h>
+#include <cstdio>
+#include <cstring>
 
 #if (TARGET_SYSTEM == _LINUX_)
 #include <netinet/in.h>
@@ -66,23 +65,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <sys/ioctl.h>
 #endif
 
-
-//============================================================================//
-//            G L O B A L   D E F I N I T I O N S                             //
-//============================================================================//
-
-//------------------------------------------------------------------------------
-// const defines
-//------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------
-// module global vars
-//------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------
-// global function prototypes
-//------------------------------------------------------------------------------
-
 //============================================================================//
 //            P R I V A T E   D E F I N I T I O N S                           //
 //============================================================================//
@@ -90,15 +72,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //------------------------------------------------------------------------------
 // const defines
 //------------------------------------------------------------------------------
-#define NODEID              0xF0                // MN
-#define IP_ADDR             0xc0a86401          // 192.168.100.1
-#define SUBNET_MASK         0xFFFFFF00          // 255.255.255.0
-#define DEFAULT_GATEWAY     0xC0A864FE          // 192.168.100.C_ADR_RT1_DEF_NODE_ID
-#define IF_ETH              PLK_VETH_NAME
+const UINT32 Api::IP_ADDR = 0xc0a86400;         // 192.168.100.0
+const UINT32 Api::SUBNET_MASK = 0xFFFFFF00;     // 255.255.255.0
+const UINT32 Api::DEFAULT_GATEWAY = 0xC0A864FE; // 192.168.100.C_ADR_RT1_DEF_NODE_ID
+const UINT32 Api::CYCLE_LEN = 5000;             // default cycle time
+const UINT8  Api::aMacAddr[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-#define CYCLE_LEN           5000
-
+//------------------------------------------------------------------------------
+// local types
+//------------------------------------------------------------------------------
 Q_DECLARE_METATYPE(tSdoComFinished)
+Q_DECLARE_METATYPE(tNmtState)
 
 //------------------------------------------------------------------------------
 // local types
@@ -107,12 +91,38 @@ Q_DECLARE_METATYPE(tSdoComFinished)
 //------------------------------------------------------------------------------
 // local vars
 //------------------------------------------------------------------------------
-static const UINT8  aMacAddr_l[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-static char         devName_l[256];
 
 //------------------------------------------------------------------------------
 // local function prototypes
 //------------------------------------------------------------------------------
+
+//============================================================================//
+//            S T A T I C   M E M B E R   F U N C T I O N S                   //
+//============================================================================//
+
+//------------------------------------------------------------------------------
+/**
+\brief   Get the openPOWERLINK stack version
+
+\return  Returns the openPOWERLINK stack version
+*/
+//------------------------------------------------------------------------------
+UINT32 Api::getVersion()
+{
+    return oplk_getVersion();
+}
+
+//------------------------------------------------------------------------------
+/**
+\brief   Execute an NMT command
+
+\param[in]      nmtEvent_p          NMT event
+*/
+//------------------------------------------------------------------------------
+void Api::execNmtCommand(tNmtEvent nmtEvent_p)
+{
+    oplk_execNmtCommand(nmtEvent_p);
+}
 
 //============================================================================//
 //            P U B L I C   F U N C T I O N S                                 //
@@ -125,198 +135,186 @@ static char         devName_l[256];
 Constructs a POWERLINK Api object.
 
 \param[in,out]  pMainWindow_p       Pointer to main window
-\param[in]      nodeId_p            Node ID of the POWERLINK node
-\param[in]      rDevName_p          Reference to the device name of the network interface
 */
 //------------------------------------------------------------------------------
-Api::Api(MainWindow* pMainWindow_p,
-         UINT nodeId_p,
-         const QString& rDevName_p)
-    : pCdcFilename("mnobd.cdc")
+Api::Api(MainWindow* pMainWindow_p) :
+    pCdcFilename("mnobd.cdc")
 {
-    tOplkError  ret;
-    State*      pState;
-    Output*     pOutput;
-    Input*      pInput;
-    CnState*    pCnState;
+    IoWidget*   pOutput = pMainWindow_p->getOutputWidget();
+    IoWidget*   pInput = pMainWindow_p->getInputWidget();
 
-    pState = pMainWindow_p->getStateWidget();
-    pOutput = pMainWindow_p->getOutputWidget();
-    pInput = pMainWindow_p->getInputWidget();
-    pCnState = pMainWindow_p->getCnStateWidget();
+    // Register types in Qt
+    qRegisterMetaType<tNmtState>("tNmtState");
+    qRegisterMetaType<tSdoComFinished>("tSdoComFinished");
 
-    pProcessThread = new ProcessThread(pMainWindow_p);
-    QObject::connect(pProcessThread,
-                     SIGNAL(oplkStatusChanged(int)),
-                     pState,
-                     SLOT(setStatusLed(int)));
-    QObject::connect(pProcessThread,
-                     SIGNAL(nmtStateChanged(const QString&)),
-                     pState,
-                     SLOT(setNmtStateText(const QString&)));
-
-    QObject::connect(pProcessThread,
-                     SIGNAL(nodeAppeared(int)),
-                     pInput,
-                     SLOT(addNode(int)));
-    QObject::connect(pProcessThread,
-                     SIGNAL(allNodesRemoved()),
-                     pInput,
-                     SLOT(removeAllNodes()));
-    QObject::connect(pProcessThread,
-                     SIGNAL(nodeDisappeared(int)),
-                     pInput,
-                     SLOT(removeNode(int)));
-
-    QObject::connect(pProcessThread,
-                     SIGNAL(nodeAppeared(int)),
-                     pOutput,
-                     SLOT(addNode(int)));
-    QObject::connect(pProcessThread,
-                     SIGNAL(nodeDisappeared(int)),
-                     pOutput,
-                     SLOT(removeNode(int)));
-    QObject::connect(pProcessThread,
-                     SIGNAL(allNodesRemoved()),
-                     pOutput,
-                     SLOT(removeAllNodes()));
-
-    QObject::connect(pProcessThread,
-                     SIGNAL(nodeAppeared(int)),
-                     pCnState,
-                     SLOT(addNode(int)));
-    QObject::connect(pProcessThread,
-                     SIGNAL(nodeDisappeared(int)),
-                     pCnState,
-                     SLOT(removeNode(int)));
-    QObject::connect(pProcessThread,
-                     SIGNAL(allNodesRemoved()),
-                     pCnState,
-                     SLOT(removeAllNodes()));
-
-    QObject::connect(pProcessThread,
-                     SIGNAL(nodeStatusChanged(int, int)),
-                     pCnState,
-                     SLOT(setState(int, int)));
-
-    QObject::connect(pProcessThread,
+    // Event logger
+    this->pEventLog = new EventLog();
+    QObject::connect(this->pEventLog,
                      SIGNAL(printLog(const QString&)),
                      pMainWindow_p,
-                     SLOT(printlog(const QString&)));
+                     SLOT(printLogMessage(const QString&)));
 
-    QObject::connect(pProcessThread,
+    // Connect process thread
+    this->pEventHandler = new EventHandler(this->pEventLog);
+    QObject::connect(this->pEventHandler,
+                     SIGNAL(nmtStateChanged(tNmtState)),
+                     pMainWindow_p,
+                     SLOT(nmtStateChanged(tNmtState)));
+    QObject::connect(this->pEventHandler,
+                     SIGNAL(nodeStatusChanged(unsigned int, tNmtState)),
+                     pMainWindow_p,
+                     SLOT(nodeNmtStateChanged(unsigned int, tNmtState)));
+
+    // Connect other events
+    QObject::connect(this->pEventHandler,
                      SIGNAL(userDefEvent(void*)),
                      this,
                      SIGNAL(userDefEvent(void*)),
                      Qt::DirectConnection);
-    QObject::connect(pProcessThread,
+    QObject::connect(this->pEventHandler,
                      SIGNAL(sdoFinished(tSdoComFinished)),
                      this,
                      SIGNAL(sdoFinished(tSdoComFinished)));
 
-    pDataInOutThread = new DataInOutThread;
-    QObject::connect(pDataInOutThread,
-                     SIGNAL(processImageOutChanged(int, int)),
+    // Connect sync event handler
+    this->pSyncEventHandler = &SyncEventHandler::getInstance();
+    QObject::connect(this->pSyncEventHandler,
+                     SIGNAL(processImageOutChanged(unsigned int, unsigned int)),
                      pOutput,
-                     SLOT(setValue(int, int)));
-    QObject::connect(pDataInOutThread,
-                     SIGNAL(processImageInChanged(int, int)),
+                     SLOT(setValue(unsigned int, unsigned int)));
+    QObject::connect(this->pSyncEventHandler,
+                     SIGNAL(processImageInChanged(unsigned int, unsigned int)),
                      pInput,
-                     SLOT(setLeds(int, int)));
-    QObject::connect(pDataInOutThread,
-                     SIGNAL(disableOutputs(int)),
+                     SLOT(setValue(unsigned int, unsigned int)));
+    QObject::connect(this->pSyncEventHandler,
+                     SIGNAL(disableOutputs(unsigned int)),
                      pOutput,
-                     SLOT(disable(int)));
-    QObject::connect(pProcessThread,
+                     SLOT(disableNode(unsigned int)));
+    QObject::connect(this->pEventHandler,
                      SIGNAL(isMnActive(bool)),
-                     pDataInOutThread,
-                     SLOT(setMnActiveFlag(bool)));
+                     this->pSyncEventHandler,
+                     SLOT(setOperational(bool)));
 
-    memset(&initParam, 0, sizeof(initParam));
-    initParam.sizeOfInitParam = sizeof(initParam);
+    // Initialize the stack
+    tOplkError ret = oplk_initialize();
+    if (ret != kErrorOk)
+    {
+        QMessageBox::critical(0,
+                              "POWERLINK demo",
+                              QString("Initialization of openPOWERLINK stack failed.\n") +
+                                      "Error code: 0x"+ QString::number(ret, 16) + "\n" +
+                                      "\"" + debugstr_getRetValStr(ret) + "\"\n" +
+                                      "For further information please consult the manual.");
+    }
+}
 
-    initParam.nodeId = nodeId_p;
-    initParam.ipAddress = (IP_ADDR & 0xFFFFFF00) | initParam.nodeId;
+//------------------------------------------------------------------------------
+/**
+\brief  Destructor
 
-    initParam.fAsyncOnly = FALSE;
-    initParam.featureFlags = UINT_MAX;
-    initParam.cycleLen = CYCLE_LEN;           // required for error detection
-    initParam.isochrTxMaxPayload = 256;       // const
-    initParam.isochrRxMaxPayload = 1490;      // const
-    initParam.presMaxLatency = 50000;         // const; only required for IdentRes
-    initParam.preqActPayloadLimit = 36;       // required for initialization (+28 bytes)
-    initParam.presActPayloadLimit = 36;       // required for initialization of Pres frame (+28 bytes)
-    initParam.asndMaxLatency = 150000;        // const; only required for IdentRes
-    initParam.multiplCylceCnt = 0;            // required for error detection
-    initParam.asyncMtu = 1500;                // required to set up max frame size
-    initParam.prescaler = 2;                  // required for sync
-    initParam.lossOfFrameTolerance = 500000;
-    initParam.asyncSlotTimeout = 3000000;
-    initParam.waitSocPreq = 1000;
-    initParam.deviceType = UINT_MAX;          // NMT_DeviceType_U32
-    initParam.vendorId = UINT_MAX;            // NMT_IdentityObject_REC.VendorId_U32
-    initParam.productCode = UINT_MAX;         // NMT_IdentityObject_REC.ProductCode_U32
-    initParam.revisionNumber = UINT_MAX;      // NMT_IdentityObject_REC.RevisionNo_U32
-    initParam.serialNumber = UINT_MAX;        // NMT_IdentityObject_REC.SerialNo_U32
+Destructs a POWERLINK Api object.
+*/
+//------------------------------------------------------------------------------
+Api::~Api()
+{
+    // Exit the stack API
+    oplk_exit();
 
-    initParam.subnetMask = SUBNET_MASK;
-    initParam.defaultGateway = DEFAULT_GATEWAY;
-    sprintf((char*)initParam.sHostname, "%02x-%08x", initParam.nodeId, initParam.vendorId);
-    initParam.syncNodeId = C_ADR_SYNC_ON_SOA;
-    initParam.fSyncOnPrcNode = FALSE;
+    // Cleanup
+    delete this->pEventHandler;
+    delete this->pEventLog;
+}
 
-    // set callback functions
-    initParam.pfnCbEvent = pProcessThread->getEventCbFunc();
+//------------------------------------------------------------------------------
+/**
+\brief  Start stack
 
+Starts the openPOWERLINK stack.
+
+\param[in]      nodeId_p            Node ID of the POWERLINK node
+\param[in]      devName_p           Reference to the device name of the network interface
+*/
+//------------------------------------------------------------------------------
+void Api::start(unsigned int nodeId_p,
+                const QString& devName_p)
+{
+    tOplkError  ret;
+
+    std::memset(&this->initParam, 0, sizeof(this->initParam));
+    this->initParam.sizeOfInitParam = sizeof(this->initParam);
+    this->initParam.fAsyncOnly = FALSE;
+    this->initParam.nodeId = nodeId_p;
     /* write 00:00:00:00:00:00 to MAC address, so that the driver uses the real hardware address */
-    memcpy(initParam.aMacAddress, aMacAddr_l, sizeof(initParam.aMacAddress));
+    std::memcpy(this->initParam.aMacAddress, Api::aMacAddr, sizeof(this->initParam.aMacAddress));
+    this->initParam.featureFlags = UINT_MAX;
+    this->initParam.cycleLen = Api::CYCLE_LEN;      // required for error detection
+    this->initParam.isochrTxMaxPayload = 1490;      // const
+    this->initParam.isochrRxMaxPayload = 1490;      // const
+    this->initParam.presMaxLatency = 150000;        // const; only required for IdentRes
+    this->initParam.preqActPayloadLimit = 36;       // required for initialization (+28 bytes)
+    this->initParam.presActPayloadLimit = 36;       // required for initialization of Pres frame (+28 bytes)
+    this->initParam.asndMaxLatency = 150000;        // const; only required for IdentRes
+    this->initParam.multiplCylceCnt = 0;            // required for error detection
+    this->initParam.asyncMtu = 1500;                // required to set up max frame size
+    this->initParam.prescaler = 2;                  // required for sync
+    this->initParam.lossOfFrameTolerance = 500000;
+    this->initParam.waitSocPreq = 1000;
+    this->initParam.asyncSlotTimeout = 3000000;
+    this->initParam.deviceType = UINT_MAX;          // NMT_DeviceType_U32
+    this->initParam.vendorId = UINT_MAX;            // NMT_IdentityObject_REC.VendorId_U32
+    this->initParam.productCode = UINT_MAX;         // NMT_IdentityObject_REC.ProductCode_U32
+    this->initParam.revisionNumber = UINT_MAX;      // NMT_IdentityObject_REC.RevisionNo_U32
+    this->initParam.serialNumber = UINT_MAX;        // NMT_IdentityObject_REC.SerialNo_U32
 
-    // Copy the selected interface string to a local variable
-    strcpy(devName_l, rDevName_p.toStdString().c_str());
-    initParam.hwParam.pDevName = devName_l;
+    this->initParam.ipAddress = (Api::IP_ADDR & Api::SUBNET_MASK) | this->initParam.nodeId;
+    this->initParam.subnetMask = Api::SUBNET_MASK;
+    this->initParam.defaultGateway = Api::DEFAULT_GATEWAY;
+    std::sprintf((char*)this->initParam.sHostname,
+                 "%02x-%08x",
+                 this->initParam.nodeId,
+                 this->initParam.vendorId);
+
+    // set event and sync callback functions
+    this->initParam.pfnCbEvent = EventHandler::appCbEvent;
+    this->initParam.pEventUserArg = this->pEventHandler;
 
 #if defined(CONFIG_KERNELSTACK_DIRECTLINK)
-    initParam.pfnCbSync = pDataInOutThread->getSyncCbFunc();
+    this->initParam.pfnCbSync = SyncEventHandler::appCbSync;
 #else
-    initParam.pfnCbSync = NULL;
+    this->initParam.pfnCbSync = NULL;
 #endif
 
+    // Copy the selected interface string to a local variable
+    std::strcpy(this->devName, devName_p.toStdString().c_str());
+    this->initParam.hwParam.pDevName = this->devName;
+
+    this->initParam.syncNodeId = C_ADR_SYNC_ON_SOA;
+    this->initParam.fSyncOnPrcNode = FALSE;
+
     // Initialize object dictionary
-    ret = obdcreate_initObd(&initParam.obdInitParam);
+    ret = obdcreate_initObd(&this->initParam.obdInitParam);
     if (ret != kErrorOk)
     {
         QMessageBox::critical(0,
                               "POWERLINK demo",
                               QString("Initialization of openPOWERLINK stack failed.\n") +
-                               "Error code: 0x" + QString::number(ret, 16) + "\n" +
-                               "\"" + debugstr_getRetValStr(ret) + "\"\n" +
-                               "For further information please consult the manual.");
+                                      "Error code: 0x" + QString::number(ret, 16) + "\n" +
+                                      "\"" + debugstr_getRetValStr(ret) + "\"\n" +
+                                      "For further information please consult the manual.");
         goto Exit;
     }
 
-    // init POWERLINK
-    ret = oplk_initialize();
-    if (ret != kErrorOk)
-    {
-        QMessageBox::critical(0,
-                              "POWERLINK demo",
-                              QString("Initialization of openPOWERLINK stack failed.\n") +
-                               "Error code: 0x"+ QString::number(ret, 16) + "\n" +
-                               "\"" + debugstr_getRetValStr(ret) + "\"\n" +
-                               "For further information please consult the manual.");
-        goto Exit;
-    }
-
-    ret = oplk_create(&initParam);
+    ret = oplk_create(&this->initParam);
     if (ret != kErrorOk)
     {
         QMessageBox::critical(0,
                               "POWERLINK demo",
                               QString("Creation of openPOWERLINK stack failed.\n") +
-                               "Error code: 0x"+ QString::number(ret, 16) + "\n" +
-                               "\"" + debugstr_getRetValStr(ret) + "\"\n" +
-                               "The most common error source are an unsupported Ethernet controller or the kernel module is not loaded.\n" +
-                               "For further information please consult the manual.");
+                                      "Error code: 0x"+ QString::number(ret, 16) + "\n" +
+                                      "\"" + debugstr_getRetValStr(ret) + "\"\n" +
+                                      "The most common error source are an unsupported Ethernet controller " +
+                                      "or the kernel module is not loaded.\n" +
+                                      "For further information please consult the manual.");
         goto Exit;
     }
 
@@ -326,19 +324,19 @@ Api::Api(MainWindow* pMainWindow_p,
         QMessageBox::critical(0,
                               "POWERLINK demo",
                               QString("oplk_setCdcFilename() failed.\n") +
-                               "Error code: 0x"+ QString::number(ret, 16) + "\n" +
-                               "\"" + debugstr_getRetValStr(ret) + "\"");
+                                      "Error code: 0x"+ QString::number(ret, 16) + "\n" +
+                                      "\"" + debugstr_getRetValStr(ret) + "\"");
         goto Exit;
     }
 
-    ret = pDataInOutThread->setupProcessImage();
+    ret = this->pSyncEventHandler->setupProcessImage();
     if (ret != kErrorOk)
     {
         QMessageBox::critical(0,
                               "POWERLINK demo",
                               QString("setupProcessImage() failed.\n") +
-                               "Error code: 0x"+ QString::number(ret, 16) + "\n" +
-                               "\"" + debugstr_getRetValStr(ret) + "\"");
+                                      "Error code: 0x"+ QString::number(ret, 16) + "\n" +
+                                      "\"" + debugstr_getRetValStr(ret) + "\"");
         goto Exit;
     }
 
@@ -349,53 +347,40 @@ Api::Api(MainWindow* pMainWindow_p,
         QMessageBox::critical(0,
                               "POWERLINK demo",
                               QString("oplk_execNmtCommand() failed.\n") +
-                               "Error code: 0x"+ QString::number(ret, 16) + "\n" +
-                               "\"" + debugstr_getRetValStr(ret) + "\"");
+                                      "Error code: 0x"+ QString::number(ret, 16) + "\n" +
+                                      "\"" + debugstr_getRetValStr(ret) + "\"");
         goto Exit;
     }
 
-    // start process thread
-    pProcessThread->start();
-
-#if !defined(CONFIG_KERNELSTACK_DIRECTLINK)
-    // start data in out thread
-    pDataInOutThread->start();
-#endif
+    // Start synchronous data handler
+    this->pSyncEventHandler->setMinSyncPeriod(1000);
+    this->pSyncEventHandler->start();
 
 Exit:
     return;
 }
 
+//------------------------------------------------------------------------------
 /**
-********************************************************************************
-\brief  Destructor
+\brief  Stop stack
 
-Destructs a POWERLINK object.
-*******************************************************************************/
-Api::~Api()
+Stops the openPOWERLINK stack.
+*/
+//------------------------------------------------------------------------------
+void Api::stop()
 {
-    tOplkError  ret;
+    // Stop the sync event handler
+    if (this->pSyncEventHandler->isRunning())
+    {
+        this->pSyncEventHandler->requestInterruption();
+        this->pSyncEventHandler->wait(100);          // wait until thread terminates (max 100ms)
+    }
 
-    pDataInOutThread->stop();
-    pDataInOutThread->wait(100);            // wait until thread terminates (max 100ms)
+    // Signal the stack to switch off
+    Api::execNmtCommand(kNmtEventSwitchOff);
+    // And wait until the stack has really shut down (reached state "NMT_GS_OFF")
+    this->pEventHandler->awaitNmtGsOff();
 
-    ret = oplk_execNmtCommand(kNmtEventSwitchOff);
-    pProcessThread->waitForNmtStateOff();
-
-    ret = oplk_freeProcessImage();
-    ret = oplk_destroy();
-    oplk_exit();
-}
-
-/**
-********************************************************************************
-\brief  Get default node ID
-
-Returns the default Node ID.
-
-\return Default node ID
-*******************************************************************************/
-UINT Api::defaultNodeId()
-{
-    return NODEID;
+    oplk_freeProcessImage();
+    oplk_destroy();
 }

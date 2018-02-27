@@ -9,7 +9,7 @@ device profile.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 Copyright (c) 2013, SYSTEC electronic GmbH
 All rights reserved.
 
@@ -81,14 +81,14 @@ OBD_BEGIN()
            OBD_SUBINDEX_RAM_VSTRING(0x100A, 0x00, kObdAccR, software_version, OBD_MAX_STRING_SIZE, PLK_PRODUCT_NAME" "PLK_PRODUCT_VERSION)
         OBD_END_INDEX(0x100A)
 
-#if defined(CONFIG_OBD_USE_STORE_RESTORE)
+#if defined(CONFIG_APP_STORE_RESTORE)
         // Object 1010h: NMT_StoreParam_REC
         OBD_BEGIN_INDEX_RAM(0x1010, 0x05, FALSE)
             OBD_SUBINDEX_RAM_VAR(0x1010, 0x00, kObdTypeUInt8, kObdAccConst, tObdUnsigned8, NumberOfEntries, 0x04)
             OBD_SUBINDEX_RAM_VAR_NOINIT(0x1010, 0x01, kObdTypeUInt32, kObdAccRW, tObdUnsigned32, AllParam_U32)
             OBD_SUBINDEX_RAM_VAR_NOINIT(0x1010, 0x02, kObdTypeUInt32, kObdAccRW, tObdUnsigned32, CommunicationParam_U32)
             OBD_SUBINDEX_RAM_VAR_NOINIT(0x1010, 0x03, kObdTypeUInt32, kObdAccRW, tObdUnsigned32, ApplicationParam_U32)
-            OBD_SUBINDEX_RAM_VAR_NOINIT(0x1010, 0x04, kObdTypeUInt32, kObdAccRW, tObdUnsigned32, ManufacturerParam_U32)
+            OBD_SUBINDEX_RAM_VAR_NOINIT(0x1010, 0x04, kObdTypeUInt32, kObdAccRW, tObdUnsigned32, ManufacturerParam_04h_U32)
         OBD_END_INDEX(0x1010)
 
         // Object 1011h: NMT_RestoreDefParam_REC
@@ -97,7 +97,7 @@ OBD_BEGIN()
             OBD_SUBINDEX_RAM_VAR_NOINIT(0x1011, 0x01, kObdTypeUInt32, kObdAccRW, tObdUnsigned32, AllParam_U32)
             OBD_SUBINDEX_RAM_VAR_NOINIT(0x1011, 0x02, kObdTypeUInt32, kObdAccRW, tObdUnsigned32, CommunicationParam_U32)
             OBD_SUBINDEX_RAM_VAR_NOINIT(0x1011, 0x03, kObdTypeUInt32, kObdAccRW, tObdUnsigned32, ApplicationParam_U32)
-            OBD_SUBINDEX_RAM_VAR_NOINIT(0x1011, 0x04, kObdTypeUInt32, kObdAccRW, tObdUnsigned32, ManufacturerParam_U32)
+            OBD_SUBINDEX_RAM_VAR_NOINIT(0x1011, 0x04, kObdTypeUInt32, kObdAccRW, tObdUnsigned32, ManufacturerParam_04h_U32)
         OBD_END_INDEX(0x1011)
 #endif
 
@@ -357,7 +357,7 @@ OBD_BEGIN()
 
         // Object 1F8Ch: NMT_CurrNMTState_U8
         OBD_BEGIN_INDEX_RAM(0x1F8C, 0x01, FALSE)
-            OBD_SUBINDEX_RAM_VAR(0x1F8C, 0x00, kObdTypeUInt8, (kObdAccR | kObdAccPdo), tObdUnsigned8, NMT_CurrNMTState_U8, 0x1C)
+            OBD_SUBINDEX_RAM_VAR(0x1F8C, 0x00, kObdTypeUInt8, kObdAccR, tObdUnsigned8, NMT_CurrNMTState_U8, 0x1C)
         OBD_END_INDEX(0x1F8C)
 
 #if NMT_MAX_NODE_ID > 0

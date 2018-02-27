@@ -10,7 +10,7 @@ This file contains the frame processing functions of the kernel DLL module.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 Copyright (c) 2015, SYSTEC electronic GmbH
 All rights reserved.
 
@@ -3171,7 +3171,7 @@ static tOplkError cbCnTimer(const tTimerEventArg* pEventArg_p)
 
     // restart the timer to detect further loss of SoC
     ret = hrestimer_modifyTimer(&dllkInstance_g.timerHdlCycle,
-                                dllkInstance_g.dllConfigParam.cycleLen,
+                                dllkInstance_g.dllConfigParam.cycleLen * 1000ULL,
                                 cbCnTimer,
                                 0L,
                                 FALSE);

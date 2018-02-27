@@ -1,5 +1,5 @@
 Assembler report for DE10_NANO_SoC_GHRD
-Thu Feb  8 18:58:58 2018
+Mon Feb 12 23:18:15 2018
 Quartus II 64-Bit Version 14.0.0 Build 200 06/17/2014 SJ Web Edition
 
 
@@ -39,7 +39,7 @@ agreement for further details.
 +---------------------------------------------------------------+
 ; Assembler Summary                                             ;
 +-----------------------+---------------------------------------+
-; Assembler Status      ; Successful - Thu Feb  8 18:58:58 2018 ;
+; Assembler Status      ; Successful - Mon Feb 12 23:18:15 2018 ;
 ; Revision Name         ; DE10_NANO_SoC_GHRD                    ;
 ; Top-level Entity Name ; toplevel                              ;
 ; Family                ; Cyclone V                             ;
@@ -106,8 +106,8 @@ agreement for further details.
 ; Option         ; Setting                                      ;
 +----------------+----------------------------------------------+
 ; Device         ; 5CSEBA6U23I7                                 ;
-; JTAG usercode  ; 0x0C3881DC                                   ;
-; Checksum       ; 0x0C3881DC                                   ;
+; JTAG usercode  ; 0x0C398E25                                   ;
+; Checksum       ; 0x0C398E25                                   ;
 +----------------+----------------------------------------------+
 
 
@@ -131,7 +131,7 @@ Info: Running Quartus II 64-Bit Assembler
     Info: devices manufactured by Altera and sold by Altera or its 
     Info: authorized distributors.  Please refer to the applicable 
     Info: agreement for further details.
-    Info: Processing started: Thu Feb  8 18:58:31 2018
+    Info: Processing started: Mon Feb 12 23:17:53 2018
 Info: Command: quartus_asm DE10_NANO_SoC_GHRD
 Warning (125092): Tcl Script File pll_25MHz/pll_25MHz_0002.qip not found
     Info (125063): set_global_assignment -name QIP_FILE pll_25MHz/pll_25MHz_0002.qip -qip pll_25MHz.qip -library pll_25MHz
@@ -172,9 +172,9 @@ Warning (11713): The configuration of the Hard Processor Subsystem (HPS) within 
 The Preloader software that initializes the HPS requires an update.
 Using hps_isw_handoff/soc_system_host_0_hps_0/, run the Preloader Support Package Generator to update your Preloader software
 Info: Quartus II 64-Bit Assembler was successful. 0 errors, 32 warnings
-    Info: Peak virtual memory: 1047 megabytes
-    Info: Processing ended: Thu Feb  8 18:58:58 2018
-    Info: Elapsed time: 00:00:27
-    Info: Total CPU time (on all processors): 00:00:27
+    Info: Peak virtual memory: 1039 megabytes
+    Info: Processing ended: Mon Feb 12 23:18:15 2018
+    Info: Elapsed time: 00:00:22
+    Info: Total CPU time (on all processors): 00:00:22
 
 

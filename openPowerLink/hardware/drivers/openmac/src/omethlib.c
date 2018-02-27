@@ -552,8 +552,7 @@ static OMETH_H        omethCreateInt
     }
     else
     {
-        if(hEth->phyCount==0)
-        	return hEth;    // error ... no phys found
+        if(hEth->phyCount==0) return hEth;    // error ... no phys found
 
         // get phy IDs (Reg 2 and 3) to 32Bit var phyId
         // note: big endian reads reg 2 first, otherwise reg 3 is read first
@@ -749,7 +748,7 @@ static OMETH_H        omethCreateInt
     {
         //use heap
         pByte = (unsigned char*)
-        		OMETH_UNCACHED_MALLOC(hEth->config.rxBuffers * len);
+                OMETH_UNCACHED_MALLOC(hEth->config.rxBuffers * len);
 
         //store tx buffer address equ. rx buffer -> tx is handled by user!
         hEth->pTxBufBase = pByte;
@@ -760,8 +759,7 @@ static OMETH_H        omethCreateInt
         return hEth;
     }
 
-    if(pByte == 0)
-    	return hEth;
+    if(pByte == 0) return hEth;
 
     // store rx buffer address for appi and destroy function
     hEth->pRxBufBase = pByte;
@@ -925,8 +923,7 @@ static OMETH_H        omethCreateInt
 
     //---------------------------------  allocate phy register memory -------------------------------
     hEth->pPhyReg = calloc(hEth->phyCount, sizeof(*hEth->pPhyReg));
-    if(hEth->pPhyReg == 0)
-    	return hEth;
+    if(hEth->pPhyReg == 0) return hEth;
 
     //--------------------------------- call user's phy cfg -----------------------------------------
     if(omethPhyCfgUser(hEth) != 0)

@@ -10,7 +10,7 @@ This file contains the implementation of the generic API functions.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2017, B&R Industrial Automation GmbH
 Copyright (c) 2013, SYSTEC electronic GmbH
 All rights reserved.
 
@@ -123,6 +123,23 @@ static tOplkError cbReceivedAsnd(const tFrameInfo* pFrameInfo_p);
 #if defined(CONFIG_INCLUDE_VETH)
 static tOplkError cbReceivedEth(const tFrameInfo* pFrameInfo_p);
 #endif
+static tOplkError readLocalObject(UINT index_p,
+                                  UINT subindex_p,
+                                  void* pDstData_p,
+                                  UINT* pSize_p);
+static tOplkError writeLocalObject(UINT index_p,
+                                   UINT subindex_p,
+                                   const void* pSrcData_p,
+                                   UINT size_p);
+static tOplkError performSdo(tSdoComConHdl* pSdoComConHdl_p,
+                             UINT nodeId_p,
+                             tSdoMultiAccEntry* paSubAcc_p,
+                             UINT subAccCnt_p,
+                             tSdoType sdoType_p,
+                             void* pBuffer_p,
+                             UINT bufSize_p,
+                             void* pUserArg_p,
+                             tSdoAccessType sdoAccessType_p);
 
 //============================================================================//
 //            P U B L I C   F U N C T I O N S                                 //
@@ -510,14 +527,6 @@ tOplkError oplk_readObject(tSdoComConHdl* pSdoComConHdl_p,
                            void* pUserArg_p)
 {
     tOplkError  ret = kErrorOk;
-    tObdSize    obdSize;
-
-#if !defined(CONFIG_INCLUDE_SDOC)
-    // Ignore unused parameters
-    UNUSED_PARAMETER(pSdoComConHdl_p);
-    UNUSED_PARAMETER(sdoType_p);
-    UNUSED_PARAMETER(pUserArg_p);
-#endif
 
     if (!ctrlu_stackIsInitialized())
         return kErrorApiNotInitialized;
@@ -526,49 +535,114 @@ tOplkError oplk_readObject(tSdoComConHdl* pSdoComConHdl_p,
         return kErrorApiInvalidParam;
 
     if ((nodeId_p == 0) || (nodeId_p == obdu_getNodeId()))
-    {   // local OD access can be performed
-        obdSize = (tObdSize)*pSize_p;
-        ret = obdu_readEntryToLe(index_p, subindex_p, pDstData_le_p, &obdSize);
-        *pSize_p = (UINT)obdSize;
+    {
+        ret = readLocalObject(index_p, subindex_p, pDstData_le_p, pSize_p);
     }
     else
-    {   // perform SDO transfer
-#if defined(CONFIG_INCLUDE_SDOC)
-        tSdoComTransParamByIndex    transParamByIndex;
+    {
+        tSdoMultiAccEntry accEntry;
 
-        // check if application provides space for handle
-        if (pSdoComConHdl_p == NULL)
-            return kErrorApiInvalidParam;
+        OPLK_MEMSET(&accEntry, 0, sizeof(tSdoMultiAccEntry));
 
-#if defined(CONFIG_INCLUDE_CFM)
-        if (cfmu_isSdoRunning(nodeId_p))
-            return kErrorApiSdoBusyIntern;
-#endif
+        accEntry.index = index_p;
+        accEntry.subIndex = subindex_p;
+        accEntry.pData_le = pDstData_le_p;
+        accEntry.dataSize = *pSize_p;
 
-        // init command layer connection
-        ret = sdocom_defineConnection(pSdoComConHdl_p, nodeId_p, sdoType_p);
-        if ((ret != kErrorOk) && (ret != kErrorSdoComHandleExists))
-            return ret;
+        ret = performSdo(pSdoComConHdl_p,
+                         nodeId_p,
+                         &accEntry,
+                         1,
+                         sdoType_p,
+                         NULL,
+                         0,
+                         pUserArg_p,
+                         kSdoAccessTypeRead);
 
-        transParamByIndex.pData = pDstData_le_p;
-        transParamByIndex.sdoAccessType = kSdoAccessTypeRead;
-        transParamByIndex.sdoComConHdl = *pSdoComConHdl_p;
-        transParamByIndex.dataSize = *pSize_p;
-        transParamByIndex.index = index_p;
-        transParamByIndex.subindex = subindex_p;
-        transParamByIndex.pfnSdoFinishedCb = cbSdoCon;
-        transParamByIndex.pUserArg = pUserArg_p;
+        *pSize_p = accEntry.dataSize;
+    }
 
-        ret = sdocom_initTransferByIndex(&transParamByIndex);
-        if (ret != kErrorOk)
-            return ret;
+    return ret;
+}
 
-        ret = kErrorApiTaskDeferred;
+//------------------------------------------------------------------------------
+/**
+\brief  Read several aggregated entries from object dictionary
 
-#else
-        // no SDO client implemented, only local access possible!
-        ret = kErrorInvalidNodeId;
-#endif
+The function reads the specified entry from the object dictionary of the specified
+node. If this node is a remote node, it performs an SDO transfer. In such case this
+function returns kErrorApiTaskDeferred and the application is informed via the
+event callback function when the task is completed.
+
+\param[in,out]  pSdoComConHdl_p     A pointer to the SDO connection handle. It may be
+                                    NULL in case of local OD access.
+\param[in]      nodeId_p            Node ID of the node to read. If node ID is 0, the
+                                    local OD will be accessed.
+\param[in]      paSubAcc_p          Pointer to array of sub-reads.
+                                    The array can be deleted after the multi-transfer has finished.
+\param[in]      subAccCnt_p         Number of sub-read array elements
+\param[in]      sdoType_p           The type of the SDO transfer (SDO over ASnd, SDO over
+                                    UDP or SDO over PDO)
+\param[in]      pBuffer_p           Pointer to frame buffer for multi-object transfer of size bufSize_p.
+                                    Must not change for sub-calls of the same multi-transfer.
+                                    Buffer can be deleted after multi-transfer has finished.
+\param[in]      bufSize_p           Size of multi-object transfer frame buffer. Size depends on number of aggregated objects.
+                                    The max. required size is 1442 (bytes)
+\param[in]      pUserArg_p          User defined argument which will be passed to the
+                                    event callback function.
+
+\return The function returns a \ref tOplkError error code.
+\retval kErrorOk                    Entries were successfully read from the local OD.
+\retval kErrorApiTaskDeferred       The multi-access was successfully initiated.
+\retval Other                       Error occurred while reading the OD.
+
+\ingroup module_api
+*/
+//------------------------------------------------------------------------------
+tOplkError oplk_readMultipleObjects(tSdoComConHdl* pSdoComConHdl_p,
+                                    UINT nodeId_p,
+                                    tSdoMultiAccEntry* paSubAcc_p,
+                                    UINT subAccCnt_p,
+                                    tSdoType sdoType_p,
+                                    void* pBuffer_p,
+                                    UINT bufSize_p,
+                                    void* pUserArg_p)
+{
+    tOplkError          ret = kErrorOk;
+    tSdoMultiAccEntry*  pCurSubAcc = paSubAcc_p;
+    UINT                loopCnt;
+
+    if (!ctrlu_stackIsInitialized())
+        return kErrorApiNotInitialized;
+
+    if ((paSubAcc_p == NULL) || (subAccCnt_p == 0))
+        return kErrorApiInvalidParam;
+
+    if ((nodeId_p == 0) || (nodeId_p == obdu_getNodeId()))
+    {
+        for (loopCnt = 0; loopCnt < subAccCnt_p; loopCnt++)
+        {
+            ret = readLocalObject(pCurSubAcc->index,
+                                  pCurSubAcc->subIndex,
+                                  pCurSubAcc->pData_le,
+                                  &pCurSubAcc->dataSize);
+            if (ret != kErrorOk)
+                break;
+
+            pCurSubAcc++;
+        }
+    }
+    else
+    {
+        ret = performSdo(pSdoComConHdl_p,
+                         nodeId_p,
+                         paSubAcc_p,
+                         subAccCnt_p,
+                         sdoType_p,
+                         pBuffer_p,
+                         bufSize_p,
+                         pUserArg_p,
+                         kSdoAccessTypeMultiRead);
     }
 
     return ret;
@@ -615,13 +689,6 @@ tOplkError oplk_writeObject(tSdoComConHdl* pSdoComConHdl_p,
 {
     tOplkError  ret = kErrorOk;
 
-#if !defined(CONFIG_INCLUDE_SDOC)
-    // Ignore unused parameters
-    UNUSED_PARAMETER(pSdoComConHdl_p);
-    UNUSED_PARAMETER(sdoType_p);
-    UNUSED_PARAMETER(pUserArg_p);
-#endif
-
     if (!ctrlu_stackIsInitialized())
         return kErrorApiNotInitialized;
 
@@ -629,52 +696,112 @@ tOplkError oplk_writeObject(tSdoComConHdl* pSdoComConHdl_p,
         return kErrorApiInvalidParam;
 
     if ((nodeId_p == 0) || (nodeId_p == obdu_getNodeId()))
-    {   // local OD access can be performed
-        ret = obdu_writeEntryFromLe(index_p, subindex_p, pSrcData_le_p, size_p);
+    {
+        ret = writeLocalObject(index_p, subindex_p, pSrcData_le_p, size_p);
     }
     else
-    {   // perform SDO transfer
-#if defined(CONFIG_INCLUDE_SDOC)
-        tSdoComTransParamByIndex    transParamByIndex;
+    {
+        tSdoMultiAccEntry accEntry;
 
-        // check if application provides space for handle
-        if (pSdoComConHdl_p == NULL)
-            return kErrorApiInvalidParam;
+        OPLK_MEMSET(&accEntry, 0, sizeof(tSdoMultiAccEntry));
 
-#if defined(CONFIG_INCLUDE_CFM)
-        if (cfmu_isSdoRunning(nodeId_p))
-            return kErrorApiSdoBusyIntern;
-#endif
-        // d.k.: How to recycle command layer connection?
-        //       Try to redefine it, which will return kErrorSdoComHandleExists
-        //       and the existing command layer handle.
-        //       If the returned handle is busy, sdocom_initTransferByIndex()
-        //       will return with error.
+        accEntry.index = index_p;
+        accEntry.subIndex = subindex_p;
+        accEntry.pData_le = (void*)pSrcData_le_p;
+        accEntry.dataSize = size_p;
 
-        // init command layer connection
-        ret = sdocom_defineConnection(pSdoComConHdl_p, nodeId_p, sdoType_p);
-        if ((ret != kErrorOk) && (ret != kErrorSdoComHandleExists))
-            return ret;
+        ret = performSdo(pSdoComConHdl_p,
+                         nodeId_p,
+                         &accEntry,
+                         1,
+                         sdoType_p,
+                         NULL,
+                         0,
+                         pUserArg_p,
+                         kSdoAccessTypeWrite);
+    }
 
-        transParamByIndex.pData = (void*)pSrcData_le_p;
-        transParamByIndex.sdoAccessType = kSdoAccessTypeWrite;
-        transParamByIndex.sdoComConHdl = *pSdoComConHdl_p;
-        transParamByIndex.dataSize = size_p;
-        transParamByIndex.index = index_p;
-        transParamByIndex.subindex = subindex_p;
-        transParamByIndex.pfnSdoFinishedCb = cbSdoCon;
-        transParamByIndex.pUserArg = pUserArg_p;
+    return ret;
+}
 
-        ret = sdocom_initTransferByIndex(&transParamByIndex);
-        if (ret != kErrorOk)
-            return ret;
+//------------------------------------------------------------------------------
+/**
+\brief  Write several aggregated entries to object dictionary
 
-        ret = kErrorApiTaskDeferred;
+The function writes the specified entry to the object dictionary of the specified
+node. If this node is a remote node, it performs an SDO transfer. In such case this
+function returns kErrorApiTaskDeferred and the application is informed via the
+event callback function when the task is completed.
 
-#else
-        // no SDO client implemented, only local access possible!
-        ret = kErrorInvalidNodeId;
-#endif
+\param[in,out]  pSdoComConHdl_p     A pointer to the SDO connection handle. It may be
+                                    NULL in case of local OD access.
+\param[in]      nodeId_p            Node ID of the node to write. If node ID is 0, the
+                                    local OD will be accessed.
+\param[in]      paSubAcc_p          Pointer to array of sub-writes.
+                                    The array can be deleted after the multi-transfer has finished.
+\param[in]      subAccCnt_p         Number of sub-write array elements
+\param[in]      sdoType_p           The type of the SDO transfer (SDO over ASnd, SDO over
+                                    UDP or SDO over PDO)
+\param[in]      pBuffer_p           Pointer to frame buffer for multi-object transfer of size bufSize_p.
+                                    Must not change for sub-calls of the same multi-transfer.
+                                    Buffer can be deleted after multi-transfer has finished.
+\param[in]      bufSize_p           Size of multi-object transfer frame buffer. Size depends on number of aggregated objects.
+                                    The max. required size is 1442 (bytes)
+\param[in]      pUserArg_p          User defined argument which will be passed to the
+                                    event callback function.
+
+\return The function returns a \ref tOplkError error code.
+\retval kErrorOk                    Entries were successfully written to the local OD.
+\retval kErrorApiTaskDeferred       The multi-access was successfully initiated.
+\retval Other                       Error occurred while writing the OD.
+
+\ingroup module_api
+*/
+//------------------------------------------------------------------------------
+tOplkError oplk_writeMultipleObjects(tSdoComConHdl* pSdoComConHdl_p,
+                                     UINT nodeId_p,
+                                     tSdoMultiAccEntry* paSubAcc_p,
+                                     UINT subAccCnt_p,
+                                     tSdoType sdoType_p,
+                                     void* pBuffer_p,
+                                     UINT bufSize_p,
+                                     void* pUserArg_p)
+{
+    tOplkError              ret = kErrorOk;
+    tSdoMultiAccEntry*      pCurSubAcc = paSubAcc_p;
+    UINT                    loopCnt;
+
+    if (!ctrlu_stackIsInitialized())
+        return kErrorApiNotInitialized;
+
+    if ((paSubAcc_p == NULL) || (subAccCnt_p == 0))
+        return kErrorApiInvalidParam;
+
+    if ((nodeId_p == 0) || (nodeId_p == obdu_getNodeId()))
+    {
+        for (loopCnt = 0; loopCnt < subAccCnt_p; loopCnt++)
+        {
+            ret = writeLocalObject(pCurSubAcc->index,
+                                   pCurSubAcc->subIndex,
+                                   pCurSubAcc->pData_le,
+                                   pCurSubAcc->dataSize);
+            if (ret != kErrorOk)
+                break;
+
+            pCurSubAcc++;
+        }
+    }
+    else
+    {
+        ret = performSdo(pSdoComConHdl_p,
+                         nodeId_p,
+                         paSubAcc_p,
+                         subAccCnt_p,
+                         sdoType_p,
+                         pBuffer_p,
+                         bufSize_p,
+                         pUserArg_p,
+                         kSdoAccessTypeMultiWrite);
     }
 
     return ret;
@@ -690,9 +817,9 @@ beginning of the access to signal a delayed answer.
 
 \parblock
 \param[in,out]  pUserObdConHdl_p    Connection handle to user OD. Used members:
-                \li \ref tObdAlConHdl::obdAlHdl
-                \li \ref tObdAlConHdl::plkError
-                \li \ref tObdAlConHdl::origin
+                \li tObdAlConHdl::obdAlHdl
+                \li tObdAlConHdl::plkError
+                \li tObdAlConHdl::origin
 
                 Only used for \ref tObdAlConHdl::accessTyp = kObdAlAccessTypeRead:
                 \li tObdAlConHdl::pSrcData
@@ -1762,5 +1889,173 @@ static tOplkError cbReceivedEth(const tFrameInfo* pFrameInfo_p)
     return ret;
 }
 #endif
+
+//------------------------------------------------------------------------------
+/**
+\brief  Read entry from local object dictionary
+
+The function reads the specified entry from the local object dictionary.
+
+\param[in]      index_p             The index of the object to read.
+\param[in]      subindex_p          The subindex of the object to read.
+\param[out]     pDstData_p          Pointer where to store the read data. The data is in
+                                    platform byte order.
+\param[in,out]  pSize_p             Pointer to the size of the buffer. The function
+                                    stores the size of the object at this location.
+
+\return The function returns a \ref tOplkError error code.
+*/
+//------------------------------------------------------------------------------
+static tOplkError readLocalObject(UINT index_p,
+                                  UINT subindex_p,
+                                  void* pDstData_p,
+                                  UINT* pSize_p)
+{
+    tOplkError  ret = kErrorOk;
+    tObdSize    obdSize;
+
+    if ((index_p == 0) ||
+        (subindex_p > 255) ||
+        (pDstData_p == NULL) ||
+        (pSize_p == NULL) ||
+        (*pSize_p == 0))
+    {
+            ret = kErrorApiInvalidParam;
+            goto Exit;
+    }
+
+    obdSize = (tObdSize)*pSize_p;
+    ret = obdu_readEntryToLe(index_p, subindex_p, pDstData_p, &obdSize);
+    *pSize_p = (UINT)obdSize;
+
+Exit:
+    return ret;
+}
+
+//------------------------------------------------------------------------------
+/**
+\brief  Write entry to local object dictionary
+
+The function writes the specified entry to the local object dictionary.
+
+\param[in]      index_p             The index of the object to write.
+\param[in]      subindex_p          The subindex of the object to write.
+\param[in]      pSrcData_p          Pointer to data. The data must be in platform byte
+                                    order.
+\param[in]      size_p              Size of the data to write.
+
+\return The function returns a \ref tOplkError error code.
+*/
+//------------------------------------------------------------------------------
+static tOplkError writeLocalObject(UINT index_p,
+                                   UINT subindex_p,
+                                   const void* pSrcData_p,
+                                   UINT size_p)
+{
+    if ((index_p == 0) ||
+        (subindex_p > 255) ||
+        (pSrcData_p == NULL) ||
+        (size_p == 0))
+        return kErrorApiInvalidParam;
+
+    return obdu_writeEntryFromLe(index_p, subindex_p, pSrcData_p, (tObdSize)size_p);
+}
+
+//------------------------------------------------------------------------------
+/**
+\brief  Perform SDO to remote node
+
+The function performs an SDO transfer to a remote node.
+
+\param[in,out]  pSdoComConHdl_p     A pointer to the SDO connection handle
+\param[in]      nodeId_p            Node ID of the remote node
+\param[in]      paSubAcc_p          Pointer to array of sub-reads
+\param[in]      subAccCnt_p         Number of sub-read array elements
+\param[in]      sdoType_p           The type of the SDO transfer
+\param[in]      pBuffer_p           Pointer to frame buffer for multi-object transfer of size bufSize_p
+                                    Only used if sdoAccessType_p is set to kSdoAccessTypeMultiRead or
+                                    kSdoAccessTypeMultiWrite, otherwise ignored!
+\param[in]      bufSize_p           Size of multi-object transfer frame buffer
+                                    Only used if sdoAccessType_p is set to kSdoAccessTypeMultiRead or
+                                    kSdoAccessTypeMultiWrite, otherwise ignored!
+\param[in]      pUserArg_p          User defined argument
+\param[in]      sdoAccessType_p     SDO access type
+
+\return The function returns a \ref tOplkError error code.
+*/
+//------------------------------------------------------------------------------
+static tOplkError performSdo(tSdoComConHdl* pSdoComConHdl_p,
+                             UINT nodeId_p,
+                             tSdoMultiAccEntry* paSubAcc_p,
+                             UINT subAccCnt_p,
+                             tSdoType sdoType_p,
+                             void* pBuffer_p,
+                             UINT bufSize_p,
+                             void* pUserArg_p,
+                             tSdoAccessType sdoAccessType_p)
+{
+    tOplkError                  ret = kErrorOk;
+#if defined(CONFIG_INCLUDE_SDOC)
+    tSdoComTransParamByIndex    transParamByIndex;
+
+    if (pSdoComConHdl_p == NULL)
+        return kErrorApiInvalidParam;
+
+#if defined(CONFIG_INCLUDE_CFM)
+    if (cfmu_isSdoRunning(nodeId_p))
+        return kErrorApiSdoBusyIntern;
+#endif
+
+    ASSERT((sdoAccessType_p == kSdoAccessTypeWrite) ||
+           (sdoAccessType_p == kSdoAccessTypeRead) ||
+           (sdoAccessType_p == kSdoAccessTypeMultiWrite) ||
+           (sdoAccessType_p == kSdoAccessTypeMultiRead));
+
+    if ((sdoAccessType_p == kSdoAccessTypeWrite) ||
+        (sdoAccessType_p == kSdoAccessTypeRead))
+    {
+        ASSERT(subAccCnt_p == 1);
+    }
+
+    ret = sdocom_defineConnection(pSdoComConHdl_p, nodeId_p, sdoType_p);
+    if ((ret != kErrorOk) && (ret != kErrorSdoComHandleExists))
+        return ret;
+
+    OPLK_MEMSET(&transParamByIndex, 0, sizeof(tSdoComTransParamByIndex));
+
+    transParamByIndex.sdoAccessType = sdoAccessType_p;
+    transParamByIndex.sdoComConHdl = *pSdoComConHdl_p;
+    transParamByIndex.pData = paSubAcc_p->pData_le;
+    transParamByIndex.dataSize = paSubAcc_p->dataSize;
+    transParamByIndex.index = (UINT16)paSubAcc_p->index;
+    transParamByIndex.subindex = (UINT8)paSubAcc_p->subIndex;
+    transParamByIndex.pfnSdoFinishedCb = cbSdoCon;
+    transParamByIndex.pUserArg = pUserArg_p;
+
+    if ((sdoAccessType_p == kSdoAccessTypeMultiWrite) ||
+        (sdoAccessType_p == kSdoAccessTypeMultiRead))
+    {
+        transParamByIndex.paMultiAcc = paSubAcc_p;
+        transParamByIndex.multiAccCnt = subAccCnt_p;
+        transParamByIndex.pMultiBuffer = pBuffer_p;
+        transParamByIndex.multiBufSize = bufSize_p;
+    }
+
+    ret = sdocom_initTransferByIndex(&transParamByIndex);
+    if (ret != kErrorOk)
+        return ret;
+
+    ret = kErrorApiTaskDeferred;
+
+#else
+    UNUSED_PARAMETER(pSdoComConHdl_p);
+    UNUSED_PARAMETER(sdoType_p);
+    UNUSED_PARAMETER(pUserArg_p);
+
+    ret = kErrorInvalidNodeId;
+#endif
+
+    return ret;
+}
 
 /// \}

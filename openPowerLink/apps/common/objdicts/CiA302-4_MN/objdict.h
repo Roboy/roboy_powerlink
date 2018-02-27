@@ -9,7 +9,7 @@ device profile.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 Copyright (c) 2013, SYSTEC electronic GmbH
 All rights reserved.
 
@@ -81,7 +81,7 @@ OBD_BEGIN()
            OBD_SUBINDEX_RAM_VSTRING(0x100A, 0x00, kObdAccR, software_version, OBD_MAX_STRING_SIZE, PLK_PRODUCT_NAME" "PLK_PRODUCT_VERSION)
         OBD_END_INDEX(0x100A)
 
-#if defined(CONFIG_OBD_USE_STORE_RESTORE)
+#if defined(CONFIG_APP_STORE_RESTORE)
         // Object 1010h: NMT_StoreParam_REC
         OBD_BEGIN_INDEX_RAM(0x1010, 0x05, FALSE)
             OBD_SUBINDEX_RAM_VAR(0x1010, 0x00, kObdTypeUInt8, kObdAccConst, tObdUnsigned8, NumberOfEntries, 0x04)
@@ -122,7 +122,7 @@ OBD_BEGIN()
         // Object 1030h: NMT_InterfaceGroup_Xh_REC
         OBD_BEGIN_INDEX_RAM(0x1030, 0x0A, FALSE)
             OBD_SUBINDEX_RAM_VAR(0x1030, 0x00, kObdTypeUInt8, kObdAccConst, tObdUnsigned8, NumberOfEntries, 0x09)
-            OBD_SUBINDEX_RAM_VAR_RG(0x1030, 0x01, kObdTypeUInt16, kObdAccR, tObdUnsigned16, InterfaceIndex_U16, 0x01, 0x00, 0x0A)
+            OBD_SUBINDEX_RAM_VAR_RG(0x1030, 0x01, kObdTypeUInt16, kObdAccR, tObdUnsigned16, InterfaceIndex_U16, 0x01, 0x01, 0x0A)
             OBD_SUBINDEX_RAM_VSTRING(0x1030, 0x02, kObdAccR, InterfaceDescription_VSTR, 0x20, "Interface 1")
             OBD_SUBINDEX_RAM_VAR(0x1030, 0x03, kObdTypeUInt8, kObdAccR, tObdUnsigned8, InterfaceType_U8, 0x06)
             OBD_SUBINDEX_RAM_VAR(0x1030, 0x04, kObdTypeUInt16, kObdAccR, tObdUnsigned16, InterfaceMtu_U16, 1518)
@@ -1078,7 +1078,7 @@ OBD_BEGIN()
 
         // Object 1F8Ah: NMT_MNCycleTiming_REC
         OBD_BEGIN_INDEX_RAM(0x1F8A, 0x03, FALSE)
-            OBD_SUBINDEX_RAM_VAR(0x1F8A, 0x00, kObdTypeUInt8, kObdAccConst, tObdUnsigned8, NumberOfEntries, 0x02)
+            OBD_SUBINDEX_RAM_VAR(0x1F8A, 0x00, kObdTypeUInt8, kObdAccR, tObdUnsigned8, NumberOfEntries, 0x02)
             OBD_SUBINDEX_RAM_VAR(0x1F8A, 0x01, kObdTypeUInt32, kObdAccSRW, tObdUnsigned32, WaitSoCPReq_U32, 1000)           // in [ns]
             OBD_SUBINDEX_RAM_VAR_RG(0x1F8A, 0x02, kObdTypeUInt32, kObdAccSRW, tObdUnsigned32, AsyncSlotTimeout_U32, 100000, 250, 0xFFFFFFFF) // in [ns]
         OBD_END_INDEX(0x1F8A)
@@ -1088,7 +1088,7 @@ OBD_BEGIN()
 
         // Object 1F8Ch: NMT_CurrNMTState_U8
         OBD_BEGIN_INDEX_RAM(0x1F8C, 0x01, FALSE)
-            OBD_SUBINDEX_RAM_VAR(0x1F8C, 0x00, kObdTypeUInt8, (kObdAccR | kObdAccPdo), tObdUnsigned8, NMT_CurrNMTState_U8, 0x1C)
+            OBD_SUBINDEX_RAM_VAR(0x1F8C, 0x00, kObdTypeUInt8, kObdAccR, tObdUnsigned8, NMT_CurrNMTState_U8, 0x1C)
         OBD_END_INDEX(0x1F8C)
 
         // Object 1F8Dh: NMT_PResPayloadLimitList_AU16
@@ -1334,24 +1334,6 @@ OBD_BEGIN()
 
         OBD_RAM_INDEX_RAM_VARARRAY(0xA8C0, (252), FALSE, kObdTypeUInt64, kObdAccVPRW, tObdUnsigned64, PI_Output_U64, 0x0000000000000000LL)
         OBD_RAM_INDEX_RAM_VARARRAY(0xA8C1, (252), FALSE, kObdTypeUInt64, kObdAccVPRW, tObdUnsigned64, PI_Output_U64, 0x0000000000000000LL)
-
-        // DigitalInput_00h_AU8
-        OBD_BEGIN_INDEX_RAM(0x6000, 0x05, FALSE)
-            OBD_SUBINDEX_RAM_VAR(0x6000, 0x00, kObdTypeUInt8, kObdAccConst, tObdUnsigned8, NumberOfEntries, 0x04)
-            OBD_SUBINDEX_RAM_USERDEF(0x6000, 0x01, kObdTypeUInt8, kObdAccVPR, tObdUnsigned8, DigitalInput, 0x00)
-            OBD_SUBINDEX_RAM_USERDEF(0x6000, 0x02, kObdTypeUInt8, kObdAccVPR, tObdUnsigned8, DigitalInput, 0x00)
-            OBD_SUBINDEX_RAM_USERDEF(0x6000, 0x03, kObdTypeUInt8, kObdAccVPR, tObdUnsigned8, DigitalInput, 0x00)
-            OBD_SUBINDEX_RAM_USERDEF(0x6000, 0x04, kObdTypeUInt8, kObdAccVPR, tObdUnsigned8, DigitalInput, 0x00)
-        OBD_END_INDEX(0x6000)
-
-        // DigitalOutput_00h_AU8
-        OBD_BEGIN_INDEX_RAM(0x6200, 0x05, FALSE)
-            OBD_SUBINDEX_RAM_VAR(0x6200, 0x00, kObdTypeUInt8, kObdAccConst, tObdUnsigned8, NumberOfEntries, 0x04)
-            OBD_SUBINDEX_RAM_USERDEF(0x6200, 0x01, kObdTypeUInt8, kObdAccVPRW, tObdUnsigned8, DigitalOutput, 0x00)
-            OBD_SUBINDEX_RAM_USERDEF(0x6200, 0x02, kObdTypeUInt8, kObdAccVPRW, tObdUnsigned8, DigitalOutput, 0x00)
-            OBD_SUBINDEX_RAM_USERDEF(0x6200, 0x03, kObdTypeUInt8, kObdAccVPRW, tObdUnsigned8, DigitalOutput, 0x00)
-            OBD_SUBINDEX_RAM_USERDEF(0x6200, 0x04, kObdTypeUInt8, kObdAccVPRW, tObdUnsigned8, DigitalOutput, 0x00)
-        OBD_END_INDEX(0x6200)
 
     OBD_END_PART()
 

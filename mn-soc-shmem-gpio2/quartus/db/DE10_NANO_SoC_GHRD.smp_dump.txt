@@ -1,0 +1,147 @@
+
+State Machine - |toplevel|soc_system:u0|soc_system_mm_interconnect_1:mm_interconnect_1|altera_merlin_burst_adapter:onchip_memory2_0_s1_burst_adapter|altera_merlin_burst_adapter_13_1:altera_merlin_burst_adapter_13_1.burst_adapter_13_1|altera_merlin_burst_adapter_full_13_1:altera_merlin_burst_adapter_full.the_ba_13_1|state
+Name state.ST_IDLE state.ST_UNCOMP_WR_SUBBURST state.ST_UNCOMP_TRANS state.ST_COMP_TRANS 
+state.ST_IDLE 0 0 0 0 
+state.ST_COMP_TRANS 1 0 0 1 
+state.ST_UNCOMP_TRANS 1 0 1 0 
+state.ST_UNCOMP_WR_SUBBURST 1 1 0 0 
+
+State Machine - |toplevel|soc_system:u0|soc_system_host_0:host_0|soc_system_host_0_mm_interconnect_0:mm_interconnect_0|altera_merlin_burst_adapter:timer_0_s1_burst_adapter|altera_merlin_burst_adapter_13_1:altera_merlin_burst_adapter_13_1.burst_adapter_13_1|altera_merlin_burst_adapter_full_13_1:altera_merlin_burst_adapter_full.the_ba_13_1|state
+Name state.ST_IDLE state.ST_UNCOMP_WR_SUBBURST state.ST_UNCOMP_TRANS state.ST_COMP_TRANS 
+state.ST_IDLE 0 0 0 0 
+state.ST_COMP_TRANS 1 0 0 1 
+state.ST_UNCOMP_TRANS 1 0 1 0 
+state.ST_UNCOMP_WR_SUBBURST 1 1 0 0 
+
+State Machine - |toplevel|soc_system:u0|soc_system_host_0:host_0|soc_system_host_0_mm_interconnect_0:mm_interconnect_0|altera_merlin_burst_adapter:jtag_uart_0_avalon_jtag_slave_burst_adapter|altera_merlin_burst_adapter_13_1:altera_merlin_burst_adapter_13_1.burst_adapter_13_1|altera_merlin_burst_adapter_full_13_1:altera_merlin_burst_adapter_full.the_ba_13_1|state
+Name state.ST_IDLE state.ST_UNCOMP_WR_SUBBURST state.ST_UNCOMP_TRANS state.ST_COMP_TRANS 
+state.ST_IDLE 0 0 0 0 
+state.ST_COMP_TRANS 1 0 0 1 
+state.ST_UNCOMP_TRANS 1 0 1 0 
+state.ST_UNCOMP_WR_SUBBURST 1 1 0 0 
+
+State Machine - |toplevel|soc_system:u0|soc_system_host_0:host_0|soc_system_host_0_mm_interconnect_0:mm_interconnect_0|altera_merlin_burst_adapter:lw_bridge_s0_burst_adapter|altera_merlin_burst_adapter_13_1:altera_merlin_burst_adapter_13_1.burst_adapter_13_1|altera_merlin_burst_adapter_full_13_1:altera_merlin_burst_adapter_full.the_ba_13_1|state
+Name state.ST_IDLE state.ST_UNCOMP_WR_SUBBURST state.ST_UNCOMP_TRANS state.ST_COMP_TRANS 
+state.ST_IDLE 0 0 0 0 
+state.ST_COMP_TRANS 1 0 0 1 
+state.ST_UNCOMP_TRANS 1 0 1 0 
+state.ST_UNCOMP_WR_SUBBURST 1 1 0 0 
+
+State Machine - |toplevel|soc_system:u0|soc_system_host_0:host_0|soc_system_host_0_mm_interconnect_0:mm_interconnect_0|altera_merlin_burst_adapter:button_pio_s1_burst_adapter|altera_merlin_burst_adapter_13_1:altera_merlin_burst_adapter_13_1.burst_adapter_13_1|altera_merlin_burst_adapter_full_13_1:altera_merlin_burst_adapter_full.the_ba_13_1|state
+Name state.ST_IDLE state.ST_UNCOMP_WR_SUBBURST state.ST_UNCOMP_TRANS state.ST_COMP_TRANS 
+state.ST_IDLE 0 0 0 0 
+state.ST_COMP_TRANS 1 0 0 1 
+state.ST_UNCOMP_TRANS 1 0 1 0 
+state.ST_UNCOMP_WR_SUBBURST 1 1 0 0 
+
+State Machine - |toplevel|soc_system:u0|soc_system_host_0:host_0|soc_system_host_0_mm_interconnect_0:mm_interconnect_0|altera_merlin_burst_adapter:dipsw_pio_s1_burst_adapter|altera_merlin_burst_adapter_13_1:altera_merlin_burst_adapter_13_1.burst_adapter_13_1|altera_merlin_burst_adapter_full_13_1:altera_merlin_burst_adapter_full.the_ba_13_1|state
+Name state.ST_IDLE state.ST_UNCOMP_WR_SUBBURST state.ST_UNCOMP_TRANS state.ST_COMP_TRANS 
+state.ST_IDLE 0 0 0 0 
+state.ST_COMP_TRANS 1 0 0 1 
+state.ST_UNCOMP_TRANS 1 0 1 0 
+state.ST_UNCOMP_WR_SUBBURST 1 1 0 0 
+
+State Machine - |toplevel|soc_system:u0|alteraOpenmacTop:openmac_0|openmacTop:THEOPENMACTOP|openmac:THEOPENMAC|\b_Full_Rx:bRxDesc:Dsm
+Name \b_Full_Rx:bRxDesc:Dsm.sLenW \b_Full_Rx:bRxDesc:Dsm.sStat \b_Full_Rx:bRxDesc:Dsm.sOdd \b_Full_Rx:bRxDesc:Dsm.sData \b_Full_Rx:bRxDesc:Dsm.sAdrL \b_Full_Rx:bRxDesc:Dsm.sAdrH \b_Full_Rx:bRxDesc:Dsm.sTimH \b_Full_Rx:bRxDesc:Dsm.sTimL \b_Full_Rx:bRxDesc:Dsm.sLen \b_Full_Rx:bRxDesc:Dsm.sIdle 
+\b_Full_Rx:bRxDesc:Dsm.sIdle 0 0 0 0 0 0 0 0 0 0 
+\b_Full_Rx:bRxDesc:Dsm.sLen 0 0 0 0 0 0 0 0 1 1 
+\b_Full_Rx:bRxDesc:Dsm.sTimL 0 0 0 0 0 0 0 1 0 1 
+\b_Full_Rx:bRxDesc:Dsm.sTimH 0 0 0 0 0 0 1 0 0 1 
+\b_Full_Rx:bRxDesc:Dsm.sAdrH 0 0 0 0 0 1 0 0 0 1 
+\b_Full_Rx:bRxDesc:Dsm.sAdrL 0 0 0 0 1 0 0 0 0 1 
+\b_Full_Rx:bRxDesc:Dsm.sData 0 0 0 1 0 0 0 0 0 1 
+\b_Full_Rx:bRxDesc:Dsm.sOdd 0 0 1 0 0 0 0 0 0 1 
+\b_Full_Rx:bRxDesc:Dsm.sStat 0 1 0 0 0 0 0 0 0 1 
+\b_Full_Rx:bRxDesc:Dsm.sLenW 1 0 0 0 0 0 0 0 0 1 
+
+State Machine - |toplevel|soc_system:u0|soc_system_host_0:host_0|soc_system_host_0_mm_interconnect_1:mm_interconnect_1|altera_merlin_burst_adapter:fpga_mem_s0_burst_adapter|altera_merlin_burst_adapter_13_1:altera_merlin_burst_adapter_13_1.burst_adapter_13_1|altera_merlin_burst_adapter_full_13_1:altera_merlin_burst_adapter_full.the_ba_13_1|state
+Name state.ST_IDLE state.ST_UNCOMP_WR_SUBBURST state.ST_UNCOMP_TRANS state.ST_COMP_TRANS 
+state.ST_IDLE 0 0 0 0 
+state.ST_COMP_TRANS 1 0 0 1 
+state.ST_UNCOMP_TRANS 1 0 1 0 
+state.ST_UNCOMP_WR_SUBBURST 1 1 0 0 
+
+State Machine - |toplevel|soc_system:u0|alteraOpenmacTop:openmac_0|openmacTop:THEOPENMACTOP|openMAC_DMAmaster:\GEN_DMAMASTER:THEDMAMASTER|dma_handler:THE_DMA_HANDLER|rx_fsm
+Name rx_fsm.run rx_fsm.first rx_fsm.idle 
+rx_fsm.idle 0 0 0 
+rx_fsm.first 0 1 1 
+rx_fsm.run 1 0 1 
+
+State Machine - |toplevel|soc_system:u0|alteraOpenmacTop:openmac_0|openmacTop:THEOPENMACTOP|openMAC_DMAmaster:\GEN_DMAMASTER:THEDMAMASTER|master_handler:THE_MASTER_HANDLER|rx_fsm
+Name rx_fsm.finish rx_fsm.run rx_fsm.idle 
+rx_fsm.idle 0 0 0 
+rx_fsm.run 0 1 1 
+rx_fsm.finish 1 0 1 
+
+State Machine - |toplevel|soc_system:u0|soc_system_pcp_0:pcp_0|soc_system_pcp_0_cpu_0:cpu_0|soc_system_pcp_0_cpu_0_nios2_oci:the_soc_system_pcp_0_cpu_0_nios2_oci|soc_system_pcp_0_cpu_0_jtag_debug_module_wrapper:the_soc_system_pcp_0_cpu_0_jtag_debug_module_wrapper|soc_system_pcp_0_cpu_0_jtag_debug_module_tck:the_soc_system_pcp_0_cpu_0_jtag_debug_module_tck|DRsize
+Name DRsize.101 DRsize.100 DRsize.011 DRsize.010 DRsize.001 DRsize.000 
+DRsize.000 0 0 0 0 0 0 
+DRsize.001 0 0 0 0 1 1 
+DRsize.010 0 0 0 1 0 1 
+DRsize.011 0 0 1 0 0 1 
+DRsize.100 0 1 0 0 0 1 
+DRsize.101 1 0 0 0 0 1 
+
+State Machine - |toplevel|altera_edge_detector:pulse_debug_reset|state
+Name state.IDLE state.CAPT state.ARM 
+state.IDLE 0 0 0 
+state.ARM 1 0 1 
+state.CAPT 1 1 0 
+
+State Machine - |toplevel|altera_edge_detector:pulse_warm_reset|state
+Name state.IDLE state.CAPT state.ARM 
+state.IDLE 0 0 0 
+state.ARM 1 0 1 
+state.CAPT 1 1 0 
+
+State Machine - |toplevel|altera_edge_detector:pulse_cold_reset|state
+Name state.IDLE state.CAPT state.ARM 
+state.IDLE 0 0 0 
+state.ARM 1 0 1 
+state.CAPT 1 1 0 
+
+State Machine - |toplevel|soc_system:u0|alteraOpenmacTop:openmac_0|openmacTop:THEOPENMACTOP|openfilter:\GEN_FILTER:2:THEOPENFILTER|FiltState
+Name FiltState.fs_BlockAll FiltState.fs_FRM2long FiltState.fs_FRMok FiltState.fs_FRM2short FiltState.fs_FRMpreOk FiltState.fs_FRMpre2short FiltState.fs_FRMnopre FiltState.fs_GAPok FiltState.fs_GAPext FiltState.fs_GAP2short FiltState.fs_init 
+FiltState.fs_init 0 0 0 0 0 0 0 0 0 0 0 
+FiltState.fs_GAP2short 0 0 0 0 0 0 0 0 0 1 1 
+FiltState.fs_GAPext 0 0 0 0 0 0 0 0 1 0 1 
+FiltState.fs_GAPok 0 0 0 0 0 0 0 1 0 0 1 
+FiltState.fs_FRMnopre 0 0 0 0 0 0 1 0 0 0 1 
+FiltState.fs_FRMpre2short 0 0 0 0 0 1 0 0 0 0 1 
+FiltState.fs_FRMpreOk 0 0 0 0 1 0 0 0 0 0 1 
+FiltState.fs_FRM2short 0 0 0 1 0 0 0 0 0 0 1 
+FiltState.fs_FRMok 0 0 1 0 0 0 0 0 0 0 1 
+FiltState.fs_FRM2long 0 1 0 0 0 0 0 0 0 0 1 
+FiltState.fs_BlockAll 1 0 0 0 0 0 0 0 0 0 1 
+
+State Machine - |toplevel|soc_system:u0|alteraOpenmacTop:openmac_0|openmacTop:THEOPENMACTOP|openmac:THEOPENMAC|\b_Full_Tx:bTxDesc:Dsm
+Name \b_Full_Tx:bTxDesc:Dsm.sColl \b_Full_Tx:bTxDesc:Dsm.sStat \b_Full_Tx:bTxDesc:Dsm.sData \b_Full_Tx:bTxDesc:Dsm.sDel \b_Full_Tx:bTxDesc:Dsm.sBegH \b_Full_Tx:bTxDesc:Dsm.sBegL \b_Full_Tx:bTxDesc:Dsm.sReq \b_Full_Tx:bTxDesc:Dsm.sAdrL \b_Full_Tx:bTxDesc:Dsm.sAdrH \b_Full_Tx:bTxDesc:Dsm.sTimH \b_Full_Tx:bTxDesc:Dsm.sTimL \b_Full_Tx:bTxDesc:Dsm.sLen \b_Full_Tx:bTxDesc:Dsm.sIdle 
+\b_Full_Tx:bTxDesc:Dsm.sIdle 0 0 0 0 0 0 0 0 0 0 0 0 0 
+\b_Full_Tx:bTxDesc:Dsm.sLen 0 0 0 0 0 0 0 0 0 0 0 1 1 
+\b_Full_Tx:bTxDesc:Dsm.sTimL 0 0 0 0 0 0 0 0 0 0 1 0 1 
+\b_Full_Tx:bTxDesc:Dsm.sTimH 0 0 0 0 0 0 0 0 0 1 0 0 1 
+\b_Full_Tx:bTxDesc:Dsm.sAdrH 0 0 0 0 0 0 0 0 1 0 0 0 1 
+\b_Full_Tx:bTxDesc:Dsm.sAdrL 0 0 0 0 0 0 0 1 0 0 0 0 1 
+\b_Full_Tx:bTxDesc:Dsm.sReq 0 0 0 0 0 0 1 0 0 0 0 0 1 
+\b_Full_Tx:bTxDesc:Dsm.sBegL 0 0 0 0 0 1 0 0 0 0 0 0 1 
+\b_Full_Tx:bTxDesc:Dsm.sBegH 0 0 0 0 1 0 0 0 0 0 0 0 1 
+\b_Full_Tx:bTxDesc:Dsm.sDel 0 0 0 1 0 0 0 0 0 0 0 0 1 
+\b_Full_Tx:bTxDesc:Dsm.sData 0 0 1 0 0 0 0 0 0 0 0 0 1 
+\b_Full_Tx:bTxDesc:Dsm.sStat 0 1 0 0 0 0 0 0 0 0 0 0 1 
+\b_Full_Tx:bTxDesc:Dsm.sColl 1 0 0 0 0 0 0 0 0 0 0 0 1 
+
+State Machine - |toplevel|soc_system:u0|alteraOpenmacTop:openmac_0|openmacTop:THEOPENMACTOP|openmac:THEOPENMAC|\b_Full_Tx:Sm_Tx
+Name \b_Full_Tx:Sm_Tx.sJam \b_Full_Tx:Sm_Tx.sCol \b_Full_Tx:Sm_Tx.sCrc \b_Full_Tx:Sm_Tx.sTxd \b_Full_Tx:Sm_Tx.sPre \b_Full_Tx:Sm_Tx.sBop \b_Full_Tx:Sm_Tx.sIdle 
+\b_Full_Tx:Sm_Tx.sIdle 0 0 0 0 0 0 0 
+\b_Full_Tx:Sm_Tx.sBop 0 0 0 0 0 1 1 
+\b_Full_Tx:Sm_Tx.sPre 0 0 0 0 1 0 1 
+\b_Full_Tx:Sm_Tx.sTxd 0 0 0 1 0 0 1 
+\b_Full_Tx:Sm_Tx.sCrc 0 0 1 0 0 0 1 
+\b_Full_Tx:Sm_Tx.sCol 0 1 0 0 0 0 1 
+\b_Full_Tx:Sm_Tx.sJam 1 0 0 0 0 0 1 
+
+State Machine - |toplevel|soc_system:u0|alteraOpenmacTop:openmac_0|openmacTop:THEOPENMACTOP|openmac:THEOPENMAC|\b_Full_Rx:Sm_Rx
+Name \b_Full_Rx:Sm_Rx.sRxd \b_Full_Rx:Sm_Rx.sSof \b_Full_Rx:Sm_Rx.sIdle 
+\b_Full_Rx:Sm_Rx.sIdle 0 0 0 
+\b_Full_Rx:Sm_Rx.sSof 0 1 1 
+\b_Full_Rx:Sm_Rx.sRxd 1 0 1 

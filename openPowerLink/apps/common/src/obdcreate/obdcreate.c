@@ -20,7 +20,7 @@ the next table.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 Copyright (c) 2013, SYSTEC electronic GmbH
 All rights reserved.
 
@@ -162,8 +162,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define CONFIG_FF_SDO_RW_ALL                0
 #endif
 
-// Set to true if SDO Read/Write Multiple Parameter By Index is used (not implemented in the stack)
-#if 0
+// Set to true if SDO Read/Write Multiple Parameter By Index is used
+#if defined(CONFIG_INCLUDE_SDO_RW_MULTIPLE)
 #define CONFIG_FF_SDO_RW_MULTIPLE           (NMT_FEATUREFLAGS_SDO_RW_MULTIPLE)
 #else
 #define CONFIG_FF_SDO_RW_MULTIPLE           0
@@ -205,7 +205,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 // Set to true if a modular device (DS302-F) is created
-#if 0
+#if defined(CONFIG_INCLUDE_MODULAR_DEVICE)
 #define CONFIG_FF_MODULAR_DEVICE            (NMT_FEATUREFLAGS_MODULAR_DEVICE)
 #else
 #define CONFIG_FF_MODULAR_DEVICE            0

@@ -11,7 +11,7 @@ This file contains the implementation of the user PDO module.
 
 /*------------------------------------------------------------------------------
 Copyright (c) 2012, SYSTEC electronic GmbH
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2017, B&R Industrial Automation GmbH
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -206,9 +206,9 @@ static tOplkError getMaxPdoSize(BYTE nodeId_p,
                                 UINT16* pMaxPdoSize_p,
                                 UINT32* pAbortCode_p);
 static tOplkError getPdoChannelId(UINT pdoId_p, BOOL fTxPdo_p, UINT* pChannelId_p);
-static UINT calcPdoMemSize(const tPdoChannelSetup* pPdoChannels_p,
-                           size_t* pRxPdoMemSize_p,
-                           size_t* pTxPdoMemSize_p);
+static size_t calcPdoMemSize(const tPdoChannelSetup* pPdoChannels_p,
+                             size_t* pRxPdoMemSize_p,
+                             size_t* pTxPdoMemSize_p);
 static tOplkError copyVarToPdo(BYTE* pPayload_p,
                                const tPdoMappObject* pMappObject_p,
                                UINT16 offsetInFrame_p);
@@ -319,7 +319,7 @@ tOplkError pdou_cbNmtStateChange(tEventNmtStateChange nmtStateChange_p)
                      mapParamIndex++)
                 {
                     ret = checkAndConfigurePdo(mapParamIndex, 0, &abortCode);
-                    if (ret != kErrorOk)
+                    if ((ret != kErrorOk) && (ret != kErrorObdIndexNotExist))
                     {
                         DEBUG_LVL_ERROR_TRACE("%s() checkAndConfigurePdo for RPDO failed with 0x%X\n",
                                               __func__,
@@ -336,7 +336,7 @@ tOplkError pdou_cbNmtStateChange(tEventNmtStateChange nmtStateChange_p)
                      mapParamIndex++)
                 {
                     ret = checkAndConfigurePdo(mapParamIndex, 0, &abortCode);
-                    if (ret != kErrorOk)
+                    if ((ret != kErrorOk) && (ret != kErrorObdIndexNotExist))
                     {
                         DEBUG_LVL_ERROR_TRACE("%s() checkAndConfigurePdo for TPDO failed with 0x%X\n",
                                               __func__,
@@ -1960,9 +1960,9 @@ The function calculates the size needed for the PDO memory.
 \return The function returns the size of the used PDO memory
 */
 //------------------------------------------------------------------------------
-static UINT calcPdoMemSize(const tPdoChannelSetup* pPdoChannels_p,
-                           size_t* pRxPdoMemSize_p,
-                           size_t* pTxPdoMemSize_p)
+static size_t calcPdoMemSize(const tPdoChannelSetup* pPdoChannels_p,
+                             size_t* pRxPdoMemSize_p,
+                             size_t* pTxPdoMemSize_p)
 {
     UINT                channelId;
     size_t              rxSize;

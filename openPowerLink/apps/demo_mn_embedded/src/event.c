@@ -10,7 +10,7 @@ This file contains a demo MN application event handler.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 Copyright (c) 2013, SYSTEC electronic GmbH
 Copyright (c) 2013, Kalycito Infotech Private Ltd.All rights reserved.
 All rights reserved.
@@ -263,13 +263,6 @@ static tOplkError processStateChangeEvent(const tEventNmtStateChange* pNmtStateC
         case kNmtMsReadyToOperate:
         case kNmtMsOperational:
         case kNmtMsBasicEthernet:           // no break
-        case kNmtCsNotActive:               // Implement
-		case kNmtCsPreOperational1:         // handling of
-		case kNmtCsStopped:                 // different
-		case kNmtCsPreOperational2:         // states here
-		case kNmtCsReadyToOperate:
-		case kNmtCsOperational:
-		case kNmtCsBasicEthernet:           // no break;
 
         default:
             PRINTF("StateChangeEvent(0x%X) originating event = 0x%X (%s)\n",

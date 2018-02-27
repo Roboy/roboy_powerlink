@@ -51,7 +51,6 @@ MARK_AS_ADVANCED(SKIP_BITSTREAM)
 # Find the Xilinx toolchain
 # Find the Xilinx toolchain
 UNSET(XIL_SDK CACHE)
-set(XILINX_VIVADO "/opt/Xilinx/")
 FIND_PROGRAM(XIL_SDK NAMES xsct
     PATHS
     ${XILINX_VIVADO}SDK/2016.2/bin

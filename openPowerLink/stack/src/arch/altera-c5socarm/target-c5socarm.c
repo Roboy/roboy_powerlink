@@ -12,7 +12,7 @@ Altera SoC ARM without OS.
 
 /*------------------------------------------------------------------------------
 Copyright (c) 2015, Kalycito Infotech Private Limited
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -186,8 +186,6 @@ tOplkError target_init(void)
     tOplkError      oplkRet = kErrorOk;
     ALT_STATUS_CODE halRet = ALT_E_SUCCESS;
 
-
-    PRINTF("enableling cache\n");
 #if defined(ALTARM_CACHE_ENABLE)
     // Enable Cache
     halRet = alt_cache_system_enable();
@@ -201,7 +199,6 @@ tOplkError target_init(void)
         goto Exit;
     }
 
-    PRINTF("Initialize the global interrupt controller\n");
     // Initialize the global interrupt controller
     halRet = alt_int_global_init();
     if (halRet != ALT_E_SUCCESS)
@@ -211,7 +208,6 @@ tOplkError target_init(void)
         goto Exit;
     }
 
-    PRINTF("Initialize the CPU interrupt interface\n");
     // Initialize the CPU interrupt interface
     halRet = alt_int_cpu_init();
     if (halRet != ALT_E_SUCCESS)
@@ -221,7 +217,6 @@ tOplkError target_init(void)
         goto Exit;
     }
 
-    PRINTF("Enable global interrupt master\n");
     // Enable global interrupt master
     halRet = alt_int_global_enable();
     if (halRet != ALT_E_SUCCESS)

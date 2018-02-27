@@ -2,7 +2,7 @@
 #
 # CMake file of CiA 401 CN embedded demo application
 #
-# Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+# Copyright (c) 2016, B&R Industrial Automation GmbH
 # Copyright (c) 2016, Kalycito Infotech Private Limited
 # All rights reserved.
 #
@@ -82,7 +82,7 @@ IF(CFG_IP_STACK)
 ENDIF(CFG_IP_STACK)
 
 # Store/restore is not available on embedded targets (yet)
-#ADD_DEFINITIONS(-DCONFIG_OBD_USE_STORE_RESTORE)
+#ADD_DEFINITIONS(-DCONFIG_APP_STORE_RESTORE)
 
 ################################################################################
 # Setup the architecture specific definitions

@@ -9,7 +9,7 @@ This file is the global include file for all NMT modules
 
 /*------------------------------------------------------------------------------
 Copyright (c) 2015, SYSTEC electronic GmbH
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -246,6 +246,7 @@ typedef enum
     kNmtNodeEventNmtState           = 0x06,     ///< Issued if the NMT state of the CN has changed.
     kNmtNodeEventError              = 0x07,     ///< NMT error of the CN.
     kNmtNodeEventAmniReceived       = 0x08,     ///< An AMNI frame was received.
+    kNmtNodeEventConfDone           = 0x09,     ///< Configuration done.
 } eNmtNodeEvent;
 
 /**
@@ -270,6 +271,7 @@ typedef enum
     kNmtNodeCommandConfReset        = 0x06,     ///< The application / Configuration Manager has successfully updated the configuration on the CN, and the CN needs ResetConf so that the configuration gets activated.
     kNmtNodeCommandConfErr          = 0x07,     ///< The application / Configuration Manager failed on updating configuration on the CN.
     kNmtNodeCommandStart            = 0x08,     ///< If NMT_STARTUP_NO_STARTNODE is set, this command must be issued after kNmtNodeEventReadyToStart.
+    kNmtNodeCommandSwErr            = 0x09,     ///< The application failed on updating the software on the CN.
 } eNmtNodeCommand;
 
 /**

@@ -180,9 +180,9 @@ tOplkError processSync(void)
 
     cnt_l++;
 
-//    aNodeVar_l[0].input = pProcessImageOut_l->CN1_DigitalInput_00h_AU8_DigitalInput;
-//    aNodeVar_l[1].input = pProcessImageOut_l->CN32_DigitalInput_00h_AU8_DigitalInput;
-//    aNodeVar_l[2].input = pProcessImageOut_l->CN110_DigitalInput_00h_AU8_DigitalInput;
+    aNodeVar_l[0].input = pProcessImageOut_l->CN1_DigitalInput_00h_AU8_DigitalInput;
+    aNodeVar_l[1].input = pProcessImageOut_l->CN32_DigitalInput_00h_AU8_DigitalInput;
+    aNodeVar_l[2].input = pProcessImageOut_l->CN110_DigitalInput_00h_AU8_DigitalInput;
 
     for (i = 0; (i < MAX_NODES) && (aUsedNodeIds_l[i] != 0); i++)
     {
@@ -220,9 +220,9 @@ tOplkError processSync(void)
             aNodeVar_l[i].ledsOld = aNodeVar_l[i].leds;
     }
 
-//    pProcessImageIn_l->CN1_DigitalOutput_00h_AU8_DigitalOutput = aNodeVar_l[0].leds;
-//    pProcessImageIn_l->CN32_DigitalOutput_00h_AU8_DigitalOutput = aNodeVar_l[1].leds;
-//    pProcessImageIn_l->CN110_DigitalOutput_00h_AU8_DigitalOutput = aNodeVar_l[2].leds;
+    pProcessImageIn_l->CN1_DigitalOutput_00h_AU8_DigitalOutput = aNodeVar_l[0].leds;
+    pProcessImageIn_l->CN32_DigitalOutput_00h_AU8_DigitalOutput = aNodeVar_l[1].leds;
+    pProcessImageIn_l->CN110_DigitalOutput_00h_AU8_DigitalOutput = aNodeVar_l[2].leds;
 
     ret = oplk_exchangeProcessImageIn();
 
@@ -252,7 +252,7 @@ static tOplkError initProcessImage(void)
     PRINTF("Initializing process image...\n");
     PRINTF("Size of process image: Input = %lu Output = %lu\n",
            (ULONG)sizeof(PI_IN),
-            (ULONG)sizeof(PI_OUT));
+           (ULONG)sizeof(PI_OUT));
     ret = oplk_allocProcessImage(sizeof(PI_IN), sizeof(PI_OUT));
     if (ret != kErrorOk)
         return ret;

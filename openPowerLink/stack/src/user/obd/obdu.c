@@ -10,7 +10,7 @@ This file contains the implementation of the object dictionary (OD) module.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 Copyright (c) 2013, SYSTEC electronic GmbH
 All rights reserved.
 
@@ -1357,6 +1357,8 @@ static tOplkError initNonNumWrite(UINT index_p,
     // function, re-read this values.
     obdSize = getObjectSize(pSubEntry);
     pDstData = getObjectDataPtr(pSubEntry);
+    cbParam.index = index_p;
+    cbParam.subIndex = subIndex_p;
 
 #if (CONFIG_OBD_USE_STRING_DOMAIN_IN_RAM != FALSE)
     if (segmOffset_p == 0)
@@ -1376,8 +1378,6 @@ static tOplkError initNonNumWrite(UINT index_p,
     if (pDstData == NULL)
        return kErrorObdAccessViolation;
 
-    cbParam.index = index_p;
-    cbParam.subIndex = subIndex_p;
     cbParam.pArg = &obdSize;
     cbParam.obdEvent = kObdEvInitWrite;
     ret = callObjectCallback(pObdEntry, &cbParam);
@@ -2140,7 +2140,7 @@ static tObdSize getObjectSize(const tObdSubEntry* pSubIndexEntry_p)
         return 0;
 
     if (dataTypeSize_l[pSubIndexEntry_p->type].pfnGetObjSize == NULL)
-        return dataTypeSize_l[pSubIndexEntry_p->type].size;
+        return (tObdSize)dataTypeSize_l[pSubIndexEntry_p->type].size;
     else
         return dataTypeSize_l[pSubIndexEntry_p->type].pfnGetObjSize((tObdSubEntry*)pSubIndexEntry_p);
 }

@@ -11,8 +11,8 @@ module.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2014, Kalycito Infotech Private Limited
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2017, Kalycito Infotech Private Limited
+Copyright (c) 2016, B&R Industrial Automation GmbH
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -232,7 +232,7 @@ The function returns the reference to the timesync shared memory.
 
 \return The function returns a pointer to the timesync shared memory.
 
-\ingroup module_timesynckcal
+\ingroup module_timesyncucal
 */
 //------------------------------------------------------------------------------
 tTimesyncSharedMemory* timesyncucal_getSharedMemory(void)

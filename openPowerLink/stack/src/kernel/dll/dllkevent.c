@@ -10,7 +10,7 @@ This file contains the event handling functions of the kernel DLL module.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 Copyright (c) 2015, SYSTEC electronic GmbH
 All rights reserved.
 
@@ -203,8 +203,8 @@ tOplkError dllk_process(const tEvent* pEvent_p)
             for (;;);
 #else
             ret = kErrorInvalidEvent;
-#endif
             break;
+#endif
     }
 
     return ret;

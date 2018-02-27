@@ -9,7 +9,7 @@ API.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 Copyright (c) 2013, SYSTEC electronic GmbH
 All rights reserved.
 
@@ -543,6 +543,14 @@ OPLKDLLEXPORT tOplkError oplk_readObject(tSdoComConHdl* pSdoComConHdl_p,
                                          UINT* pSize_p,
                                          tSdoType sdoType_p,
                                          void* pUserArg_p);
+OPLKDLLEXPORT tOplkError oplk_readMultipleObjects(tSdoComConHdl* pSdoComConHdl_p,
+                                                  UINT nodeId_p,
+                                                  tSdoMultiAccEntry* paSubAcc_p,
+                                                  UINT subAccCnt_p,
+                                                  tSdoType sdoType_p,
+                                                  void* pBuffer_p,
+                                                  UINT bufSize_p,
+                                                  void* pUserArg_p);
 OPLKDLLEXPORT tOplkError oplk_writeObject(tSdoComConHdl* pSdoComConHdl_p,
                                           UINT nodeId_p,
                                           UINT index_p,
@@ -551,6 +559,14 @@ OPLKDLLEXPORT tOplkError oplk_writeObject(tSdoComConHdl* pSdoComConHdl_p,
                                           UINT size_p,
                                           tSdoType sdoType_p,
                                           void* pUserArg_p);
+OPLKDLLEXPORT tOplkError oplk_writeMultipleObjects(tSdoComConHdl* pSdoComConHdl_p,
+                                                   UINT nodeId_p,
+                                                   tSdoMultiAccEntry* paSubAcc_p,
+                                                   UINT subAccCnt_p,
+                                                   tSdoType sdoType_p,
+                                                   void* pBuffer_p,
+                                                   UINT bufSize_p,
+                                                   void* pUserArg_p);
 OPLKDLLEXPORT tOplkError oplk_finishUserObdAccess(tObdAlConHdl* pUserObdConHdl_p);
 OPLKDLLEXPORT tOplkError oplk_enableUserObdAccess(BOOL fEnable_p);
 OPLKDLLEXPORT tOplkError oplk_freeSdoChannel(tSdoComConHdl sdoComConHdl_p);

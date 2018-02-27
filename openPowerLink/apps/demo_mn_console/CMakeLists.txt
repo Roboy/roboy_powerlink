@@ -2,7 +2,7 @@
 #
 # CMake file of CiA 302 MN console demo application
 #
-# Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+# Copyright (c) 2016, B&R Industrial Automation GmbH
 # Copyright (c) 2016, kalycito Infotech Private Limited
 # All rights reserved.
 #
@@ -43,6 +43,7 @@ IF (POLICY CMP0043)
 ENDIF()
 
 INCLUDE(../common/cmake/options.cmake)
+INCLUDE(../common/cmake/firmwaremanager.cmake)
 
 OPTION(CFG_IP_STACK "Is an IP stack available (support of SDO/UDP)" OFF)
 OPTION(CFG_INCLUDE_MN_REDUNDANCY "Use MN redundancy functions (if compiled into the libraries)" OFF)
@@ -67,7 +68,7 @@ SET(DEMO_SOURCES
     ${COMMON_SOURCE_DIR}/eventlog/eventlog.c
     ${COMMON_SOURCE_DIR}/eventlog/eventlogstring.c
     ${CONTRIB_SOURCE_DIR}/console/printlog.c
-    ${CONTRIB_SOURCE_DIR}/getopt/getopt.c
+    ${FIRMWARE_MANAGER_SOURCES}
     )
 
 INCLUDE_DIRECTORIES(
@@ -91,7 +92,7 @@ IF(CFG_INCLUDE_MN_REDUNDANCY)
     ADD_DEFINITIONS(-DCONFIG_INCLUDE_NMT_RMN)
 ENDIF(CFG_INCLUDE_MN_REDUNDANCY)
 
-#ADD_DEFINITIONS(-DCONFIG_OBD_USE_STORE_RESTORE)
+#ADD_DEFINITIONS(-DCONFIG_APP_STORE_RESTORE)
 #ADD_DEFINITIONS(-DCONFIG_DLL_PRES_CHAINING_CN)
 #ADD_DEFINITIONS(-DCONFIG_INCLUDE_MASND)
 

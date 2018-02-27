@@ -11,7 +11,7 @@ application.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 Copyright (c) 2013, SYSTEC electronic GmbH
 Copyright (c) 2015, Kalycito Infotech Private Ltd.All rights reserved.
 All rights reserved.
@@ -54,8 +54,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <arp/arp.h>
 #include <system/system.h>
 
-#define CONFIG_CDC_ON_SD FALSE
-
 #if (CONFIG_CDC_ON_SD != FALSE)
 #include <sdcard/sdcard.h>
 #endif
@@ -69,7 +67,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //------------------------------------------------------------------------------
 #define CYCLE_LEN           -1
 #define NODEID              0xF0                                    //=> MN
-#define IP_ADDR             0xc0a86402                              // 192.168.100.2
+#define IP_ADDR             0xc0a86401                              // 192.168.100.1
 #define SUBNET_MASK         0xFFFFFF00                              // 255.255.255.0
 #define DEFAULT_GATEWAY     0xC0A864FE                              // 192.168.100.C_ADR_RT1_DEF_NODE_ID
 #define MAC_ADDR            0x02, 0x88, 0xAB, 0x00, 0x00, NODEID    // Locally administered MAC address
@@ -127,8 +125,6 @@ static tOplkError   eventCbPowerlink(tOplkApiEventType eventType_p,
                                      const tOplkApiEventArg* pEventArg_p,
                                      void* pUserArg_p);
 
-int __auto_semihosting;
-
 //============================================================================//
 //            P U B L I C   F U N C T I O N S                                 //
 //============================================================================//
@@ -156,11 +152,11 @@ int main(void)
 
     // Initialize helper modules
     system_init();
-//    gpio_init();
-//    lcd_init();
+    gpio_init();
+    lcd_init();
 
     // get node ID from input
-    nodeid = NODEID;//gpio_getNodeid();
+    nodeid = gpio_getNodeid();
 
     // initialize instance
     memset(&instance_l, 0, sizeof(instance_l));
@@ -194,12 +190,10 @@ int main(void)
     PRINTF("NODEID=0x%02X\n", instance_l.nodeId);
     lcd_printNodeId(instance_l.nodeId);
 
-    PRINTF("initializing powerlink\n");
     ret = initPowerlink(&instance_l);
     if (ret != kErrorOk)
         goto Exit;
 
-    PRINTF("initializing app\n");
     ret = initApp();
     if (ret != kErrorOk)
         goto Exit;
@@ -212,7 +206,6 @@ int main(void)
                ret);
     }
 
-    PRINTF("staring main loop\n");
     loopMain(&instance_l);
 
 Exit:
@@ -397,13 +390,13 @@ static tOplkError loopMain(tInstance* pInstance_p)
         {
             case 0x01:
                 PRINTF("KEY0: SwReset\n");
-//                lcd_printText("KEY0: SwReset", 2);
+                lcd_printText("KEY0: SwReset", 2);
                 ret = oplk_execNmtCommand(kNmtEventSwReset);
                 break;
 
             case 0x02:
                 PRINTF("KEY1: SwitchOff\n");
-//                lcd_printText("KEY1: SwitchOff", 2);
+                lcd_printText("KEY1: SwitchOff", 2);
                 ret = oplk_execNmtCommand(kNmtEventSwitchOff);
                 break;
 

@@ -11,7 +11,7 @@ circular buffers for communication.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
-Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+Copyright (c) 2016, B&R Industrial Automation GmbH
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -289,7 +289,7 @@ tOplkError eventucal_processEventCircbuf(tEventQueue eventQueue_p)
     }
 
     pEvent = (tEvent*)aRxBuffer;
-    pEvent->eventArgSize = (readSize - sizeof(tEvent));
+    pEvent->eventArgSize = (UINT)(readSize - sizeof(tEvent));
 
     if (pEvent->eventArgSize > 0)
         pEvent->eventArg.pEventArg = &aRxBuffer[sizeof(tEvent)];

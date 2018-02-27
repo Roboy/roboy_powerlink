@@ -10,6 +10,7 @@ application library without an OS which is using the dualprocshm interface.
 *******************************************************************************/
 
 /*------------------------------------------------------------------------------
+Copyright (c) 2017, B&R Industrial Automation GmbH
 Copyright (c) 2014, Kalycito Infotech Private Limited.
 All rights reserved.
 
@@ -59,6 +60,7 @@ The generic defines are valid for the whole openPOWERLINK stack.
 #define CONFIG_INCLUDE_SDOS
 #define CONFIG_INCLUDE_SDOC
 #define CONFIG_INCLUDE_SDO_ASND
+#define CONFIG_INCLUDE_SDO_RW_MULTIPLE
 #define CONFIG_INCLUDE_CFM
 #define CONFIG_INCLUDE_VETH
 #define CONFIG_INCLUDE_IP
@@ -73,7 +75,7 @@ The generic defines are valid for the whole openPOWERLINK stack.
     ///< enable benchmark for specific stack modules
 #endif
 #ifndef DEF_DEBUG_LVL
-#define DEF_DEBUG_LVL                       0xC0000400L
+#define DEF_DEBUG_LVL                       0xC0000000L
     ///< determine debug level for specific stack modules
 #endif
 /**@}*/

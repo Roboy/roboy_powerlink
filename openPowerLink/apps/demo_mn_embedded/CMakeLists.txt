@@ -2,7 +2,7 @@
 #
 # CMake file of CiA302 MN embedded demo application
 #
-# Copyright (c) 2016, Bernecker+Rainer Industrie-Elektronik Ges.m.b.H. (B&R)
+# Copyright (c) 2016, B&R Industrial Automation GmbH
 # Copyright (c) 2016, Kalycito Infotech Private Limited
 # All rights reserved.
 #
@@ -61,11 +61,10 @@ ENDIF()
 
 # Set generic sources and include directories for this demo
 SET(DEMO_SOURCES
+#    ${DEMO_SOURCE_DIR}/main.c
     ${DEMO_SOURCE_DIR}/app.c
     ${DEMO_SOURCE_DIR}/event.c
     ${COMMON_SOURCE_DIR}/obdcreate/obdcreate.c
-    ${COMMON_SOURCE_DIR}/eventlog/eventlog.c
-    ${COMMON_SOURCE_DIR}/eventlog/eventlogstring.c
     ${OBJDICT_DIR}/${OBJDICT}/obdpi.c
     ${COMMON_SOURCE_DIR}/lcd/lcd.c
     ${COMMON_SOURCE_DIR}/arp/arp.c
@@ -91,7 +90,7 @@ ADD_DEFINITIONS(-DCONFIG_INCLUDE_CFM)
 # Redundant MN is not supported on embedded targets (yet)
 #ADD_DEFINITIONS(-DCONFIG_INCLUDE_NMT_RMN)
 
-#ADD_DEFINITIONS(-DCONFIG_OBD_USE_STORE_RESTORE)
+#ADD_DEFINITIONS(-DCONFIG_APP_STORE_RESTORE)
 #ADD_DEFINITIONS(-DCONFIG_DLL_PRES_CHAINING_CN)
 #ADD_DEFINITIONS(-DCONFIG_INCLUDE_MASND)
 
@@ -125,22 +124,22 @@ ENDIF (CFG_KERNEL_STACK_DIRECTLINK)
 ADD_EXECUTABLE(${EXECUTABLE_NAME} ${DEMO_SOURCE_DIR}/main.c ${DEMO_SOURCES} ${DEMO_ARCH_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/mnobd.cdc)
 ADD_EXECUTABLE(${EXECUTABLE_NAME}2 ${DEMO_SOURCE_DIR}/main2.c ${DEMO_SOURCES} ${DEMO_ARCH_SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/mnobd.cdc)
 SET_PROPERTY(TARGET ${EXECUTABLE_NAME}
-             PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
+        PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
 
- SET_PROPERTY(TARGET ${EXECUTABLE_NAME}2
-              PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
+SET_PROPERTY(TARGET ${EXECUTABLE_NAME}2
+        PROPERTY COMPILE_DEFINITIONS_DEBUG DEBUG;DEF_DEBUG_LVL=${CFG_DEBUG_LVL})
 
 SET_PROPERTY(TARGET ${EXECUTABLE_NAME}
-             PROPERTY LINK_FLAGS ${ARCH_LINKER_FLAGS})
+        PROPERTY LINK_FLAGS ${ARCH_LINKER_FLAGS})
 
- SET_PROPERTY(TARGET ${EXECUTABLE_NAME}2
-              PROPERTY LINK_FLAGS ${ARCH_LINKER_FLAGS})
+SET_PROPERTY(TARGET ${EXECUTABLE_NAME}2
+        PROPERTY LINK_FLAGS ${ARCH_LINKER_FLAGS})
 
 ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/mnobd.cdc
-                   COMMAND ${CMAKE_COMMAND} -E copy ${OPENCONFIG_PROJ_DIR}/Demo_3CN/output/mnobd.cdc ${CMAKE_CURRENT_BINARY_DIR}/mnobd.cdc
-                   DEPENDS ${OPENCONFIG_PROJ_DIR}/Demo_3CN/output/mnobd.cdc
-                   VERBATIM
-                   )
+        COMMAND ${CMAKE_COMMAND} -E copy ${OPENCONFIG_PROJ_DIR}/Demo_3CN/output/mnobd.cdc ${CMAKE_CURRENT_BINARY_DIR}/mnobd.cdc
+        DEPENDS ${OPENCONFIG_PROJ_DIR}/Demo_3CN/output/mnobd.cdc
+        VERBATIM
+        )
 
 ################################################################################
 # Libraries to link
