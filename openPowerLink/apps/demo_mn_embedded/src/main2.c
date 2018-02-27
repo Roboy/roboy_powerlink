@@ -152,12 +152,12 @@ int main(void)
 
     // Initialize helper modules
     system_init();
-    gpio_init();
-    lcd_init();
+//    gpio_init();
+//    lcd_init();
 
     // get node ID from input
-    nodeid = gpio_getNodeid();
-
+//    nodeid = gpio_getNodeid();
+    nodeid=NODEID;
     // initialize instance
     memset(&instance_l, 0, sizeof(instance_l));
 

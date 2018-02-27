@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<simPackage>
- <file path="pll_25MHz_sim/pll_25MHz.vo" type="VERILOG" />
- <topLevel name="pll_25MHz" />
- <deviceFamily name="cyclonev" />
-</simPackage>

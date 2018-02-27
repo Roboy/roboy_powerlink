@@ -1178,6 +1178,25 @@ OBD_BEGIN()
      * Standardised Interface Profile Area (0xA000 - 0xBFFF)
      *************************************************************************/
     OBD_BEGIN_PART_DEVICE()
+        // DigitalInput_00h_AU8
+        OBD_BEGIN_INDEX_RAM(0x6000, 0x05, FALSE)
+            OBD_SUBINDEX_RAM_VAR(0x6000, 0x00, kObdTypeUInt8, kObdAccConst, tObdUnsigned8, NumberOfEntries, 0x04)
+            OBD_SUBINDEX_RAM_USERDEF(0x6000, 0x01, kObdTypeUInt8, kObdAccVPR, tObdUnsigned8, DigitalInput, 0x00)
+            OBD_SUBINDEX_RAM_USERDEF(0x6000, 0x02, kObdTypeUInt8, kObdAccVPR, tObdUnsigned8, DigitalInput, 0x00)
+            OBD_SUBINDEX_RAM_USERDEF(0x6000, 0x03, kObdTypeUInt8, kObdAccVPR, tObdUnsigned8, DigitalInput, 0x00)
+            OBD_SUBINDEX_RAM_USERDEF(0x6000, 0x04, kObdTypeUInt8, kObdAccVPR, tObdUnsigned8, DigitalInput, 0x00)
+        OBD_END_INDEX(0x6000)
+
+        // DigitalOutput_00h_AU8
+        OBD_BEGIN_INDEX_RAM(0x6200, 0x05, FALSE)
+            OBD_SUBINDEX_RAM_VAR(0x6200, 0x00, kObdTypeUInt8, kObdAccConst, tObdUnsigned8, NumberOfEntries, 0x04)
+            OBD_SUBINDEX_RAM_USERDEF(0x6200, 0x01, kObdTypeUInt8, kObdAccVPRW, tObdUnsigned8, DigitalOutput, 0x00)
+            OBD_SUBINDEX_RAM_USERDEF(0x6200, 0x02, kObdTypeUInt8, kObdAccVPRW, tObdUnsigned8, DigitalOutput, 0x00)
+            OBD_SUBINDEX_RAM_USERDEF(0x6200, 0x03, kObdTypeUInt8, kObdAccVPRW, tObdUnsigned8, DigitalOutput, 0x00)
+            OBD_SUBINDEX_RAM_USERDEF(0x6200, 0x04, kObdTypeUInt8, kObdAccVPRW, tObdUnsigned8, DigitalOutput, 0x00)
+        OBD_END_INDEX(0x6200)
+
+
         // static input process image (from network point of view)
         OBD_RAM_INDEX_RAM_VARARRAY(0xA000, (252), FALSE, kObdTypeInt8, kObdAccVPR, tObdInteger8, PI_Input_I8, 0x00)
         OBD_RAM_INDEX_RAM_VARARRAY(0xA001, (252), FALSE, kObdTypeInt8, kObdAccVPR, tObdInteger8, PI_Input_I8, 0x00)

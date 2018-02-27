@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openCONFIGURATORProject xmlns="http://sourceforge.net/projects/openconf/configuration" xmlns:ns2="http://ethernet-powerlink.org/POWERLINK" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://sourceforge.net/projects/openconf/configuration openCONFIGURATOR.xsd">
+  <Generator vendor="Kalycito Infotech Private Limited &amp; Bernecker + Rainer Industrie Elektronik Ges.m.b.H." toolName="Ethernet POWERLINK openCONFIGURATOR" toolVersion="2.2.1" createdBy="letrend" createdOn="2018-02-09T16:39:24.471+01:00" modifiedBy="letrend" modifiedOn="2018-02-12T18:16:13.707+01:00" />
+  <ProjectConfiguration activeAutoGenerationSetting="all" activePathSetting="default">
+    <PathSettings id="default">
+      <Path id="CONFIG_TEXT" path="output" />
+      <Path id="CONFIG_BINARY" path="output" />
+      <Path id="CONFIG_CHAR_ARRAY" path="output" />
+      <Path id="XML_PROCESS_IMAGE" path="output" />
+      <Path id="C_PROCESS_IMAGE" path="output" />
+      <Path id="CSHARP_PROCESS_IMAGE" path="output" />
+    </PathSettings>
+    <AutoGenerationSettings id="all">
+      <Setting name="GENERATE_MN_MAPPING_FOR_NODES" value="" enabled="true" />
+    </AutoGenerationSettings>
+    <AutoGenerationSettings id="none" />
+    <AutoGenerationSettings id="custom" />
+  </ProjectConfiguration>
+  <NetworkConfiguration lossOfSocTolerance="100000">
+    <NodeCollection>
+      <MN name="MN" nodeID="240" pathToXDC="deviceConfiguration/00000000_POWERLINK_CiA302-4_MN.xdc" isAsyncOnly="false" isType1Router="false" isType2Router="false" transmitsPRes="false" />
+      <CN nodeID="1" name="CN_1" pathToXDC="deviceConfiguration/00000000_POWERLINK_CiA302-4_MN_1.xdc" forcedMultiplexedCycle="0" isMultiplexed="false" isChained="false" isAsyncOnly="false" isType1Router="false" isType2Router="false" isMandatory="false" autostartNode="true" resetInOperational="false" verifyAppSwVersion="false" autoAppSwUpdateAllowed="false" verifyDeviceType="true" verifyVendorId="false" verifyRevisionNumber="false" verifyProductCode="false" verifySerialNumber="false" enabled="true" />
+      <CN nodeID="2" name="CN_2" pathToXDC="deviceConfiguration/00000000_POWERLINK_CiA302-4_MN_2.xdc" forcedMultiplexedCycle="0" isMultiplexed="false" isChained="false" isAsyncOnly="false" isType1Router="false" isType2Router="false" isMandatory="false" autostartNode="true" resetInOperational="false" verifyAppSwVersion="false" autoAppSwUpdateAllowed="false" verifyDeviceType="true" verifyVendorId="false" verifyRevisionNumber="false" verifyProductCode="false" verifySerialNumber="false" enabled="true" />
+    </NodeCollection>
+  </NetworkConfiguration>
+</openCONFIGURATORProject>

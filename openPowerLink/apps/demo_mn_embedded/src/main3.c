@@ -66,7 +66,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // const defines
 //------------------------------------------------------------------------------
 #define CYCLE_LEN           -1
-#define NODEID              0xF0                                    //=> MN
+#define NODEID              0x02                                    //=> CN
 #define IP_ADDR             0xc0a86401                              // 192.168.100.1
 #define SUBNET_MASK         0xFFFFFF00                              // 255.255.255.0
 #define DEFAULT_GATEWAY     0xC0A864FE                              // 192.168.100.C_ADR_RT1_DEF_NODE_ID
@@ -152,13 +152,12 @@ int main(void)
 
     // Initialize helper modules
     system_init();
-    gpio_init();
-    lcd_init();
+//    gpio_init();
+//    lcd_init();
 
     // get node ID from input
 //    nodeid = gpio_getNodeid();
-    nodeid = NODEID;
-
+    nodeid=NODEID;
     // initialize instance
     memset(&instance_l, 0, sizeof(instance_l));
 
@@ -289,7 +288,6 @@ static tOplkError initPowerlink(const tInstance* pInstance_p)
     initParam.pfnCbSync  = processSync;
 
     // Initialize object dictionary
-    PRINTF("Initialize object dictionary\n");
     ret = obdcreate_initObd(&initParam.obdInitParam);
     if (ret != kErrorOk)
     {
@@ -300,7 +298,6 @@ static tOplkError initPowerlink(const tInstance* pInstance_p)
     }
 
     // initialize POWERLINK stack
-    PRINTF("initialize POWERLINK stack\n");
     ret = oplk_initialize();
     if (ret != kErrorOk)
     {
@@ -310,7 +307,6 @@ static tOplkError initPowerlink(const tInstance* pInstance_p)
         return ret;
     }
 
-    PRINTF("oplk_create\n");
     ret = oplk_create(&initParam);
     if (ret != kErrorOk)
     {
@@ -319,7 +315,7 @@ static tOplkError initPowerlink(const tInstance* pInstance_p)
                ret);
         return ret;
     }
-    PRINTF("oplk_setCdcBuffer\n");
+
     ret = oplk_setCdcBuffer(pInstance_p->pCdcBuffer,
                             pInstance_p->cdcBufferSize);
     if (ret != kErrorOk)
