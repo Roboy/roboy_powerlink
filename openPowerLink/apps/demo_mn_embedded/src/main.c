@@ -152,8 +152,8 @@ int main(void)
 
     // Initialize helper modules
     system_init();
-    gpio_init();
-    lcd_init();
+    //gpio_init();
+    //lcd_init();
 
     // get node ID from input
 //    nodeid = gpio_getNodeid();
@@ -218,8 +218,8 @@ Exit:
     shutdownPowerlink(&instance_l);
 
     // Shutdown helper modules
-    lcd_exit();
-    gpio_exit();
+    //lcd_exit();
+    //gpio_exit();
     system_exit();
 
     return 0;
@@ -259,7 +259,7 @@ static tOplkError initPowerlink(const tInstance* pInstance_p)
 
     initParam.fAsyncOnly              = FALSE;
     initParam.featureFlags            = -1;
-    initParam.cycleLen                = pInstance_p->cycleLen;  // required for error detection
+    initParam.cycleLen                = 1000000;//pInstance_p->cycleLen;  // required for error detection
     initParam.isochrTxMaxPayload      = 256;                    // const
     initParam.isochrRxMaxPayload      = 1490;                   // const
     initParam.presMaxLatency          = 50000;                  // const; only required for IdentRes

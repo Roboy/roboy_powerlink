@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <EnsembleReport name="soc_system" kind="soc_system" version="1.0" fabric="QSYS">
  <!-- Format version 14.0 200 (Future versions may contain additional information.) -->
- <!-- 2018.02.12.23:09:40 -->
+ <!-- 2018.03.09.21:04:01 -->
  <!-- A collection of modules and connections -->
  <parameter name="AUTO_GENERATION_ID">
   <type>java.lang.Integer</type>
-  <value>1518473367</value>
+  <value>1520625828</value>
   <derived>false</derived>
   <enabled>true</enabled>
   <visible>false</visible>
@@ -553,7 +553,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.CMacro.TIMESTAMP</name>
-   <value>1518473367</value>
+   <value>1520625828</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.compatible</name>
@@ -573,7 +573,7 @@ the requested settings for a module instance. -->
   </assignment>
   <assignment>
    <name>embeddedsw.dts.params.timestamp</name>
-   <value>1518473367</value>
+   <value>1520625828</value>
   </assignment>
   <assignment>
    <name>embeddedsw.dts.vendor</name>
@@ -589,7 +589,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="timestamp">
    <type>int</type>
-   <value>1518473367</value>
+   <value>1520625828</value>
    <derived>false</derived>
    <enabled>false</enabled>
    <visible>false</visible>
@@ -5041,7 +5041,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="gui_device_speed_grade">
    <type>java.lang.String</type>
-   <value>1</value>
+   <value>7</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -5065,7 +5065,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="gui_reference_clock_frequency">
    <type>double</type>
-   <value>100.0</value>
+   <value>50.0</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -5073,7 +5073,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="reference_clock_frequency">
    <type>java.lang.String</type>
-   <value>100.0 MHz</value>
+   <value>50.0 MHz</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -5233,7 +5233,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="gui_actual_multiply_factor0">
    <type>int</type>
-   <value>3</value>
+   <value>6</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -7449,7 +7449,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="m_cnt_hi_div">
    <type>int</type>
-   <value>2</value>
+   <value>3</value>
    <derived>true</derived>
    <enabled>false</enabled>
    <visible>false</visible>
@@ -7457,7 +7457,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="m_cnt_lo_div">
    <type>int</type>
-   <value>1</value>
+   <value>3</value>
    <derived>true</derived>
    <enabled>false</enabled>
    <visible>false</visible>
@@ -7497,7 +7497,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="m_cnt_odd_div_duty_en">
    <type>java.lang.String</type>
-   <value>true</value>
+   <value>false</value>
    <derived>true</derived>
    <enabled>false</enabled>
    <visible>false</visible>
@@ -8529,7 +8529,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="pll_cp_current">
    <type>int</type>
-   <value>20</value>
+   <value>30</value>
    <derived>true</derived>
    <enabled>false</enabled>
    <visible>false</visible>
@@ -8609,7 +8609,7 @@ the requested settings for a module instance. -->
   </parameter>
   <parameter name="gui_parameter_values">
    <type>[Ljava.lang.String;</type>
-   <value>2,1,256,256,false,true,true,false,2,1,1,0,ph_mux_clk,false,true,2,20,2000,300.0 MHz,1,none,glb,m_cnt,ph_mux_clk,false</value>
+   <value>3,3,256,256,false,true,false,false,2,1,1,0,ph_mux_clk,false,true,2,30,2000,300.0 MHz,1,none,glb,m_cnt,ph_mux_clk,false</value>
    <derived>true</derived>
    <enabled>true</enabled>
    <visible>true</visible>
@@ -9878,7 +9878,7 @@ parameters are a RESULT of the module parameters. -->
 the requested settings for a module instance. -->
   <parameter name="AUTO_GENERATION_ID">
    <type>java.lang.Integer</type>
-   <value>1518473367</value>
+   <value>1520625828</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>
@@ -90294,7 +90294,7 @@ parameters are a RESULT of the module parameters. -->
 the requested settings for a module instance. -->
   <parameter name="AUTO_GENERATION_ID">
    <type>java.lang.Integer</type>
-   <value>1518473367</value>
+   <value>1520625828</value>
    <derived>false</derived>
    <enabled>true</enabled>
    <visible>false</visible>

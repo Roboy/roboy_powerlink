@@ -115,7 +115,7 @@
          type = "String";
       }
    }
-   element com_mem.s1
+   element onchip_memory2_0.s1
    {
       datum baseAddress
       {
@@ -123,7 +123,7 @@
          type = "String";
       }
    }
-   element onchip_memory2_0.s1
+   element com_mem.s1
    {
       datum baseAddress
       {
@@ -341,9 +341,9 @@
   <parameter name="debug_use_rbc_taf_method" value="false" />
   <parameter name="device_family" value="Cyclone V" />
   <parameter name="device" value="5CSEBA6U23I7" />
-  <parameter name="gui_device_speed_grade" value="1" />
+  <parameter name="gui_device_speed_grade" value="7" />
   <parameter name="gui_pll_mode" value="Integer-N PLL" />
-  <parameter name="gui_reference_clock_frequency" value="100.0" />
+  <parameter name="gui_reference_clock_frequency" value="50.0" />
   <parameter name="gui_channel_spacing" value="0.0" />
   <parameter name="gui_operation_mode" value="direct" />
   <parameter name="gui_feedback_clock" value="Global Clock" />

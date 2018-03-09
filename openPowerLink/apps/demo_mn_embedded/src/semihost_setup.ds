@@ -1,0 +1,27 @@
+#
+# Copyright Altera 2013,2015
+# All Rights Reserved
+# File: semihost_setup.ds
+#
+
+#
+# stop processor if running
+#
+stop
+wait 5s
+
+#
+# Load Symbol File for current Sourcery ELF
+#
+file $sdir/demo_mn_embedded.axf
+
+#
+# Extract semihosting heap/stack values from ELF
+#
+set semihosting enabled false
+set semihosting stack-base __cs3_stack
+set semihosting stack-limit __cs3_heap_start
+set semihosting heap-base __cs3_heap_start
+set semihosting heap-limit __cs3_heap_end
+set semihosting enabled true
+
